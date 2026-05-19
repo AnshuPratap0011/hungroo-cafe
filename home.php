@@ -1,6 +1,31 @@
-<?php include "Navbar.php"; ?>
+<?php
+
+require_once "db.php";
+
+/* =========================================================
+PAGE TITLE
+========================================================= */
+
+$pageTitle =
+"Hungroo Café | Premium Home";
+
+/* =========================================================
+FEATURED ITEMS
+========================================================= */
+
+$featuredQuery =
+"SELECT * FROM menu_items ORDER BY id DESC LIMIT 8";
+
+$featuredResult =
+mysqli_query(
+$conn,
+$featuredQuery
+);
+
+?>
 
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -13,13 +38,17 @@ content="width=device-width, initial-scale=1.0">
 
 <meta
 name="description"
-content="Hungroo Cafe serves premium burgers, pizza, coffee, desserts and delicious fast food with modern foodie vibes.">
+content="Hungroo Café premium modern food ordering website.">
 
 <title>
-Hungroo Cafe | Premium Food & Cafe
+
+<?php echo $pageTitle; ?>
+
 </title>
 
-<!-- GOOGLE FONT -->
+<!-- =====================================================
+GOOGLE FONT
+===================================================== -->
 
 <link
 rel="preconnect"
@@ -34,808 +63,349 @@ crossorigin>
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- FONT AWESOME -->
+<!-- =====================================================
+FONT AWESOME
+===================================================== -->
 
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<!-- CSS -->
+<!-- =====================================================
+CSS
+===================================================== -->
 
 <link
 rel="stylesheet"
-href="Style.css?v=1000">
+href="assets/css/home.css">
 
 </head>
 
 <body>
 
-<main>
-
 <!-- =====================================================
-HERO SECTION
+NAVBAR
 ===================================================== -->
 
-<section class="hero-cinematic">
+<?php include "Navbar.php"; ?>
 
-    <!-- LEFT -->
+<!-- =====================================================
+MAIN
+===================================================== -->
 
-    <div class="hero-left">
+<main class="home-page">
 
-        <span class="hero-mini">
+    <!-- =====================================================
+    HERO
+    ===================================================== -->
 
-            Premium Café & Restaurant
+    <section class="hero-section">
 
-        </span>
+        <!-- GLOW -->
 
-        <h1>
+        <div class="hero-glow hero-glow-1"></div>
 
-            Fresh Burgers,<br>
-            Coffee & Pizza<br>
-            Made With Love
+        <div class="hero-glow hero-glow-2"></div>
 
-        </h1>
+        <!-- LEFT -->
 
-        <p>
+        <div class="hero-content">
 
-            Experience handcrafted burgers,
-            premium coffee, desserts and
-            delicious fast food in a modern
-            and cozy atmosphere made for
-            real food lovers.
+            <!-- BADGE -->
 
-        </p>
+            <span class="hero-badge">
 
-        <!-- BUTTONS -->
-
-        <div class="hero-buttons">
-
-            <a
-                href="menu.php"
-                class="hero-primary-btn">
-
-                <i class="fa-solid fa-utensils"></i>
-
-                Explore Menu
-
-            </a>
-
-            <a
-                href="#popular"
-                class="hero-secondary-btn">
-
-                <i class="fa-solid fa-fire"></i>
-
-                Popular Picks
-
-            </a>
-
-        </div>
-
-        <!-- FEATURES -->
-
-        <div class="hero-features">
-
-            <div class="hero-feature-box">
-
-                <i class="fa-solid fa-burger"></i>
-
-                Fresh Burgers
-
-            </div>
-
-            <div class="hero-feature-box">
-
-                <i class="fa-solid fa-mug-hot"></i>
-
-                Premium Coffee
-
-            </div>
-
-            <div class="hero-feature-box">
-
-                <i class="fa-solid fa-truck-fast"></i>
-
-                Fast Delivery
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- RIGHT -->
-
-    <div class="hero-right">
-
-        <div class="hero-image-main">
-
-            <img
-                src="assets/images/hero-banner.png"
-                alt="Burger">
-
-        </div>
-
-        <!-- FLOATING -->
-
-        <div class="floating-rating-card">
-
-            <h3>
-
-                4.9★
-
-            </h3>
-
-            <span>
-
-                Rated By 10K+ Foodies
+                Premium Café Experience
 
             </span>
 
+            <!-- TITLE -->
+
+            <h1>
+
+                Crafted Coffee,
+                Gourmet Burgers
+                & Premium Café Vibes
+
+            </h1>
+
+            <!-- TEXT -->
+
+            <p>
+
+                Experience handcrafted meals,
+                café drinks and luxury food ordering
+                with a modern premium experience.
+
+            </p>
+
+            <!-- BUTTONS -->
+
+            <div class="hero-buttons">
+
+                <a
+                href="menu.php"
+                class="hero-btn-primary">
+
+                    Explore Menu
+
+                </a>
+
+                <a
+                href="#popular"
+                class="hero-btn-secondary">
+
+                    Most Loved
+
+                </a>
+
+            </div>
+
+            <!-- FEATURES -->
+
+            <div class="hero-features">
+
+                <div class="hero-feature-card">
+
+                    <i class="fa-solid fa-star"></i>
+
+                    4.9 Rating
+
+                </div>
+
+                <div class="hero-feature-card">
+
+                    <i class="fa-solid fa-bolt"></i>
+
+                    Fast Delivery
+
+                </div>
+
+                <div class="hero-feature-card">
+
+                    <i class="fa-solid fa-shield-heart"></i>
+
+                    Premium Quality
+
+                </div>
+
+            </div>
+
         </div>
 
-    </div>
+        <!-- RIGHT -->
 
-</section>
+        <div class="hero-image">
 
-<!-- =====================================================
-PROMO SECTION
-===================================================== -->
+            <img
+            src="assets/images/promo-2.png"
+            alt="Hungroo Food">
 
-<section class="promo">
+            <!-- FLOATING -->
 
-    <div class="section-heading">
+            <div class="floating-card floating-1">
 
-        <span>
+                <i class="fa-solid fa-burger"></i>
 
-            Why People Love Us
+                <div>
 
-        </span>
+                    <h4>
 
-        <h2>
+                        Premium Burgers
 
-            Premium Café Specials
+                    </h4>
 
-        </h2>
+                    <p>
 
-    </div>
+                        Fresh & Hot
 
-    <ul class="promo-list">
-
-        <!-- CARD -->
-
-        <li class="promo-item">
-
-            <div class="promo-card">
-
-                <div class="card-icon">
-
-                    <i class="fa-solid fa-pizza-slice"></i>
+                    </p>
 
                 </div>
 
-                <h3 class="card-title">
-
-                    Maxican Pizza
-
-                </h3>
-
-                <p class="card-text">
-
-                    Food is any substance consumed
-                    to provide nutritional support
-                    for an organism.
-
-                </p>
-
-                <img
-                    src="assets/images/promo-1.png"
-                    alt="Pizza"
-                    class="card-banner">
-
             </div>
 
-        </li>
+            <div class="floating-card floating-2">
 
-        <!-- CARD -->
+                <i class="fa-solid fa-mug-hot"></i>
 
-        <li class="promo-item">
+                <div>
 
-            <div class="promo-card">
+                    <h4>
 
-                <div class="card-icon">
+                        Café Coffee
 
-                    <i class="fa-solid fa-glass-water"></i>
+                    </h4>
+
+                    <p>
+
+                        Fresh Brewed
+
+                    </p>
 
                 </div>
 
-                <h3 class="card-title">
+            </div>
 
-                    Soft Drinks
+        </div>
 
-                </h3>
+    </section>
 
-                <p class="card-text">
+    <!-- =====================================================
+    OFFERS
+    ===================================================== -->
 
-                    Refreshing premium drinks
-                    served chilled every day.
+    <section class="offers-strip">
 
-                </p>
+        <div class="offers-track">
 
-                <img
-                    src="assets/images/promo-2.png"
-                    alt="Drinks"
-                    class="card-banner">
+            <?php for($i=0;$i<3;$i++){ ?>
+
+            <div class="offer-card">
+
+                <i class="fa-solid fa-fire"></i>
+
+                Flat 50% OFF Today
 
             </div>
 
-        </li>
+            <div class="offer-card">
 
-        <!-- CARD -->
+                <i class="fa-solid fa-burger"></i>
 
-        <li class="promo-item">
-
-            <div class="promo-card">
-
-                <div class="card-icon">
-
-                    <i class="fa-solid fa-bowl-food"></i>
-
-                </div>
-
-                <h3 class="card-title">
-
-                    French Fry
-
-                </h3>
-
-                <p class="card-text">
-
-                    Crispy fries with premium
-                    café-style flavors.
-
-                </p>
-
-                <img
-                    src="assets/images/promo-3.png"
-                    alt="Fries"
-                    class="card-banner">
+                Buy 1 Get Fries Free
 
             </div>
 
-        </li>
+            <div class="offer-card">
 
-        <!-- CARD -->
+                <i class="fa-solid fa-truck-fast"></i>
 
-        <li class="promo-item">
-
-            <div class="promo-card">
-
-                <div class="card-icon">
-
-                    <i class="fa-solid fa-burger"></i>
-
-                </div>
-
-                <h3 class="card-title">
-
-                    Burger Kingo
-
-                </h3>
-
-                <p class="card-text">
-
-                    Loaded burgers packed with
-                    cheese and sauces.
-
-                </p>
-
-                <img
-                    src="assets/images/promo-4.png"
-                    alt="Burger"
-                    class="card-banner">
+                Free Delivery Above ₹499
 
             </div>
 
-        </li>
+            <div class="offer-card">
 
-        <!-- CARD -->
+                <i class="fa-solid fa-pizza-slice"></i>
 
-        <li class="promo-item">
-
-            <div class="promo-card">
-
-                <div class="card-icon">
-
-                    <i class="fa-solid fa-drumstick-bite"></i>
-
-                </div>
-
-                <h3 class="card-title">
-
-                    Chicken Masala
-
-                </h3>
-
-                <p class="card-text">
-
-                    Authentic spicy chicken
-                    recipes with rich flavor.
-
-                </p>
-
-                <img
-                    src="assets/images/promo-5.png"
-                    alt="Chicken"
-                    class="card-banner">
+                Stone Oven Pizza Specials
 
             </div>
 
-        </li>
+            <div class="offer-card">
 
-    </ul>
+                <i class="fa-solid fa-ice-cream"></i>
 
-</section>
+                Dessert Combo Deals
 
-<!-- =====================================================
-ABOUT SECTION
-===================================================== -->
+            </div>
 
-<section class="foodie-about-section">
+            <?php } ?>
 
-    <!-- IMAGE -->
+        </div>
 
-    <div class="foodie-about-image">
+    </section>
 
-        <img
-            src="assets/images/about-banner.png"
-            alt="Burger"
-            class="foodie-main-burger">
+    <!-- =====================================================
+    CATEGORIES
+    ===================================================== -->
 
-        <!-- DISCOUNT -->
+    <section class="food-categories">
 
-        <div class="foodie-discount-card">
+        <div class="section-title">
 
             <span>
 
-                GET UP TO
+                Explore Categories
 
             </span>
 
             <h2>
 
-                50%
+                What Are You Craving Today?
 
             </h2>
 
-            <p>
-
-                OFF NOW
-
-            </p>
-
         </div>
 
-    </div>
+        <div class="categories-grid">
 
-    <!-- CONTENT -->
+            <a
+            href="menu.php?category=Veg"
+            class="category-card">
 
-    <div class="foodie-about-content">
-
-        <span>
-
-            About Hungroo Café
-
-        </span>
-
-        <h2>
-
-            Burgers, Pizza & Premium
-            Café Experience
-
-        </h2>
-
-        <p>
-
-            The restaurants in Hangzhou also
-            catered to many northern Chinese
-            who had fled south from Kaifeng
-            during the invasion of the 1120s.
-
-        </p>
-
-        <!-- LIST -->
-
-        <div class="foodie-about-list">
-
-            <div class="foodie-about-item">
-
-                <i class="fa-solid fa-check"></i>
-
-                Delicious & Healthy Foods
-
-            </div>
-
-            <div class="foodie-about-item">
-
-                <i class="fa-solid fa-check"></i>
-
-                Spacific Family And Kids Zone
-
-            </div>
-
-            <div class="foodie-about-item">
-
-                <i class="fa-solid fa-check"></i>
-
-                Music & Other Facilities
-
-            </div>
-
-            <div class="foodie-about-item">
-
-                <i class="fa-solid fa-check"></i>
-
-                Fastest Food Home Delivery
-
-            </div>
-
-        </div>
-
-        <!-- BTN -->
-
-        <a
-            href="menu.php"
-            class="foodie-about-btn">
-
-            Order Now
-
-        </a>
-
-    </div>
-
-</section>
-
-<!-- =====================================================
-POPULAR ITEMS
-===================================================== -->
-
-<section
-class="popular-items-section"
-id="popular">
-
-    <div class="section-heading">
-
-        <span>
-
-            Popular Dishes
-
-        </span>
-
-        <h2>
-
-            Our Delicious Foods
-
-        </h2>
-
-    </div>
-
-    <!-- GRID -->
-
-    <div class="popular-items-grid">
-
-        <!-- CARD -->
-
-        <div class="popular-item-card">
-
-            <div class="popular-image">
-
-                <div class="popular-badge">
-
-                    <i class="fa-solid fa-fire"></i>
-
-                    Bestseller
-
-                </div>
+                <div class="category-wave"></div>
 
                 <img
-                    src="assets/images/food-menu-1.png"
-                    alt="Chicken">
+                src="assets/images/cat-burger.png"
+                alt="Burger">
 
-            </div>
+                <h3>
 
-            <div class="popular-content">
+                    Veg Meals
 
-                <div class="popular-top">
+                </h3>
 
-                    <h3>
+            </a>
 
-                        Fried Chicken
+            <a
+            href="menu.php?category=Coffee"
+            class="category-card">
 
-                    </h3>
-
-                    <span>
-
-                        ₹99
-
-                    </span>
-
-                </div>
-
-                <p>
-
-                    Crispy chicken loaded with
-                    cheese and delicious sauces.
-
-                </p>
-
-                <button class="add-cart">
-
-                    Add To Cart
-
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- CARD -->
-
-        <div class="popular-item-card">
-
-            <div class="popular-image">
-
-                <div class="popular-badge">
-
-                    <i class="fa-solid fa-star"></i>
-
-                    Trending
-
-                </div>
+                <div class="category-wave"></div>
 
                 <img
-                    src="assets/images/food-menu-2.png"
-                    alt="Burger">
+                src="assets/images/cat-coffee.png"
+                alt="Coffee">
 
-            </div>
+                <h3>
 
-            <div class="popular-content">
+                    Café Coffee
 
-                <div class="popular-top">
+                </h3>
 
-                    <h3>
+            </a>
 
-                        Burger King
+            <a
+            href="menu.php?category=Dessert"
+            class="category-card">
 
-                    </h3>
-
-                    <span>
-
-                        ₹140
-
-                    </span>
-
-                </div>
-
-                <p>
-
-                    Loaded cheesy burger with
-                    premium toppings.
-
-                </p>
-
-                <button class="add-cart">
-
-                    Add To Cart
-
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- CARD -->
-
-        <div class="popular-item-card">
-
-            <div class="popular-image">
-
-                <div class="popular-badge">
-
-                    <i class="fa-solid fa-heart"></i>
-
-                    Loved
-
-                </div>
+                <div class="category-wave"></div>
 
                 <img
-                    src="assets/images/food-menu-3.png"
-                    alt="Pizza">
+                src="assets/images/cat-dessert.png"
+                alt="Dessert">
 
-            </div>
+                <h3>
 
-            <div class="popular-content">
+                    Desserts
 
-                <div class="popular-top">
+                </h3>
 
-                    <h3>
+            </a>
 
-                        Castle Pizza
+            <a
+            href="menu.php?category=Boba"
+            class="category-card">
 
-                    </h3>
-
-                    <span>
-
-                        ₹120
-
-                    </span>
-
-                </div>
-
-                <p>
-
-                    Creamy cheese pizza with
-                    fresh toppings.
-
-                </p>
-
-                <button class="add-cart">
-
-                    Add To Cart
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- =====================================================
-REVIEWS
-===================================================== -->
-
-<section class="reviews-section">
-
-    <div class="section-heading">
-
-        <span>
-
-            Testimonials
-
-        </span>
-
-        <h2>
-
-            Our Customers Reviews
-
-        </h2>
-
-    </div>
-
-    <!-- GRID -->
-
-    <div class="reviews-grid">
-
-        <!-- REVIEW -->
-
-        <div class="review-card">
-
-            <div class="review-user">
+                <div class="category-wave"></div>
 
                 <img
-                    src="assets/images/avatar-1.jpg"
-                    alt="Customer">
+                src="assets/images/cat-boba.png"
+                alt="Boba">
 
-                <div class="review-user-info">
+                <h3>
 
-                    <h3>
+                    Boba Drinks
 
-                        Robert William
+                </h3>
 
-                    </h3>
-
-                    <span>
-
-                        ★★★★★
-
-                    </span>
-
-                </div>
-
-            </div>
-
-            <p>
-
-                “I would be lost without
-                restaurant. The burgers and
-                pizza are absolutely amazing.”
-
-            </p>
+            </a>
 
         </div>
 
-        <!-- REVIEW -->
-
-        <div class="review-card">
-
-            <div class="review-user">
-
-                <img
-                    src="assets/images/avatar-2.jpg"
-                    alt="Customer">
-
-                <div class="review-user-info">
-
-                    <h3>
-
-                        Thomas Josef
-
-                    </h3>
-
-                    <span>
-
-                        ★★★★★
-
-                    </span>
-
-                </div>
-
-            </div>
-
-            <p>
-
-                “Premium quality food with
-                very fast delivery and
-                beautiful café vibes.”
-
-            </p>
-
-        </div>
-
-        <!-- REVIEW -->
-
-        <div class="review-card">
-
-            <div class="review-user">
-
-                <img
-                    src="assets/images/avatar-3.jpg"
-                    alt="Customer">
-
-                <div class="review-user-info">
-
-                    <h3>
-
-                        Charles Richard
-
-                    </h3>
-
-                    <span>
-
-                        ★★★★★
-
-                    </span>
-
-                </div>
-
-            </div>
-
-            <p>
-
-                “The coffee and burgers are
-                my favorite. Amazing place
-                for food lovers.”
-
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
+    </section>
 
 </main>
 
@@ -844,6 +414,15 @@ FOOTER
 ===================================================== -->
 
 <?php include "footer.php"; ?>
+
+<!-- =====================================================
+CART JS
+===================================================== -->
+
+<script
+src="cart.js">
+
+</script>
 
 </body>
 </html>

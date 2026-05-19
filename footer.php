@@ -1,312 +1,153 @@
-<!-- =====================================================
-====================== FOOTER ============================
-====================================================== -->
-
-<style>
-
-/* =====================================================
-================ FOOTER ===============================
-===================================================== */
-
-.footer{
-    background:#111;
-
-    color:white;
-
-    margin-top:50px;
-
-    padding-top:28px;
-
-    overflow:hidden;
-}
-
-/* =====================================================
-================ FOOTER CONTAINER =====================
-===================================================== */
-
-.footer-container{
-    width:100%;
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(180px,1fr));
-
-    gap:28px;
-
-    padding:0 45px 24px;
-}
-
-/* =====================================================
-================ FOOTER BOX ===========================
-===================================================== */
-
-.footer-box h2{
-    font-size:18px;
-
-    margin-bottom:14px;
-
-    color:white;
-
-    font-weight:600;
-}
-
-/* =====================================================
-================ FOOTER LOGO TEXT =====================
-===================================================== */
-
-.footer-logo-text{
-    display:inline-block;
-
-    font-size:28px;
-
-    font-weight:700;
-
-    color:#ff3b3b;
-
-    text-decoration:none;
-
-    margin-bottom:12px;
-
-    letter-spacing:0.5px;
-
-    transition:0.3s;
-}
-
-/* HOVER */
-
-.footer-logo-text:hover{
-    color:white;
-
-    transform:translateX(3px);
-}
-
-/* =====================================================
-================ FOOTER TEXT ==========================
-===================================================== */
-
-.footer-box p,
-.footer-box a{
-    color:#cfcfcf;
-
-    text-decoration:none;
-
-    line-height:1.7;
-
-    display:block;
-
-    margin-bottom:8px;
-
-    font-size:14px;
-
-    transition:0.3s;
-}
-
-/* =====================================================
-================ LINK HOVER ==========================
-===================================================== */
-
-.footer-box a:hover{
-    color:#ff3b3b;
-
-    transform:translateX(3px);
-}
-
-/* =====================================================
-================ FOOTER NOTE ==========================
-===================================================== */
-
-.footer-note{
-    color:#ffb703 !important;
-
-    font-weight:500;
-}
-
-/* =====================================================
-================ SOCIAL ==============================
-===================================================== */
-
-.footer-socials{
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    margin-top:15px;
-}
-
-/* =====================================================
-================ SOCIAL ICON =========================
-===================================================== */
-
-.footer-socials a{
-    width:36px;
-    height:36px;
-
-    border-radius:50%;
-
-    background:#1f1f1f;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    color:white;
-
-    font-size:14px;
-
-    transition:0.3s;
-}
-
-/* =====================================================
-================ ICON HOVER ==========================
-===================================================== */
-
-.footer-socials a:hover{
-
-    background:#ff3b3b;
-
-    transform:
-    translateY(-4px);
-
-}
-
-/* =====================================================
-================ CONTACT ICON ========================
-===================================================== */
-
-.footer-box p i{
-    color:#ff3b3b;
-
-    margin-right:8px;
-}
-
-/* =====================================================
-================ FOOTER BOTTOM =======================
-===================================================== */
-
-.footer-bottom{
-    width:100%;
-
-    border-top:
-    1px solid rgba(255,255,255,0.08);
-
-    padding:14px 45px;
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    flex-wrap:wrap;
-
-    gap:12px;
-}
-
-/* =====================================================
-================ BOTTOM TEXT =========================
-===================================================== */
-
-.footer-bottom p{
-    color:#bdbdbd;
-
-    font-size:13px;
-}
-
-/* =====================================================
-================ FOOTER BOTTOM LINKS ==================
-===================================================== */
-
-.footer-bottom-links{
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-}
-
-/* =====================================================
-================ LINKS ===============================
-===================================================== */
-
-.footer-bottom-links a{
-    color:#cfcfcf;
-
-    text-decoration:none;
-
-    font-size:13px;
-
-    transition:0.3s;
-}
-
-/* =====================================================
-================ LINK HOVER ==========================
-===================================================== */
-
-.footer-bottom-links a:hover{
-    color:#ff3b3b;
-}
-
-/* =====================================================
-================ RESPONSIVE ==========================
-===================================================== */
-
-@media(max-width:768px){
-
-    .footer-container{
-        padding:0 22px 24px;
-    }
-
-    .footer-bottom{
-        padding:14px 22px;
-
-        flex-direction:column;
-
-        align-items:flex-start;
-    }
-
-}
-
-</style>
-
-<footer class="footer" id="footer">
+<?php
+/* =========================================================
+FOOTER COMPONENT
+HUNGROO CAFÉ
+========================================================= */
+?>
+
+<!-- =========================================================
+FOOTER CSS
+========================================================= -->
+
+<link
+rel="stylesheet"
+href="assets/css/footer.css">
+
+<!-- =========================================================
+FOOTER
+========================================================= -->
+
+<footer
+class="footer"
+id="footer">
 
     <!-- =====================================================
-    ====================== FOOTER CONTAINER ==================
-    ====================================================== -->
+    NEWSLETTER
+    ===================================================== -->
+
+    <section class="footer-newsletter">
+
+        <div class="footer-newsletter-content">
+
+            <span>
+
+                Hungroo Premium Club
+
+            </span>
+
+            <h2>
+
+                Get Exclusive Offers,
+                Combo Deals & Café Updates
+
+            </h2>
+
+            <p>
+
+                Subscribe now and receive
+                premium food offers,
+                discounts and special café rewards.
+
+            </p>
+
+        </div>
+
+        <!-- FORM -->
+
+        <form
+        class="footer-newsletter-form">
+
+            <div class="newsletter-input-box">
+
+                <i class="fa-solid fa-envelope"></i>
+
+                <input
+                type="email"
+
+                placeholder=
+                "Enter your email address">
+
+            </div>
+
+            <button
+            type="submit">
+
+                Subscribe
+
+            </button>
+
+        </form>
+
+    </section>
+
+    <!-- =====================================================
+    MAIN FOOTER
+    ===================================================== -->
 
     <div class="footer-container">
 
         <!-- =====================================================
-        ====================== BRAND =============================
-        ====================================================== -->
+        BRAND
+        ===================================================== -->
 
         <div class="footer-box footer-brand">
 
-            <!-- LOGO TEXT -->
+            <!-- LOGO -->
 
-            <a href="home.php"
-            class="footer-logo-text">
+            <a
+            href="home.php"
+            class="footer-logo">
 
-                Hungroo Cafe
+                <img
+                src="hlogo.png"
+                alt="Hungroo Café">
+
+                <span>
+
+                    Hungroo Café
+
+                </span>
 
             </a>
 
-            <p>
+            <!-- TEXT -->
 
-                Fresh burgers, coffee,
-                boba and desserts made
-                daily for food lovers.
+            <p class="footer-description">
+
+                Premium burgers, café coffee,
+                pizzas, desserts and handcrafted
+                meals served with modern luxury café vibes.
 
             </p>
+
+            <!-- FEATURES -->
+
+            <div class="footer-feature-list">
+
+                <div class="footer-feature-item">
+
+                    <i class="fa-solid fa-truck-fast"></i>
+
+                    Fast Delivery
+
+                </div>
+
+                <div class="footer-feature-item">
+
+                    <i class="fa-solid fa-star"></i>
+
+                    Premium Quality
+
+                </div>
+
+            </div>
 
             <!-- SOCIAL -->
 
             <div class="footer-socials">
 
-                <!-- INSTAGRAM -->
-
-                <a href="#"
+                <a
+                href="#"
                 aria-label="Instagram">
 
                     <i class=
@@ -314,9 +155,8 @@
 
                 </a>
 
-                <!-- FACEBOOK -->
-
-                <a href="#"
+                <a
+                href="#"
                 aria-label="Facebook">
 
                     <i class=
@@ -324,13 +164,21 @@
 
                 </a>
 
-                <!-- WHATSAPP -->
-
-                <a href="#"
+                <a
+                href="#"
                 aria-label="WhatsApp">
 
                     <i class=
                     "fa-brands fa-whatsapp"></i>
+
+                </a>
+
+                <a
+                href="#"
+                aria-label="YouTube">
+
+                    <i class=
+                    "fa-brands fa-youtube"></i>
 
                 </a>
 
@@ -339,151 +187,378 @@
         </div>
 
         <!-- =====================================================
-        ====================== EXPLORE ==========================
-        ====================================================== -->
+        EXPLORE
+        ===================================================== -->
 
         <div class="footer-box">
 
-            <h2>
+            <div class="footer-title">
 
-                Explore
+                <span>
 
-            </h2>
+                    Navigation
 
-            <a href="home.php">
+                </span>
 
-                Home
+                <h3>
 
-            </a>
+                    Explore
 
-            <a href="menu.php">
+                </h3>
 
-                Menu
+            </div>
 
-            </a>
+            <div class="footer-links">
 
-            <a href="cart.php">
+                <a href="home.php">
 
-                Cart
+                    Home
 
-            </a>
+                </a>
 
-            <a href="checkout.php">
+                <a href="menu.php">
 
-                Checkout
+                    Menu
 
-            </a>
+                </a>
+
+                <a href="Cart.php">
+
+                    Cart
+
+                </a>
+
+                <a href="checkout.php">
+
+                    Checkout
+
+                </a>
+
+                <a href="home.php#reviews">
+
+                    Reviews
+
+                </a>
+
+            </div>
 
         </div>
 
         <!-- =====================================================
-        ====================== OPENING HOURS ====================
-        ====================================================== -->
+        OPENING HOURS
+        ===================================================== -->
 
         <div class="footer-box">
 
-            <h2>
+            <div class="footer-title">
 
-                Opening Hours
+                <span>
 
-            </h2>
+                    Availability
 
-            <p>
+                </span>
 
-                Monday - Friday :
-                10 AM - 10 PM
+                <h3>
 
-            </p>
+                    Opening Hours
 
-            <p>
+                </h3>
 
-                Saturday - Sunday :
-                9 AM - 11 PM
+            </div>
 
-            </p>
+            <div class="footer-hours">
 
-            <p class="footer-note">
+                <div class="footer-hours-row">
 
-                Delivery available daily.
+                    <p>
 
-            </p>
+                        Monday - Friday
+
+                    </p>
+
+                    <span>
+
+                        10 AM - 10 PM
+
+                    </span>
+
+                </div>
+
+                <div class="footer-hours-row">
+
+                    <p>
+
+                        Saturday
+
+                    </p>
+
+                    <span>
+
+                        9 AM - 11 PM
+
+                    </span>
+
+                </div>
+
+                <div class="footer-hours-row">
+
+                    <p>
+
+                        Sunday
+
+                    </p>
+
+                    <span>
+
+                        9 AM - 11 PM
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- DELIVERY -->
+
+            <div class="footer-delivery-badge">
+
+                <i class="fa-solid fa-bolt"></i>
+
+                Delivery Available Everyday
+
+            </div>
 
         </div>
 
         <!-- =====================================================
-        ====================== CONTACT ==========================
-        ====================================================== -->
+        CONTACT
+        ===================================================== -->
 
         <div class="footer-box">
 
-            <h2>
+            <div class="footer-title">
 
-                Contact
+                <span>
 
-            </h2>
+                    Get In Touch
 
-            <p>
+                </span>
 
-                <i class=
-                "fa-solid fa-location-dot"></i>
+                <h3>
 
-                Chandigarh
+                    Contact
 
-            </p>
+                </h3>
 
-            <p>
+            </div>
 
-                <i class=
-                "fa-solid fa-phone"></i>
+            <div class="footer-contact-list">
 
-                +91 99999 99999
+                <div class="footer-contact-item">
 
-            </p>
+                    <i class=
+                    "fa-solid fa-location-dot"></i>
 
-            <p>
+                    <div>
 
-                <i class=
-                "fa-solid fa-envelope"></i>
+                        <h4>
 
-                hungroo@gmail.com
+                            Location
 
-            </p>
+                        </h4>
+
+                        <p>
+
+                            Chandigarh, India
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="footer-contact-item">
+
+                    <i class=
+                    "fa-solid fa-phone"></i>
+
+                    <div>
+
+                        <h4>
+
+                            Phone
+
+                        </h4>
+
+                        <p>
+
+                            +91 99999 99999
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="footer-contact-item">
+
+                    <i class=
+                    "fa-solid fa-envelope"></i>
+
+                    <div>
+
+                        <h4>
+
+                            Email
+
+                        </h4>
+
+                        <p>
+
+                            hungroo@gmail.com
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
     <!-- =====================================================
-    ====================== FOOTER BOTTOM =====================
-    ====================================================== -->
+    APP SECTION
+    ===================================================== -->
+
+    <section class="footer-app-section">
+
+        <div class="footer-app-content">
+
+            <span>
+
+                Mobile Experience
+
+            </span>
+
+            <h2>
+
+                Download Hungroo App Soon
+
+            </h2>
+
+            <p>
+
+                Faster ordering,
+                premium rewards,
+                real-time delivery tracking
+                and café exclusives.
+
+            </p>
+
+        </div>
+
+        <!-- BUTTONS -->
+
+        <div class="footer-app-buttons">
+
+            <a
+            href="#"
+            class="footer-app-btn">
+
+                <i class=
+                "fa-brands fa-google-play"></i>
+
+                <div>
+
+                    <small>
+
+                        GET IT ON
+
+                    </small>
+
+                    <span>
+
+                        Google Play
+
+                    </span>
+
+                </div>
+
+            </a>
+
+            <a
+            href="#"
+            class="footer-app-btn">
+
+                <i class=
+                "fa-brands fa-apple"></i>
+
+                <div>
+
+                    <small>
+
+                        DOWNLOAD ON THE
+
+                    </small>
+
+                    <span>
+
+                        App Store
+
+                    </span>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+    FOOTER BOTTOM
+    ===================================================== -->
 
     <div class="footer-bottom">
 
-        <!-- COPYRIGHT -->
+        <div class="footer-bottom-container">
 
-        <p>
+            <!-- COPYRIGHT -->
 
-            © <?php echo date("Y"); ?>
-            Hungroo Cafe.
-            All Rights Reserved.
+            <p>
 
-        </p>
+                © <?php echo date("Y"); ?>
+                Hungroo Café.
+                All Rights Reserved.
 
-        <!-- LINKS -->
+            </p>
 
-        <div class="footer-bottom-links">
+            <!-- LINKS -->
 
-            <a href="#">
+            <div class="footer-bottom-links">
 
-                Privacy Policy
+                <a href="#">
 
-            </a>
+                    Privacy Policy
 
-            <a href="#">
+                </a>
 
-                Terms & Conditions
+                <a href="#">
 
-            </a>
+                    Terms & Conditions
+
+                </a>
+
+                <a href="#">
+
+                    Refund Policy
+
+                </a>
+
+            </div>
 
         </div>
 

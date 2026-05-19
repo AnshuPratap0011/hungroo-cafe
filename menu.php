@@ -3,162 +3,130 @@
 require_once "db.php";
 
 /* =====================================================
-SEARCH & CATEGORY
+SEARCH
 ===================================================== */
 
-$search =
-trim($_GET["search"] ?? "");
+$search = trim($_GET["search"] ?? "");
+$category = trim($_GET["category"] ?? "");
 
-$category =
-trim($_GET["category"] ?? "");
+/* =====================================================
+CATEGORIES
+===================================================== */
 
 $allowedCategories = [
-
     "Veg",
     "Non Veg",
     "Boba",
     "Coffee",
     "Dessert",
     "Cold Drinks"
-
 ];
 
 $categoryIcons = [
-
     "Veg" => "fa-leaf",
     "Non Veg" => "fa-drumstick-bite",
     "Boba" => "fa-glass-water",
     "Coffee" => "fa-mug-hot",
     "Dessert" => "fa-ice-cream",
     "Cold Drinks" => "fa-wine-glass"
-
 ];
 
 /* =====================================================
 VALIDATE CATEGORY
 ===================================================== */
 
-if(
+if (
     $category !== "" &&
-    !in_array($category,$allowedCategories,true)
-){
-
+    !in_array($category, $allowedCategories, true)
+) {
     $category = "";
-
 }
 
 /* =====================================================
 QUERY
 ===================================================== */
 
-$query =
-"SELECT * FROM menu_items WHERE 1";
+$query = "SELECT * FROM menu_items WHERE 1";
 
 $params = [];
 $types = "";
 
 /* SEARCH */
 
-if($search !== ""){
+if ($search !== "") {
 
-    $query .=
-    " AND name LIKE ?";
+    $query .= " AND name LIKE ?";
 
-    $params[] =
-    "%" . $search . "%";
+    $params[] = "%" . $search . "%";
 
     $types .= "s";
-
 }
 
 /* CATEGORY */
 
-if($category !== ""){
+if ($category !== "") {
 
-    $query .=
-    " AND category = ?";
+    $query .= " AND category = ?";
 
-    $params[] =
-    $category;
+    $params[] = $category;
 
     $types .= "s";
-
 }
 
-$query .=
-" ORDER BY id DESC";
+$query .= " ORDER BY id DESC";
 
 /* =====================================================
-PREPARE
+EXECUTE
 ===================================================== */
 
-$stmt =
-mysqli_prepare($conn,$query);
+$stmt = mysqli_prepare($conn, $query);
 
-if(!empty($params)){
+if (!$stmt) {
+    die("Query Error");
+}
+
+if (!empty($params)) {
 
     mysqli_stmt_bind_param(
         $stmt,
         $types,
         ...$params
     );
-
 }
 
 mysqli_stmt_execute($stmt);
 
-$result =
-mysqli_stmt_get_result($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
-$totalItems =
-mysqli_num_rows($result);
+$totalItems = mysqli_num_rows($result);
 
 ?>
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>
+    <title>Hungroo Café | Premium Menu</title>
 
-Hungroo Cafe | Menu
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/menu.css">
 
-</title>
+    <!-- GOOGLE FONT -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
-<!-- CSS -->
-
-<link
-rel="stylesheet"
-href="Style.css?v=100">
-
-<!-- GOOGLE FONT -->
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<!-- FONT AWESOME -->
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 
@@ -171,17 +139,55 @@ NAVBAR
 <?php include "Navbar.php"; ?>
 
 <!-- =====================================================
-TOP OFFER
+TOP OFFERS
 ===================================================== -->
 
-<div class="top-offer-strip">
+<div class="menu-top-offers">
 
-    🍔 Free Delivery On Orders Above ₹299
+    <div class="menu-offer-track">
+
+        <div class="menu-offer-card">
+            <i class="fa-solid fa-truck-fast"></i>
+
+            <div>
+                <h4>Free Delivery</h4>
+                <p>Orders Above ₹299</p>
+            </div>
+        </div>
+
+        <div class="menu-offer-card">
+            <i class="fa-solid fa-burger"></i>
+
+            <div>
+                <h4>Burger Combo</h4>
+                <p>Fries + Drink Included</p>
+            </div>
+        </div>
+
+        <div class="menu-offer-card">
+            <i class="fa-solid fa-pizza-slice"></i>
+
+            <div>
+                <h4>Pizza Festival</h4>
+                <p>Flat 20% OFF Today</p>
+            </div>
+        </div>
+
+        <div class="menu-offer-card">
+            <i class="fa-solid fa-mug-hot"></i>
+
+            <div>
+                <h4>Café Coffee</h4>
+                <p>Freshly Brewed Everyday</p>
+            </div>
+        </div>
+
+    </div>
 
 </div>
 
 <!-- =====================================================
-MAIN
+PAGE
 ===================================================== -->
 
 <main class="menu-page">
@@ -199,25 +205,19 @@ HERO
     <div class="menu-hero-content">
 
         <span class="menu-badge">
-
             🔥 Hungroo Café Specials
-
         </span>
 
         <h1>
-
             Fresh Food <br>
             Crafted Daily
-
         </h1>
 
         <p>
-
-            Explore handcrafted burgers,
+            Discover handcrafted burgers,
             refreshing drinks, desserts,
             coffees and delicious café meals
-            prepared fresh every single day.
-
+            prepared fresh every day.
         </p>
 
         <!-- BUTTONS -->
@@ -228,15 +228,17 @@ HERO
                 href="#menu-items"
                 class="hero-btn">
 
+                <i class="fa-solid fa-utensils"></i>
                 Order Now
 
             </a>
 
             <a
-                href="home.php"
+                href="Cart.php"
                 class="hero-btn-outline">
 
-                Explore More
+                <i class="fa-solid fa-cart-shopping"></i>
+                View Cart
 
             </a>
 
@@ -247,51 +249,18 @@ HERO
         <div class="menu-hero-stats">
 
             <div class="hero-stat-box">
-
-                <h3>
-
-                    <?php echo $totalItems; ?>+
-
-                </h3>
-
-                <span>
-
-                    Menu Items
-
-                </span>
-
+                <h3><?php echo $totalItems; ?>+</h3>
+                <span>Menu Items</span>
             </div>
 
             <div class="hero-stat-box">
-
-                <h3>
-
-                    4.9★
-
-                </h3>
-
-                <span>
-
-                    Customer Rating
-
-                </span>
-
+                <h3>4.9★</h3>
+                <span>Customer Rating</span>
             </div>
 
             <div class="hero-stat-box">
-
-                <h3>
-
-                    15 Min
-
-                </h3>
-
-                <span>
-
-                    Fast Delivery
-
-                </span>
-
+                <h3>15 Min</h3>
+                <span>Fast Delivery</span>
             </div>
 
         </div>
@@ -302,40 +271,18 @@ HERO
 
     <div class="menu-hero-image">
 
+        <!-- ONLY TOP IMAGE -->
+
         <img
             src="resturant.png"
-            alt="Hungroo Cafe">
-
-        <!-- FLOATING CARD -->
-
-        <div class="floating-card">
-
-            <i class="fa-solid fa-burger"></i>
-
-            <div>
-
-                <h4>
-
-                    Hot & Fresh
-
-                </h4>
-
-                <p>
-
-                    Burgers & Café Meals
-
-                </p>
-
-            </div>
-
-        </div>
+            alt="Hungroo Café">
 
     </div>
 
 </section>
 
 <!-- =====================================================
-MENU WRAPPER
+WRAPPER
 ===================================================== -->
 
 <section class="menu-wrapper">
@@ -353,7 +300,7 @@ MENU WRAPPER
             action="menu.php"
             class="menu-search-box">
 
-            <?php if($category !== ""){ ?>
+            <?php if ($category !== "") { ?>
 
                 <input
                     type="hidden"
@@ -362,11 +309,7 @@ MENU WRAPPER
 
             <?php } ?>
 
-            <label>
-
-                Search Menu
-
-            </label>
+            <label>Search Food</label>
 
             <div class="menu-search-input">
 
@@ -375,17 +318,13 @@ MENU WRAPPER
                 <input
                     type="text"
                     name="search"
-
-                    placeholder="Burger, Coffee..."
-
+                    placeholder="Burger, Pizza..."
                     value="<?php echo htmlspecialchars($search); ?>">
 
             </div>
 
             <button type="submit">
-
-                Search
-
+                Search Menu
             </button>
 
         </form>
@@ -396,29 +335,18 @@ MENU WRAPPER
 
             <div class="sidebar-title">
 
-                <span>
+                <span>Categories</span>
 
-                    Categories
-
-                </span>
-
-                <h2>
-
-                    Browse Food
-
-                </h2>
+                <h2>Browse</h2>
 
             </div>
 
-            <!-- CATEGORY LIST -->
+            <!-- LIST -->
 
             <div class="category-scroll">
 
-                <!-- ALL -->
-
                 <a
                     href="menu.php"
-
                     class="<?php echo $category === "" ? "active" : ""; ?>">
 
                     <i class="fa-solid fa-border-all"></i>
@@ -427,13 +355,10 @@ MENU WRAPPER
 
                 </a>
 
-                <!-- LOOP -->
-
-                <?php foreach($allowedCategories as $cat){ ?>
+                <?php foreach ($allowedCategories as $cat) { ?>
 
                     <a
                         href="menu.php?category=<?php echo urlencode($cat); ?>"
-
                         class="<?php echo $category === $cat ? "active" : ""; ?>">
 
                         <i class="fa-solid <?php echo $categoryIcons[$cat]; ?>"></i>
@@ -465,19 +390,15 @@ MENU WRAPPER
             <div>
 
                 <span class="menu-small-title">
-
                     Fresh Picks
-
                 </span>
 
                 <h2>
 
                     <?php
-
                     echo $category !== ""
-                    ? htmlspecialchars($category)
-                    : "All Menu Items";
-
+                        ? htmlspecialchars($category)
+                        : "Popular Menu";
                     ?>
 
                 </h2>
@@ -489,11 +410,7 @@ MENU WRAPPER
                 <i class="fa-solid fa-utensils"></i>
 
                 <p>
-
-                    <?php echo $totalItems; ?>
-
-                    Items Available
-
+                    <?php echo $totalItems; ?> Items Available
                 </p>
 
             </div>
@@ -504,26 +421,14 @@ MENU WRAPPER
 
         <div class="menu-grid">
 
-            <!-- EMPTY -->
-
-            <?php if($totalItems === 0){ ?>
+            <?php if ($totalItems === 0) { ?>
 
                 <div class="empty-menu">
 
-                    <img
-                        src="assets/images/empty-cart.png"
-                        alt="No Food">
-
-                    <h2>
-
-                        No Delicious Food Found
-
-                    </h2>
+                    <h2>No Food Found</h2>
 
                     <p>
-
                         Try another category or search keyword.
-
                     </p>
 
                 </div>
@@ -532,67 +437,9 @@ MENU WRAPPER
 
             <!-- LOOP -->
 
-            <?php while($row = mysqli_fetch_assoc($result)){ ?>
+            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
 
                 <article class="food-card">
-
-                    <!-- GLOW -->
-
-                    <div class="card-glow"></div>
-
-                    <!-- IMAGE -->
-
-                    <div class="food-image">
-
-                        <!-- OFFER -->
-
-                        <div class="offer-badge">
-
-                            20% OFF
-
-                        </div>
-
-                        <!-- BG -->
-
-                        <div class="food-bg-shape"></div>
-
-                        <!-- IMAGE INNER -->
-
-                        <div class="food-image-inner">
-
-                            <img
-
-                                src="images/<?php echo htmlspecialchars($row["image"]); ?>"
-
-                                alt="<?php echo htmlspecialchars($row["name"]); ?>"
-
-                                onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=900&auto=format&fit=crop'">
-
-                        </div>
-
-                        <!-- CATEGORY -->
-
-                        <span class="food-tag">
-
-                            <i class="fa-solid <?php echo $categoryIcons[$row["category"]] ?? "fa-utensils"; ?>"></i>
-
-                            <?php echo htmlspecialchars($row["category"]); ?>
-
-                        </span>
-
-                        <!-- OVERLAY -->
-
-                        <div class="food-overlay">
-
-                            <button>
-
-                                Quick View
-
-                            </button>
-
-                        </div>
-
-                    </div>
 
                     <!-- CONTENT -->
 
@@ -602,35 +449,37 @@ MENU WRAPPER
 
                         <div class="food-top">
 
-                            <h3>
+                            <div>
 
-                                <?php echo htmlspecialchars($row["name"]); ?>
+                                <h3>
+                                    <?php echo htmlspecialchars($row["name"]); ?>
+                                </h3>
 
-                            </h3>
+                                <span class="food-category">
+
+                                    <i class="fa-solid <?php echo $categoryIcons[$row["category"]] ?? "fa-utensils"; ?>"></i>
+
+                                    <?php echo htmlspecialchars($row["category"]); ?>
+
+                                </span>
+
+                            </div>
 
                             <!-- PRICE -->
 
                             <div class="food-price">
 
                                 <span class="new-price">
-
                                     ₹<?php echo htmlspecialchars($row["price"]); ?>
-
                                 </span>
-
-                                <del>
-
-                                    ₹<?php echo htmlspecialchars($row["price"] + 80); ?>
-
-                                </del>
 
                             </div>
 
                         </div>
 
-                        <!-- DESC -->
+                        <!-- DESCRIPTION -->
 
-                        <p>
+                        <p class="food-desc">
 
                             <?php echo htmlspecialchars($row["description"]); ?>
 
@@ -640,44 +489,48 @@ MENU WRAPPER
 
                         <div class="food-meta">
 
-                            <span>
+                            <span>⭐ 4.8</span>
 
-                                <i class="fa-solid fa-star"></i>
-
-                                4.8 Rating
-
-                            </span>
-
-                            <span>
-
-                                <i class="fa-solid fa-clock"></i>
-
-                                15 Min
-
-                            </span>
-
-                        </div>
-
-                        <!-- DELIVERY -->
-
-                        <div class="delivery-pill">
-
-                            <i class="fa-solid fa-bolt"></i>
-
-                            Free Delivery
+                            <span>⏱ 15 Min</span>
 
                         </div>
 
                         <!-- CART -->
 
-                        <div
-                            class="menu-cart-box"
+                        <div class="cart-action">
 
-                            data-name="<?php echo htmlspecialchars($row["name"]); ?>"
+                            <!-- ADD BUTTON -->
 
-                            data-price="<?php echo htmlspecialchars($row["price"]); ?>"
+                            <button
+                                class="food-btn add-cart"
 
-                            data-image="images/<?php echo htmlspecialchars($row["image"]); ?>">
+                                data-name="<?php echo htmlspecialchars($row["name"]); ?>"
+
+                                data-price="<?php echo htmlspecialchars($row["price"]); ?>">
+
+                                <i class="fa-solid fa-cart-shopping"></i>
+
+                                Add To Cart
+
+                            </button>
+
+                            <!-- QTY -->
+
+                            <div class="qty-wrap hidden">
+
+                                <button class="qty-btn minus">
+                                    -
+                                </button>
+
+                                <span class="qty-number">
+                                    1
+                                </span>
+
+                                <button class="qty-btn plus">
+                                    +
+                                </button>
+
+                            </div>
 
                         </div>
 
@@ -714,232 +567,41 @@ TOP BUTTON
 </button>
 
 <!-- =====================================================
-JAVASCRIPT
+CART JS
+===================================================== -->
+
+<script src="cart.js"></script>
+
+<!-- =====================================================
+TOP BUTTON JS
 ===================================================== -->
 
 <script>
 
-/* =====================================================
-CART
-===================================================== */
+const topBtn = document.getElementById("topBtn");
 
-let cart =
-JSON.parse(
-localStorage.getItem("hungroo-cart")
-) || [];
+window.addEventListener("scroll", () => {
 
-/* SAVE */
+    if (window.scrollY > 300) {
 
-function saveCart(){
+        topBtn.classList.add("show");
 
-    localStorage.setItem(
-        "hungroo-cart",
-        JSON.stringify(cart)
-    );
+    } else {
 
-}
+        topBtn.classList.remove("show");
 
-/* COUNT */
-
-function updateCartCount(){
-
-    const countEl =
-    document.getElementById("cart-count");
-
-    if(!countEl) return;
-
-    let total = 0;
-
-    cart.forEach(item => {
-
-        total += item.qty;
-
-    });
-
-    countEl.textContent = total;
-
-}
-
-/* =====================================================
-BUTTONS
-===================================================== */
-
-function renderCartButtons(){
-
-    document
-    .querySelectorAll(".menu-cart-box")
-    .forEach(box => {
-
-        const name =
-        box.dataset.name;
-
-        const existing =
-        cart.find(
-        item => item.name === name
-        );
-
-        /* EXISTS */
-
-        if(existing){
-
-            box.innerHTML = `
-
-            <div class="qty-wrapper">
-
-                <button
-                    class="qty-btn minus">
-
-                    -
-
-                </button>
-
-                <span>
-
-                    ${existing.qty}
-
-                </span>
-
-                <button
-                    class="qty-btn plus">
-
-                    +
-
-                </button>
-
-            </div>
-
-            `;
-
-            /* PLUS */
-
-            box
-            .querySelector(".plus")
-            .onclick = () => {
-
-                existing.qty++;
-
-                saveCart();
-
-                renderCartButtons();
-
-                updateCartCount();
-
-            };
-
-            /* MINUS */
-
-            box
-            .querySelector(".minus")
-            .onclick = () => {
-
-                existing.qty--;
-
-                if(existing.qty <= 0){
-
-                    cart =
-                    cart.filter(
-                    item => item.name !== name
-                    );
-
-                }
-
-                saveCart();
-
-                renderCartButtons();
-
-                updateCartCount();
-
-            };
-
-        } else {
-
-            box.innerHTML = `
-
-            <button class="food-btn">
-
-                <i class="fa-solid fa-plus"></i>
-
-                Add
-
-            </button>
-
-            `;
-
-            box
-            .querySelector(".food-btn")
-            .onclick = () => {
-
-                cart.push({
-
-                    name:
-                    box.dataset.name,
-
-                    price:
-                    parseInt(
-                    box.dataset.price
-                    ),
-
-                    image:
-                    box.dataset.image,
-
-                    qty:1
-
-                });
-
-                saveCart();
-
-                renderCartButtons();
-
-                updateCartCount();
-
-            };
-
-        }
-
-    });
-
-}
-
-/* =====================================================
-TOP BUTTON
-===================================================== */
-
-const topButton =
-document.getElementById("topBtn");
-
-window.addEventListener(
-"scroll",
-()=>{
-
-    topButton.classList.toggle(
-    "show",
-
-    document.documentElement.scrollTop > 300
-    );
+    }
 
 });
 
-topButton.addEventListener(
-"click",
-()=>{
+topBtn.onclick = () => {
 
     window.scrollTo({
-
-        top:0,
-
-        behavior:"smooth"
-
+        top: 0,
+        behavior: "smooth"
     });
 
-});
-
-/* =====================================================
-INIT
-===================================================== */
-
-renderCartButtons();
-
-updateCartCount();
+};
 
 </script>
 

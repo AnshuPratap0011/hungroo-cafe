@@ -1,159 +1,287 @@
-<header class="navbar">
+<!-- =========================================================
+NAVBAR CSS
+========================================================= -->
+
+<link
+rel="stylesheet"
+href="assets/css/navbar.css?v=2">
+
+<?php
+/* =========================================================
+HUNGROO PREMIUM NAVBAR
+========================================================= */
+?>
+
+<!-- =========================================================
+HEADER
+========================================================= -->
+
+<header
+class="navbar"
+id="navbar">
 
     <!-- =====================================================
-    LEFT
+    NAV CONTAINER
     ===================================================== -->
 
-    <div class="nav-left">
+    <div class="nav-container">
 
-        <!-- MOBILE TOGGLE -->
+        <!-- =====================================================
+        LEFT
+        ===================================================== -->
 
-        <button
+        <div class="nav-left">
+
+            <!-- MOBILE TOGGLE -->
+
+            <button
             class="menu-toggle"
             id="menuToggle"
             type="button"
+
             aria-label="Open Menu">
 
-            <i class="fa-solid fa-bars"></i>
+                <i class="fa-solid fa-bars"></i>
 
-        </button>
+            </button>
 
-        <!-- LOGO -->
+            <!-- LOGO -->
 
-        <a
+            <a
             href="home.php"
             class="logo">
 
-            <img
+                <img
                 src="hlogo.png"
-                alt="Hungroo Cafe">
+                alt="Hungroo Café">
 
-        </a>
+                <span>
 
-    </div>
+                    Hungroo Café
 
-    <!-- =====================================================
-    NAVIGATION
-    ===================================================== -->
+                </span>
 
-    <nav
-        class="nav"
+            </a>
+
+        </div>
+
+        <!-- =====================================================
+        NAVIGATION
+        ===================================================== -->
+
+        <nav
+        class="nav-links"
         id="mobileNav">
 
-        <a href="home.php">
+            <a href="home.php">
 
-            Home
+                Home
 
-        </a>
+            </a>
 
-        <a href="menu.php">
+            <a href="menu.php">
 
-            Menu
+                Menu
 
-        </a>
+            </a>
 
+            <a href="home.php#popular">
 
-        <a href="home.php#signature">
+                Popular
 
-            Signature
+            </a>
 
-        </a>
+            <a href="home.php#reviews">
 
-        <a href="home.php#reviews">
+                Reviews
 
-            Reviews
+            </a>
 
-        </a>
+            <a href="#footer">
 
-        <a href="#footer">
+                Contact
 
-            Contact
+            </a>
 
-        </a>
+        </nav>
 
-    </nav>
+        <!-- =====================================================
+        RIGHT
+        ===================================================== -->
 
-    <!-- =====================================================
-    RIGHT
-    ===================================================== -->
+        <div class="nav-right">
 
-    <div class="nav-icons">
+            <!-- SEARCH -->
 
-        <!-- CART -->
+            <button
+            class="nav-icon-btn"
+            id="searchBtn"
+            type="button">
 
-        <button
-            class="cart-icon"
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+            </button>
+
+            <!-- THEME -->
+
+            <button
+            class="nav-icon-btn"
+            id="themeToggle"
+            type="button">
+
+                <i class="fa-solid fa-moon"></i>
+
+            </button>
+
+            <!-- CART -->
+
+            <button
+            class="cart-btn"
             id="openCartBtn"
-            type="button"
-            aria-label="Open Cart">
+            type="button">
 
-            <i class="fa-solid fa-cart-shopping"></i>
+                <i class="fa-solid fa-cart-shopping"></i>
 
-            <span id="cart-count">
+                <span id="cart-count">
 
-                0
+                    0
 
-            </span>
+                </span>
 
-        </button>
+            </button>
 
-        <!-- PROFILE -->
+            <!-- PROFILE -->
 
-        <a
+            <a
             href="#"
-            class="profile-icon"
-            aria-label="Profile">
+            class="profile-btn">
 
-            <i class="fa-solid fa-user"></i>
+                <i class="fa-solid fa-user"></i>
 
-        </a>
+            </a>
+
+        </div>
 
     </div>
 
 </header>
 
-<!-- =====================================================
+<!-- =========================================================
 MOBILE OVERLAY
-===================================================== -->
+========================================================= -->
 
 <div
-    class="mobile-overlay"
-    id="mobileOverlay">
+class="mobile-overlay"
+id="mobileOverlay">
 
 </div>
 
-<!-- =====================================================
-MINI CART OVERLAY
-===================================================== -->
+<!-- =========================================================
+SEARCH MODAL
+========================================================= -->
 
 <div
-    class="mini-cart-overlay"
-    id="miniCartOverlay">
+class="search-modal"
+id="searchModal">
+
+    <div class="search-box">
+
+        <!-- CLOSE -->
+
+        <button
+        class="search-close"
+        id="closeSearch"
+        type="button">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+        <!-- TITLE -->
+
+        <h2>
+
+            Search Hungroo Menu
+
+        </h2>
+
+        <!-- FORM -->
+
+        <form
+        action="menu.php"
+        method="GET"
+
+        class="search-form">
+
+            <div class="search-input-wrap">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                type="text"
+
+                name="search"
+
+                placeholder=
+                "Search burgers, pizza, coffee...">
+
+            </div>
+
+            <button type="submit">
+
+                Explore Menu
+
+            </button>
+
+        </form>
+
+    </div>
 
 </div>
 
-<!-- =====================================================
-MINI CART SIDEBAR
-===================================================== -->
+<!-- =========================================================
+CART OVERLAY
+========================================================= -->
+
+<div
+class="cart-overlay"
+id="cartOverlay">
+
+</div>
+
+<!-- =========================================================
+MINI CART
+========================================================= -->
 
 <aside
-    class="mini-cart-sidebar"
-    id="miniCartSidebar">
+class="mini-cart"
+id="cartSidebar">
 
     <!-- TOP -->
 
     <div class="mini-cart-top">
 
-        <h2>
+        <div>
 
-            Your Cart
+            <span>
 
-        </h2>
+                Premium Cart
+
+            </span>
+
+            <h2>
+
+                Your Order
+
+            </h2>
+
+        </div>
+
+        <!-- CLOSE -->
 
         <button
-            id="closeCartBtn"
-            type="button"
-            aria-label="Close Cart">
+        id="closeCartBtn"
+        type="button">
 
             <i class="fa-solid fa-xmark"></i>
 
@@ -164,8 +292,8 @@ MINI CART SIDEBAR
     <!-- ITEMS -->
 
     <div
-        class="mini-cart-items"
-        id="miniCartItems">
+    class="mini-cart-items"
+    id="cart-items">
 
     </div>
 
@@ -173,7 +301,76 @@ MINI CART SIDEBAR
 
     <div class="mini-cart-footer">
 
-        <div class="mini-cart-total-row">
+        <!-- SUBTOTAL -->
+
+        <div class="mini-cart-row">
+
+            <p>
+
+                Subtotal
+
+            </p>
+
+            <h4>
+
+                ₹<span id="sidebar-subtotal">
+
+                    0
+
+                </span>
+
+            </h4>
+
+        </div>
+
+        <!-- DELIVERY -->
+
+        <div class="mini-cart-row">
+
+            <p>
+
+                Delivery
+
+            </p>
+
+            <h4>
+
+                ₹<span id="sidebar-delivery">
+
+                    0
+
+                </span>
+
+            </h4>
+
+        </div>
+
+        <!-- GST -->
+
+        <div class="mini-cart-row">
+
+            <p>
+
+                GST
+
+            </p>
+
+            <h4>
+
+                ₹<span id="sidebar-gst">
+
+                    0
+
+                </span>
+
+            </h4>
+
+        </div>
+
+        <!-- TOTAL -->
+
+        <div
+        class="mini-cart-row total-row">
 
             <h3>
 
@@ -183,7 +380,7 @@ MINI CART SIDEBAR
 
             <h2>
 
-                ₹<span id="miniCartTotal">
+                ₹<span id="cart-total">
 
                     0
 
@@ -193,27 +390,46 @@ MINI CART SIDEBAR
 
         </div>
 
-        <a
-            href="cart.php"
+        <!-- BUTTONS -->
+
+        <div class="mini-cart-buttons">
+
+            <a
+            href="Cart.php"
             class="mini-cart-btn">
 
-            Proceed To Cart
+                View Cart
 
-        </a>
+            </a>
+
+            <a
+            href="checkout.php"
+            class="mini-cart-btn checkout">
+
+                Checkout
+
+            </a>
+
+        </div>
 
     </div>
 
 </aside>
 
-<!-- =====================================================
-JAVASCRIPT
-===================================================== -->
+<!-- =========================================================
+NAVBAR SCRIPT
+========================================================= -->
 
 <script>
 
-/* =====================================================
-MOBILE NAV
-===================================================== */
+/* =========================================================
+ELEMENTS
+========================================================= */
+
+const navbar =
+document.getElementById(
+"navbar"
+);
 
 const menuToggle =
 document.getElementById(
@@ -230,80 +446,19 @@ document.getElementById(
 "mobileOverlay"
 );
 
-/* TOGGLE */
-
-menuToggle.onclick = () => {
-
-    mobileNav.classList.toggle(
-    "active"
-    );
-
-    mobileOverlay.classList.toggle(
-    "active"
-    );
-
-};
-
-/* CLOSE */
-
-mobileOverlay.onclick = () => {
-
-    mobileNav.classList.remove(
-    "active"
-    );
-
-    mobileOverlay.classList.remove(
-    "active"
-    );
-
-};
-
-/* AUTO CLOSE */
-
-document
-.querySelectorAll(".nav a")
-.forEach(link => {
-
-    link.onclick = () => {
-
-        mobileNav.classList.remove(
-        "active"
-        );
-
-        mobileOverlay.classList.remove(
-        "active"
-        );
-
-    };
-
-});
-
-/* =====================================================
-CART DATA
-===================================================== */
-
-let miniCart =
-JSON.parse(
-localStorage.getItem(
-"hungroo-cart"
-)
-) || [];
-
-/* ELEMENTS */
-
-const cartCount =
+const themeToggle =
 document.getElementById(
-"cart-count"
+"themeToggle"
 );
 
-const miniCartItems =
+const cartSidebar =
 document.getElementById(
-"miniCartItems"
+"cartSidebar"
 );
 
-const miniCartTotal =
+const cartOverlay =
 document.getElementById(
-"miniCartTotal"
+"cartOverlay"
 );
 
 const openCartBtn =
@@ -316,247 +471,251 @@ document.getElementById(
 "closeCartBtn"
 );
 
-const miniCartSidebar =
+const searchBtn =
 document.getElementById(
-"miniCartSidebar"
+"searchBtn"
 );
 
-const miniCartOverlay =
+const searchModal =
 document.getElementById(
-"miniCartOverlay"
+"searchModal"
 );
 
-/* =====================================================
-SAVE CART
-===================================================== */
+const closeSearch =
+document.getElementById(
+"closeSearch"
+);
 
-function saveMiniCart(){
+/* =========================================================
+NAVBAR SCROLL
+========================================================= */
 
-    localStorage.setItem(
-        "hungroo-cart",
-        JSON.stringify(miniCart)
+window.addEventListener(
+"scroll",
+()=>{
+
+    if(window.scrollY > 20){
+
+        navbar.classList.add(
+        "scrolled"
+        );
+
+    }
+
+    else{
+
+        navbar.classList.remove(
+        "scrolled"
+        );
+
+    }
+
+});
+
+/* =========================================================
+MOBILE MENU
+========================================================= */
+
+menuToggle?.addEventListener(
+"click",
+()=>{
+
+    mobileNav.classList.toggle(
+    "active"
     );
 
-}
+    mobileOverlay.classList.toggle(
+    "active"
+    );
 
-/* =====================================================
-UPDATE COUNT
-===================================================== */
+});
 
-function updateMiniCartCount(){
+/* =========================================================
+CLOSE MOBILE
+========================================================= */
 
-    let total = 0;
+mobileOverlay?.addEventListener(
+"click",
+()=>{
 
-    miniCart.forEach(item => {
+    mobileNav.classList.remove(
+    "active"
+    );
 
-        total += item.qty;
+    mobileOverlay.classList.remove(
+    "active"
+    );
 
-    });
+});
 
-    cartCount.textContent = total;
-
-}
-
-/* =====================================================
-RENDER CART
-===================================================== */
-
-function renderMiniCart(){
-
-    miniCartItems.innerHTML = "";
-
-    let totalPrice = 0;
-
-    /* EMPTY */
-
-    if(miniCart.length === 0){
-
-        miniCartItems.innerHTML = `
-
-        <div class="mini-cart-empty">
-
-            <i class="fa-solid fa-cart-shopping"></i>
-
-            <h3>
-
-                Your Cart Is Empty
-
-            </h3>
-
-            <p>
-
-                Add delicious items to continue.
-
-            </p>
-
-        </div>
-
-        `;
-
-        miniCartTotal.textContent = "0";
-
-        return;
-
-    }
-
-    /* LOOP */
-
-    miniCart.forEach((item,index)=>{
-
-        totalPrice +=
-        item.price * item.qty;
-
-        miniCartItems.innerHTML += `
-
-        <div class="mini-cart-card">
-
-            <!-- IMAGE -->
-
-            <div class="mini-cart-image">
-
-                <img
-                    src="${item.image}"
-                    alt="${item.name}">
-
-            </div>
-
-            <!-- CONTENT -->
-
-            <div class="mini-cart-content">
-
-                <h4>
-
-                    ${item.name}
-
-                </h4>
-
-                <span>
-
-                    ₹${item.price}
-
-                </span>
-
-                <!-- QTY -->
-
-                <div class="mini-cart-qty">
-
-                    <button
-                        onclick="decreaseMiniQty(${index})">
-
-                        -
-
-                    </button>
-
-                    <p>
-
-                        ${item.qty}
-
-                    </p>
-
-                    <button
-                        onclick="increaseMiniQty(${index})">
-
-                        +
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        `;
-
-    });
-
-    miniCartTotal.textContent =
-    totalPrice;
-
-}
-
-/* =====================================================
-INCREASE
-===================================================== */
-
-function increaseMiniQty(index){
-
-    miniCart[index].qty++;
-
-    saveMiniCart();
-
-    renderMiniCart();
-
-    updateMiniCartCount();
-
-}
-
-/* =====================================================
-DECREASE
-===================================================== */
-
-function decreaseMiniQty(index){
-
-    miniCart[index].qty--;
-
-    if(miniCart[index].qty <= 0){
-
-        miniCart.splice(index,1);
-
-    }
-
-    saveMiniCart();
-
-    renderMiniCart();
-
-    updateMiniCartCount();
-
-}
-
-/* =====================================================
+/* =========================================================
 OPEN CART
-===================================================== */
+========================================================= */
 
-openCartBtn.onclick = () => {
+openCartBtn?.addEventListener(
+"click",
+()=>{
 
-    miniCartSidebar.classList.add(
+    cartSidebar.classList.add(
     "active"
     );
 
-    miniCartOverlay.classList.add(
+    cartOverlay.classList.add(
     "active"
     );
 
-};
+    document.body.style.overflow =
+    "hidden";
 
-/* =====================================================
+});
+
+/* =========================================================
 CLOSE CART
-===================================================== */
+========================================================= */
 
-function closeMiniCart(){
+function closeCart(){
 
-    miniCartSidebar.classList.remove(
+    cartSidebar.classList.remove(
     "active"
     );
 
-    miniCartOverlay.classList.remove(
+    cartOverlay.classList.remove(
     "active"
     );
+
+    document.body.style.overflow =
+    "";
 
 }
 
-closeCartBtn.onclick =
-closeMiniCart;
+closeCartBtn?.addEventListener(
+"click",
+closeCart
+);
 
-miniCartOverlay.onclick =
-closeMiniCart;
+cartOverlay?.addEventListener(
+"click",
+closeCart
+);
 
-/* =====================================================
-INIT
-===================================================== */
+/* =========================================================
+SEARCH MODAL
+========================================================= */
 
-updateMiniCartCount();
+searchBtn?.addEventListener(
+"click",
+()=>{
 
-renderMiniCart();
+    searchModal.classList.add(
+    "active"
+    );
+
+    document.body.style.overflow =
+    "hidden";
+
+});
+
+/* =========================================================
+CLOSE SEARCH
+========================================================= */
+
+function closeSearchModal(){
+
+    searchModal.classList.remove(
+    "active"
+    );
+
+    document.body.style.overflow =
+    "";
+
+}
+
+closeSearch?.addEventListener(
+"click",
+closeSearchModal
+);
+
+searchModal?.addEventListener(
+"click",
+(e)=>{
+
+    if(e.target === searchModal){
+
+        closeSearchModal();
+
+    }
+
+});
+
+/* =========================================================
+THEME LOAD
+========================================================= */
+
+if(
+localStorage.getItem(
+"theme"
+) === "light"
+){
+
+    document.body.classList.add(
+    "light-mode"
+    );
+
+    themeToggle.innerHTML =
+    '<i class="fa-solid fa-sun"></i>';
+
+}
+
+/* =========================================================
+THEME TOGGLE
+========================================================= */
+
+themeToggle?.addEventListener(
+"click",
+()=>{
+
+    document.body.classList.toggle(
+    "light-mode"
+    );
+
+    if(
+    document.body.classList.contains(
+    "light-mode"
+    )
+    ){
+
+        localStorage.setItem(
+        "theme",
+        "light"
+        );
+
+        themeToggle.innerHTML =
+        '<i class="fa-solid fa-sun"></i>';
+
+    }
+
+    else{
+
+        localStorage.setItem(
+        "theme",
+        "dark"
+        );
+
+        themeToggle.innerHTML =
+        '<i class="fa-solid fa-moon"></i>';
+
+    }
+
+});
+
+</script>
+
+<!-- =========================================================
+GLOBAL CART JS
+========================================================= -->
+
+<script
+src="cart.js?v=2"
+defer>
 
 </script>

@@ -2,6 +2,17 @@
 
 require_once "db.php";
 
+/* =========================================================
+PAGE TITLE
+========================================================= */
+
+$pageTitle =
+"Hungroo Café | Premium Cart";
+
+/* =========================================================
+INCLUDE NAVBAR
+========================================================= */
+
 ?>
 
 <!DOCTYPE html>
@@ -16,29 +27,48 @@ require_once "db.php";
 name="viewport"
 content="width=device-width, initial-scale=1.0">
 
+<meta
+name="description"
+content="Review your Hungroo Café cart, update quantities and proceed to checkout.">
+
 <title>
 
-Hungroo Cafe | Cart
+<?php echo $pageTitle; ?>
 
 </title>
 
-<!-- CSS -->
+<!-- =====================================================
+GOOGLE FONT
+===================================================== -->
 
 <link
-rel="stylesheet"
-href="Style.css?v=999">
+rel="preconnect"
+href="https://fonts.googleapis.com">
 
-<!-- GOOGLE FONT -->
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
 
 <link
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- FONT AWESOME -->
+<!-- =====================================================
+FONT AWESOME
+===================================================== -->
 
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- =====================================================
+CSS
+===================================================== -->
+
+<link
+rel="stylesheet"
+href="assets/css/cart.css">
 
 </head>
 
@@ -54,144 +84,194 @@ NAVBAR
 MAIN
 ===================================================== -->
 
-<main class="modern-cart-page">
-
-<!-- =====================================================
-HERO
-===================================================== -->
-
-<section class="cart-hero-modern">
-
-    <div class="cart-hero-overlay"></div>
-
-    <div class="cart-hero-content">
-
-        <span class="cart-mini-title">
-
-            Hungroo Premium Cart
-
-        </span>
-
-        <h1>
-
-            Review Your <br>
-            Delicious Order
-
-        </h1>
-
-        <p>
-
-            Fresh meals, handcrafted drinks,
-            burgers and desserts selected
-            specially for you.
-
-        </p>
-
-    </div>
-
-</section>
-
-<!-- =====================================================
-WRAPPER
-===================================================== -->
-
-<section class="cart-layout-wrapper">
+<main class="cart-page">
 
     <!-- =====================================================
-    LEFT
+    HERO
     ===================================================== -->
 
-    <section class="cart-left-section">
+    <section class="cart-hero">
 
-        <!-- TOP -->
+        <!-- BG -->
 
-        <div class="cart-section-top">
+        <div class="cart-hero-glow"></div>
 
-            <div>
+        <!-- LEFT -->
 
-                <span>
+        <div class="cart-hero-content">
 
-                    Your Order
+            <span class="cart-badge">
 
-                </span>
+                Hungroo Premium Cart
 
-                <h2>
+            </span>
 
-                    Cart Items
+            <h1>
 
-                </h2>
+                Your Delicious
+                Order Is Waiting
 
-            </div>
-
-            <button
-                class="clear-cart-modern-btn"
-                id="clearCartBtn"
-                type="button">
-
-                <i class="fa-solid fa-trash"></i>
-
-                Clear Cart
-
-            </button>
-
-        </div>
-
-        <!-- ITEMS -->
-
-        <div
-            class="modern-cart-items"
-            id="cartPageItems">
-
-        </div>
-
-        <!-- EMPTY -->
-
-        <div
-            class="modern-empty-cart hidden"
-            id="emptyCart">
-
-            <div class="empty-cart-icon">
-
-                <i class="fa-solid fa-cart-shopping"></i>
-
-            </div>
-
-            <h2>
-
-                Your Cart Is Empty
-
-            </h2>
+            </h1>
 
             <p>
 
-                Add delicious meals and
-                experience premium café vibes.
+                Review your selected meals,
+                update quantities and continue
+                to secure checkout for a premium
+                café ordering experience.
 
             </p>
 
-            <a
-                href="menu.php"
-                class="empty-cart-btn">
+            <!-- FEATURES -->
 
-                Explore Menu
+            <div class="cart-features">
 
-            </a>
+                <div class="cart-feature-box">
+
+                    <i class="fa-solid fa-bolt"></i>
+
+                    Fast Delivery
+
+                </div>
+
+                <div class="cart-feature-box">
+
+                    <i class="fa-solid fa-shield-heart"></i>
+
+                    Secure Checkout
+
+                </div>
+
+                <div class="cart-feature-box">
+
+                    <i class="fa-solid fa-star"></i>
+
+                    Premium Quality
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="cart-hero-image">
+
+            <img
+            src="assets/images/promo-4.png"
+            alt="Cart Food">
 
         </div>
 
     </section>
 
     <!-- =====================================================
-    RIGHT
+    WRAPPER
     ===================================================== -->
 
-    <aside class="cart-summary-modern">
+    <section class="cart-wrapper">
 
-        <div class="summary-modern-card">
+        <!-- =====================================================
+        CART ITEMS
+        ===================================================== -->
 
-            <!-- HEAD -->
+        <section class="cart-items-section">
 
-            <div class="summary-modern-head">
+            <!-- TOPBAR -->
+
+            <div class="cart-topbar">
+
+                <div>
+
+                    <span>
+
+                        Hungroo Order
+
+                    </span>
+
+                    <h2>
+
+                        Cart Items
+
+                    </h2>
+
+                </div>
+
+                <!-- COUNT -->
+
+                <div class="cart-count-box">
+
+                    <i class="fa-solid fa-cart-shopping"></i>
+
+                    <p>
+
+                        <span id="cart-page-count">
+
+                            0
+
+                        </span>
+
+                        Items
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- EMPTY -->
+
+            <div
+            class="empty-cart hidden"
+            id="empty-cart">
+
+                <img
+                src="assets/images/empty-cart.png"
+                alt="Empty Cart">
+
+                <h2>
+
+                    Your Cart Is Empty
+
+                </h2>
+
+                <p>
+
+                    Explore premium meals and
+                    add delicious food now.
+
+                </p>
+
+                <a
+                href="menu.php"
+                class="empty-cart-btn">
+
+                    Explore Menu
+
+                </a>
+
+            </div>
+
+            <!-- ITEMS -->
+
+            <div
+            class="cart-page-items"
+            id="cart-page-items">
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+        SUMMARY
+        ===================================================== -->
+
+        <aside class="cart-summary">
+
+            <!-- TITLE -->
+
+            <div class="summary-title">
 
                 <span>
 
@@ -207,151 +287,174 @@ WRAPPER
 
             </div>
 
-            <!-- LIST -->
+            <!-- SUMMARY BOX -->
 
-            <div class="summary-modern-list">
+            <div class="summary-box">
 
-                <div class="summary-modern-row">
+                <!-- ROW -->
 
-                    <span>
+                <div class="summary-row">
+
+                    <p>
 
                         Subtotal
 
-                    </span>
+                    </p>
 
-                    <strong>
+                    <h4>
 
-                        ₹<span id="subtotal">
+                        ₹<span id="cart-subtotal">
 
                             0
 
                         </span>
 
-                    </strong>
+                    </h4>
 
                 </div>
 
-                <div class="summary-modern-row">
+                <!-- ROW -->
 
-                    <span>
+                <div class="summary-row">
+
+                    <p>
 
                         Delivery Fee
 
-                    </span>
+                    </p>
 
-                    <strong>
+                    <h4>
 
-                        ₹<span id="delivery">
-
-                            40
-
-                        </span>
-
-                    </strong>
-
-                </div>
-
-                <div class="summary-modern-row">
-
-                    <span>
-
-                        GST (5%)
-
-                    </span>
-
-                    <strong>
-
-                        ₹<span id="gst">
+                        ₹<span id="cart-delivery">
 
                             0
 
                         </span>
 
-                    </strong>
+                    </h4>
+
+                </div>
+
+                <!-- ROW -->
+
+                <div class="summary-row">
+
+                    <p>
+
+                        GST (5%)
+
+                    </p>
+
+                    <h4>
+
+                        ₹<span id="cart-gst">
+
+                            0
+
+                        </span>
+
+                    </h4>
+
+                </div>
+
+                <!-- TOTAL -->
+
+                <div
+                class="summary-row total">
+
+                    <h3>
+
+                        Total
+
+                    </h3>
+
+                    <h2>
+
+                        ₹<span id="cart-total-page">
+
+                            0
+
+                        </span>
+
+                    </h2>
 
                 </div>
 
             </div>
 
-            <!-- TOTAL -->
+            <!-- DELIVERY -->
 
-            <div class="summary-total-modern">
+            <div class="delivery-card">
+
+                <div class="delivery-icon">
+
+                    <i class="fa-solid fa-truck-fast"></i>
+
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Fast Delivery
+
+                    </h3>
+
+                    <p>
+
+                        Estimated arrival
+                        within 15-25 minutes.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- OFFER -->
+
+            <div class="cart-offer-card">
 
                 <span>
 
-                    Total Amount
+                    Special Offer
 
                 </span>
 
                 <h3>
 
-                    ₹<span id="grandTotal">
-
-                        0
-
-                    </span>
+                    Free Fries On Orders
+                    Above ₹599
 
                 </h3>
 
             </div>
 
-            <!-- BUTTON -->
+            <!-- BUTTONS -->
 
-            <button
-                class="checkout-modern-btn"
-                id="checkoutBtn">
+            <div class="cart-buttons">
 
-                Proceed To Checkout
+                <a
+                href="menu.php"
+                class="cart-btn-outline">
 
-            </button>
+                    Continue Shopping
 
-            <!-- FEATURES -->
+                </a>
 
-            <div class="summary-modern-features">
+                <a
+                href="checkout.php"
+                class="cart-btn-primary">
 
-                <div class="summary-feature">
+                    Proceed To Checkout
 
-                    <i class="fa-solid fa-shield-heart"></i>
-
-                    <span>
-
-                        Secure Payment
-
-                    </span>
-
-                </div>
-
-                <div class="summary-feature">
-
-                    <i class="fa-solid fa-truck-fast"></i>
-
-                    <span>
-
-                        Fast Delivery
-
-                    </span>
-
-                </div>
-
-                <div class="summary-feature">
-
-                    <i class="fa-solid fa-burger"></i>
-
-                    <span>
-
-                        Fresh Food
-
-                    </span>
-
-                </div>
+                </a>
 
             </div>
 
-        </div>
+        </aside>
 
-    </aside>
-
-</section>
+    </section>
 
 </main>
 
@@ -362,423 +465,11 @@ FOOTER
 <?php include "footer.php"; ?>
 
 <!-- =====================================================
-TOP BUTTON
+CART JS
 ===================================================== -->
 
-<button
-id="topBtn"
-type="button">
-
-<i class="fa-solid fa-arrow-up"></i>
-
-</button>
-
-<!-- =====================================================
-JAVASCRIPT
-===================================================== -->
-
-<script>
-
-/* =====================================================
-ELEMENTS
-===================================================== */
-
-const cartContainer =
-document.getElementById(
-"cartPageItems"
-);
-
-const subtotalEl =
-document.getElementById(
-"subtotal"
-);
-
-const gstEl =
-document.getElementById(
-"gst"
-);
-
-const totalEl =
-document.getElementById(
-"grandTotal"
-);
-
-const emptyCart =
-document.getElementById(
-"emptyCart"
-);
-
-const clearCartBtn =
-document.getElementById(
-"clearCartBtn"
-);
-
-const checkoutBtn =
-document.getElementById(
-"checkoutBtn"
-);
-
-/* =====================================================
-CART
-===================================================== */
-
-let cart =
-JSON.parse(
-localStorage.getItem(
-"hungroo-cart"
-)
-) || [];
-
-/* =====================================================
-SAVE
-===================================================== */
-
-function saveCart(){
-
-    localStorage.setItem(
-        "hungroo-cart",
-        JSON.stringify(cart)
-    );
-
-}
-
-/* =====================================================
-COUNT
-===================================================== */
-
-function updateCartCount(){
-
-    const cartCount =
-    document.getElementById(
-    "cart-count"
-    );
-
-    if(!cartCount) return;
-
-    let total = 0;
-
-    cart.forEach(item => {
-
-        total += item.qty;
-
-    });
-
-    cartCount.textContent =
-    total;
-
-}
-
-/* =====================================================
-TOTALS
-===================================================== */
-
-function updateTotals(){
-
-    let subtotal = 0;
-
-    cart.forEach(item => {
-
-        subtotal +=
-        item.price * item.qty;
-
-    });
-
-    const delivery =
-    cart.length > 0 ? 40 : 0;
-
-    const gst =
-    Math.floor(subtotal * 0.05);
-
-    const total =
-    subtotal + delivery + gst;
-
-    subtotalEl.textContent =
-    subtotal;
-
-    gstEl.textContent =
-    gst;
-
-    totalEl.textContent =
-    total;
-
-}
-
-/* =====================================================
-RENDER
-===================================================== */
-
-function renderCart(){
-
-    cartContainer.innerHTML = "";
-
-    /* EMPTY */
-
-    if(cart.length === 0){
-
-        emptyCart.classList.remove(
-        "hidden"
-        );
-
-        updateTotals();
-
-        updateCartCount();
-
-        return;
-
-    }
-
-    emptyCart.classList.add(
-    "hidden"
-    );
-
-    /* LOOP */
-
-    cart.forEach((item,index)=>{
-
-        cartContainer.innerHTML += `
-
-        <article class="modern-cart-card">
-
-            <!-- IMAGE -->
-
-            <div class="modern-cart-image">
-
-                <img
-                    src="${item.image}"
-                    alt="${item.name}"
-
-                    onerror="
-                    this.src='images/default-food.png'
-                    ">
-
-            </div>
-
-            <!-- CONTENT -->
-
-            <div class="modern-cart-content">
-
-                <!-- TOP -->
-
-                <div class="modern-cart-top">
-
-                    <div>
-
-                        <h3>
-
-                            ${item.name}
-
-                        </h3>
-
-                        <span>
-
-                            Freshly Prepared
-
-                        </span>
-
-                    </div>
-
-                    <h4>
-
-                        ₹${item.price}
-
-                    </h4>
-
-                </div>
-
-                <!-- ACTIONS -->
-
-                <div class="modern-cart-actions">
-
-                    <!-- QTY -->
-
-                    <div class="modern-qty-controller">
-
-                        <button
-                        onclick="decreaseQty(${index})">
-
-                            -
-
-                        </button>
-
-                        <span>
-
-                            ${item.qty}
-
-                        </span>
-
-                        <button
-                        onclick="increaseQty(${index})">
-
-                            +
-
-                        </button>
-
-                    </div>
-
-                    <!-- REMOVE -->
-
-                    <button
-                        class="modern-remove-btn"
-                        onclick="removeItem(${index})">
-
-                        <i class="fa-solid fa-trash"></i>
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </article>
-
-        `;
-
-    });
-
-    updateTotals();
-
-    updateCartCount();
-
-}
-
-/* =====================================================
-INCREASE
-===================================================== */
-
-function increaseQty(index){
-
-    cart[index].qty++;
-
-    saveCart();
-
-    renderCart();
-
-}
-
-/* =====================================================
-DECREASE
-===================================================== */
-
-function decreaseQty(index){
-
-    if(cart[index].qty > 1){
-
-        cart[index].qty--;
-
-    }
-
-    else{
-
-        cart.splice(index,1);
-
-    }
-
-    saveCart();
-
-    renderCart();
-
-}
-
-/* =====================================================
-REMOVE
-===================================================== */
-
-function removeItem(index){
-
-    cart.splice(index,1);
-
-    saveCart();
-
-    renderCart();
-
-}
-
-/* =====================================================
-CLEAR
-===================================================== */
-
-clearCartBtn.addEventListener(
-"click",
-()=>{
-
-    if(cart.length === 0) return;
-
-    const confirmClear =
-    confirm(
-    "Clear all cart items?"
-    );
-
-    if(!confirmClear) return;
-
-    cart = [];
-
-    saveCart();
-
-    renderCart();
-
-});
-
-/* =====================================================
-CHECKOUT
-===================================================== */
-
-checkoutBtn.addEventListener(
-"click",
-()=>{
-
-    if(cart.length === 0){
-
-        alert(
-        "Your cart is empty."
-        );
-
-        return;
-
-    }
-
-    window.location.href =
-    "checkout.php";
-
-});
-
-/* =====================================================
-TOP BUTTON
-===================================================== */
-
-const topBtn =
-document.getElementById(
-"topBtn"
-);
-
-window.addEventListener(
-"scroll",
-()=>{
-
-    topBtn.classList.toggle(
-    "show",
-    window.scrollY > 300
-    );
-
-});
-
-topBtn.addEventListener(
-"click",
-()=>{
-
-    window.scrollTo({
-
-        top:0,
-        behavior:"smooth"
-
-    });
-
-});
-
-/* =====================================================
-INIT
-===================================================== */
-
-renderCart();
+<script
+src="cart.js">
 
 </script>
 
