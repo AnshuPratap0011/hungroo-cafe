@@ -1,420 +1,261 @@
+<?php
+
+if(session_status() === PHP_SESSION_NONE){
+
+    session_start();
+
+}
+
+?>
+
+<!-- =========================================================
+FONT AWESOME
+========================================================= -->
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <!-- =========================================================
 NAVBAR CSS
 ========================================================= -->
 
 <link
 rel="stylesheet"
-href="assets/css/navbar.css?v=2">
-
-<?php
-/* =========================================================
-HUNGROO PREMIUM NAVBAR
-========================================================= */
-?>
+href="assets/css/navbar.css">
 
 <!-- =========================================================
-HEADER
+NAVBAR
 ========================================================= -->
 
-<header
-class="navbar"
-id="navbar">
+<nav class="navbar">
 
     <!-- =====================================================
-    NAV CONTAINER
-    ===================================================== -->
+    LOGO
+    ====================================================== -->
 
-    <div class="nav-container">
+    <a
+    href="index.php"
 
-        <!-- =====================================================
-        LEFT
-        ===================================================== -->
+    class="navbar-logo">
 
-        <div class="nav-left">
+        <span>
 
-            <!-- MOBILE TOGGLE -->
+            Hungroo
 
-            <button
-            class="menu-toggle"
-            id="menuToggle"
-            type="button"
+        </span>
 
-            aria-label="Open Menu">
+        Café
 
-                <i class="fa-solid fa-bars"></i>
+    </a>
 
-            </button>
+    <!-- =====================================================
+    DESKTOP LINKS
+    ====================================================== -->
 
-            <!-- LOGO -->
+    <div class="navbar-links">
 
-            <a
-            href="home.php"
-            class="logo">
+        <a href="index.php">
 
-                <img
-                src="hlogo.png"
-                alt="Hungroo Café">
+            Home
 
-                <span>
+        </a>
 
-                    Hungroo Café
+        <a href="menu.php">
 
-                </span>
+            Menu
 
-            </a>
+        </a>
 
-        </div>
+        <a href="offers.php">
 
-        <!-- =====================================================
-        NAVIGATION
-        ===================================================== -->
+            Offers
 
-        <nav
-        class="nav-links"
-        id="mobileNav">
+        </a>
 
-            <a href="home.php">
+        <a href="gallery.php">
 
-                Home
+            Gallery
 
-            </a>
+        </a>
 
-            <a href="menu.php">
+        <a href="about.php">
 
-                Menu
+            About
 
-            </a>
+        </a>
 
-            <a href="home.php#popular">
+        <a href="team.php">
 
-                Popular
+            Team
 
-            </a>
+        </a>
 
-            <a href="home.php#reviews">
+        <a href="blog.php">
 
-                Reviews
+            Blog
 
-            </a>
+        </a>
 
-            <a href="#footer">
+        <a href="contact.php">
 
-                Contact
+            Contact
 
-            </a>
-
-        </nav>
-
-        <!-- =====================================================
-        RIGHT
-        ===================================================== -->
-
-        <div class="nav-right">
-
-            <!-- SEARCH -->
-
-            <button
-            class="nav-icon-btn"
-            id="searchBtn"
-            type="button">
-
-                <i class="fa-solid fa-magnifying-glass"></i>
-
-            </button>
-
-            <!-- THEME -->
-
-            <button
-            class="nav-icon-btn"
-            id="themeToggle"
-            type="button">
-
-                <i class="fa-solid fa-moon"></i>
-
-            </button>
-
-            <!-- CART -->
-
-            <button
-            class="cart-btn"
-            id="openCartBtn"
-            type="button">
-
-                <i class="fa-solid fa-cart-shopping"></i>
-
-                <span id="cart-count">
-
-                    0
-
-                </span>
-
-            </button>
-
-            <!-- PROFILE -->
-
-            <a
-            href="#"
-            class="profile-btn">
-
-                <i class="fa-solid fa-user"></i>
-
-            </a>
-
-        </div>
+        </a>
 
     </div>
 
-</header>
+    <!-- =====================================================
+    RIGHT SIDE
+    ====================================================== -->
 
-<!-- =========================================================
-MOBILE OVERLAY
-========================================================= -->
+    <div class="navbar-right">
 
-<div
-class="mobile-overlay"
-id="mobileOverlay">
+        <!-- THEME -->
 
-</div>
+        <button class="theme-toggle">
 
-<!-- =========================================================
-SEARCH MODAL
-========================================================= -->
-
-<div
-class="search-modal"
-id="searchModal">
-
-    <div class="search-box">
-
-        <!-- CLOSE -->
-
-        <button
-        class="search-close"
-        id="closeSearch"
-        type="button">
-
-            <i class="fa-solid fa-xmark"></i>
+            <i class="fa-solid fa-sun"></i>
 
         </button>
 
-        <!-- TITLE -->
+        <!-- SEARCH -->
 
-        <h2>
+        <button class="nav-icon-btn">
 
-            Search Hungroo Menu
+            <i class="fa-solid fa-magnifying-glass"></i>
 
-        </h2>
+        </button>
 
-        <!-- FORM -->
+        <!-- CART -->
 
-        <form
-        action="menu.php"
-        method="GET"
+        <a
+        href="cart.php"
 
-        class="search-form">
+        class="nav-cart">
 
-            <div class="search-input-wrap">
+            <i class="fa-solid fa-cart-shopping"></i>
 
-                <i class="fa-solid fa-magnifying-glass"></i>
+            <span class="cart-count">
 
-                <input
-                type="text"
-
-                name="search"
-
-                placeholder=
-                "Search burgers, pizza, coffee...">
-
-            </div>
-
-            <button type="submit">
-
-                Explore Menu
-
-            </button>
-
-        </form>
-
-    </div>
-
-</div>
-
-<!-- =========================================================
-CART OVERLAY
-========================================================= -->
-
-<div
-class="cart-overlay"
-id="cartOverlay">
-
-</div>
-
-<!-- =========================================================
-MINI CART
-========================================================= -->
-
-<aside
-class="mini-cart"
-id="cartSidebar">
-
-    <!-- TOP -->
-
-    <div class="mini-cart-top">
-
-        <div>
-
-            <span>
-
-                Premium Cart
+                0
 
             </span>
 
-            <h2>
+        </a>
 
-                Your Order
+        <!-- PROFILE -->
 
-            </h2>
+        <a
+        href="profile.php"
 
-        </div>
+        class="nav-profile">
 
-        <!-- CLOSE -->
+            <i class="fa-solid fa-user"></i>
 
-        <button
-        id="closeCartBtn"
-        type="button">
+        </a>
 
-            <i class="fa-solid fa-xmark"></i>
+        <!-- MOBILE MENU -->
+
+        <button class="menu-toggle">
+
+            <span></span>
+            <span></span>
+            <span></span>
 
         </button>
 
     </div>
 
-    <!-- ITEMS -->
+</nav>
 
-    <div
-    class="mini-cart-items"
-    id="cart-items">
+<!-- =========================================================
+MOBILE MENU
+========================================================= -->
 
-    </div>
+<div class="mobile-menu">
 
-    <!-- FOOTER -->
+    <a href="index.php">
 
-    <div class="mini-cart-footer">
+        <i class="fa-solid fa-house"></i>
 
-        <!-- SUBTOTAL -->
+        Home
 
-        <div class="mini-cart-row">
+    </a>
 
-            <p>
+    <a href="menu.php">
 
-                Subtotal
+        <i class="fa-solid fa-utensils"></i>
 
-            </p>
+        Menu
 
-            <h4>
+    </a>
 
-                ₹<span id="sidebar-subtotal">
+    <a href="offers.php">
 
-                    0
+        <i class="fa-solid fa-tags"></i>
 
-                </span>
+        Offers
 
-            </h4>
+    </a>
 
-        </div>
+    <a href="gallery.php">
 
-        <!-- DELIVERY -->
+        <i class="fa-solid fa-image"></i>
 
-        <div class="mini-cart-row">
+        Gallery
 
-            <p>
+    </a>
 
-                Delivery
+    <a href="about.php">
 
-            </p>
+        <i class="fa-solid fa-circle-info"></i>
 
-            <h4>
+        About
 
-                ₹<span id="sidebar-delivery">
+    </a>
 
-                    0
+    <a href="team.php">
 
-                </span>
+        <i class="fa-solid fa-users"></i>
 
-            </h4>
+        Team
 
-        </div>
+    </a>
 
-        <!-- GST -->
+    <a href="blog.php">
 
-        <div class="mini-cart-row">
+        <i class="fa-solid fa-blog"></i>
 
-            <p>
+        Blog
 
-                GST
+    </a>
 
-            </p>
+    <a href="contact.php">
 
-            <h4>
+        <i class="fa-solid fa-envelope"></i>
 
-                ₹<span id="sidebar-gst">
+        Contact
 
-                    0
+    </a>
 
-                </span>
+    <a href="dashboard.php">
 
-            </h4>
+        <i class="fa-solid fa-chart-line"></i>
 
-        </div>
+        Dashboard
 
-        <!-- TOTAL -->
+    </a>
 
-        <div
-        class="mini-cart-row total-row">
+    <a href="reservation-history.php">
 
-            <h3>
+        <i class="fa-solid fa-calendar-check"></i>
 
-                Total
+        Reservations
 
-            </h3>
+    </a>
 
-            <h2>
-
-                ₹<span id="cart-total">
-
-                    0
-
-                </span>
-
-            </h2>
-
-        </div>
-
-        <!-- BUTTONS -->
-
-        <div class="mini-cart-buttons">
-
-            <a
-            href="Cart.php"
-            class="mini-cart-btn">
-
-                View Cart
-
-            </a>
-
-            <a
-            href="checkout.php"
-            class="mini-cart-btn checkout">
-
-                Checkout
-
-            </a>
-
-        </div>
-
-    </div>
-
-</aside>
+</div>
 
 <!-- =========================================================
 NAVBAR SCRIPT
@@ -423,299 +264,149 @@ NAVBAR SCRIPT
 <script>
 
 /* =========================================================
-ELEMENTS
+MENU TOGGLE
 ========================================================= */
 
-const navbar =
-document.getElementById(
-"navbar"
-);
-
 const menuToggle =
-document.getElementById(
-"menuToggle"
+
+document.querySelector(
+".menu-toggle"
 );
 
-const mobileNav =
-document.getElementById(
-"mobileNav"
+const mobileMenu =
+
+document.querySelector(
+".mobile-menu"
 );
 
-const mobileOverlay =
-document.getElementById(
-"mobileOverlay"
-);
+if(menuToggle && mobileMenu){
 
-const themeToggle =
-document.getElementById(
-"themeToggle"
-);
+    menuToggle.addEventListener(
 
-const cartSidebar =
-document.getElementById(
-"cartSidebar"
-);
+        "click",
 
-const cartOverlay =
-document.getElementById(
-"cartOverlay"
-);
+        ()=>{
 
-const openCartBtn =
-document.getElementById(
-"openCartBtn"
-);
+            mobileMenu.classList.toggle(
+            "active"
+            );
 
-const closeCartBtn =
-document.getElementById(
-"closeCartBtn"
-);
+            menuToggle.classList.toggle(
+            "active"
+            );
 
-const searchBtn =
-document.getElementById(
-"searchBtn"
-);
+        }
 
-const searchModal =
-document.getElementById(
-"searchModal"
-);
+    );
 
-const closeSearch =
-document.getElementById(
-"closeSearch"
-);
+}
 
 /* =========================================================
-NAVBAR SCROLL
+ACTIVE LINK
+========================================================= */
+
+const currentPage =
+
+window.location.pathname
+.split("/")
+.pop();
+
+const navLinks =
+
+document.querySelectorAll(
+".navbar-links a, .mobile-menu a"
+);
+
+navLinks.forEach(link=>{
+
+    const href =
+
+    link.getAttribute(
+    "href"
+    );
+
+    if(href === currentPage){
+
+        link.classList.add(
+        "active"
+        );
+
+    }
+
+});
+
+/* =========================================================
+NAVBAR SCROLL EFFECT
 ========================================================= */
 
 window.addEventListener(
-"scroll",
-()=>{
 
-    if(window.scrollY > 20){
+    "scroll",
 
-        navbar.classList.add(
-        "scrolled"
+    ()=>{
+
+        const navbar =
+
+        document.querySelector(
+        ".navbar"
         );
+
+        if(!navbar){
+
+            return;
+
+        }
+
+        if(window.scrollY > 20){
+
+            navbar.classList.add(
+            "navbar-scrolled"
+            );
+
+        }
+
+        else{
+
+            navbar.classList.remove(
+            "navbar-scrolled"
+            );
+
+        }
 
     }
 
-    else{
-
-        navbar.classList.remove(
-        "scrolled"
-        );
-
-    }
-
-});
-
-/* =========================================================
-MOBILE MENU
-========================================================= */
-
-menuToggle?.addEventListener(
-"click",
-()=>{
-
-    mobileNav.classList.toggle(
-    "active"
-    );
-
-    mobileOverlay.classList.toggle(
-    "active"
-    );
-
-});
-
-/* =========================================================
-CLOSE MOBILE
-========================================================= */
-
-mobileOverlay?.addEventListener(
-"click",
-()=>{
-
-    mobileNav.classList.remove(
-    "active"
-    );
-
-    mobileOverlay.classList.remove(
-    "active"
-    );
-
-});
-
-/* =========================================================
-OPEN CART
-========================================================= */
-
-openCartBtn?.addEventListener(
-"click",
-()=>{
-
-    cartSidebar.classList.add(
-    "active"
-    );
-
-    cartOverlay.classList.add(
-    "active"
-    );
-
-    document.body.style.overflow =
-    "hidden";
-
-});
-
-/* =========================================================
-CLOSE CART
-========================================================= */
-
-function closeCart(){
-
-    cartSidebar.classList.remove(
-    "active"
-    );
-
-    cartOverlay.classList.remove(
-    "active"
-    );
-
-    document.body.style.overflow =
-    "";
-
-}
-
-closeCartBtn?.addEventListener(
-"click",
-closeCart
-);
-
-cartOverlay?.addEventListener(
-"click",
-closeCart
 );
 
 /* =========================================================
-SEARCH MODAL
+AUTO CLOSE MOBILE MENU
 ========================================================= */
 
-searchBtn?.addEventListener(
-"click",
-()=>{
+const mobileLinks =
 
-    searchModal.classList.add(
-    "active"
-    );
-
-    document.body.style.overflow =
-    "hidden";
-
-});
-
-/* =========================================================
-CLOSE SEARCH
-========================================================= */
-
-function closeSearchModal(){
-
-    searchModal.classList.remove(
-    "active"
-    );
-
-    document.body.style.overflow =
-    "";
-
-}
-
-closeSearch?.addEventListener(
-"click",
-closeSearchModal
+document.querySelectorAll(
+".mobile-menu a"
 );
 
-searchModal?.addEventListener(
-"click",
-(e)=>{
+mobileLinks.forEach(link=>{
 
-    if(e.target === searchModal){
+    link.addEventListener(
 
-        closeSearchModal();
+        "click",
 
-    }
+        ()=>{
 
-});
+            mobileMenu.classList.remove(
+            "active"
+            );
 
-/* =========================================================
-THEME LOAD
-========================================================= */
+            menuToggle.classList.remove(
+            "active"
+            );
 
-if(
-localStorage.getItem(
-"theme"
-) === "light"
-){
+        }
 
-    document.body.classList.add(
-    "light-mode"
     );
 
-    themeToggle.innerHTML =
-    '<i class="fa-solid fa-sun"></i>';
-
-}
-
-/* =========================================================
-THEME TOGGLE
-========================================================= */
-
-themeToggle?.addEventListener(
-"click",
-()=>{
-
-    document.body.classList.toggle(
-    "light-mode"
-    );
-
-    if(
-    document.body.classList.contains(
-    "light-mode"
-    )
-    ){
-
-        localStorage.setItem(
-        "theme",
-        "light"
-        );
-
-        themeToggle.innerHTML =
-        '<i class="fa-solid fa-sun"></i>';
-
-    }
-
-    else{
-
-        localStorage.setItem(
-        "theme",
-        "dark"
-        );
-
-        themeToggle.innerHTML =
-        '<i class="fa-solid fa-moon"></i>';
-
-    }
-
 });
-
-</script>
-
-<!-- =========================================================
-GLOBAL CART JS
-========================================================= -->
-
-<script
-src="cart.js?v=2"
-defer>
 
 </script>

@@ -1,26 +1,45 @@
 <?php
 
-require_once "db.php";
-
-/* =========================================================
-PAGE TITLE
-========================================================= */
+session_start();
 
 $pageTitle =
-"Hungroo Café | Premium Home";
+"Hungroo Café | Home";
 
 /* =========================================================
 FEATURED ITEMS
 ========================================================= */
 
-$featuredQuery =
-"SELECT * FROM menu_items ORDER BY id DESC LIMIT 8";
+$featuredItems = [
 
-$featuredResult =
-mysqli_query(
-$conn,
-$featuredQuery
-);
+    [
+        "id"    => 1,
+        "name"  => "Premium Burger",
+        "price" => 349,
+        "image" => "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1400&auto=format&fit=crop"
+    ],
+
+    [
+        "id"    => 2,
+        "name"  => "Cold Coffee",
+        "price" => 229,
+        "image" => "https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=1400&auto=format&fit=crop"
+    ],
+
+    [
+        "id"    => 3,
+        "name"  => "Italian Pizza",
+        "price" => 599,
+        "image" => "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1400&auto=format&fit=crop"
+    ],
+
+    [
+        "id"    => 4,
+        "name"  => "Chocolate Dessert",
+        "price" => 279,
+        "image" => "https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1400&auto=format&fit=crop"
+    ]
+
+];
 
 ?>
 
@@ -36,19 +55,13 @@ $featuredQuery
 name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<meta
-name="description"
-content="Hungroo Café premium modern food ordering website.">
-
 <title>
 
 <?php echo $pageTitle; ?>
 
 </title>
 
-<!-- =====================================================
-GOOGLE FONT
-===================================================== -->
+<!-- GOOGLE FONT -->
 
 <link
 rel="preconnect"
@@ -63,17 +76,21 @@ crossorigin>
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- =====================================================
-FONT AWESOME
-===================================================== -->
+<!-- FONT AWESOME -->
 
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<!-- =====================================================
-CSS
-===================================================== -->
+<!-- CSS -->
+
+<link
+rel="stylesheet"
+href="assets/css/navbar.css">
+
+<link
+rel="stylesheet"
+href="assets/css/footer.css">
 
 <link
 rel="stylesheet"
@@ -83,165 +100,188 @@ href="assets/css/home.css">
 
 <body>
 
-<!-- =====================================================
-NAVBAR
-===================================================== -->
-
 <?php include "Navbar.php"; ?>
 
-<!-- =====================================================
-MAIN
-===================================================== -->
+<!-- =========================================================
+HERO
+========================================================= -->
 
-<main class="home-page">
+<section class="hero">
 
-    <!-- =====================================================
-    HERO
-    ===================================================== -->
+    <!-- LEFT -->
 
-    <section class="hero-section">
+    <div class="hero-left">
 
-        <!-- GLOW -->
+        <span class="hero-badge">
 
-        <div class="hero-glow hero-glow-1"></div>
+            <i class="fa-solid fa-fire"></i>
 
-        <div class="hero-glow hero-glow-2"></div>
+            Premium Café Experience
 
-        <!-- LEFT -->
+        </span>
 
-        <div class="hero-content">
+        <h1>
 
-            <!-- BADGE -->
+            Taste The
 
-            <span class="hero-badge">
+            <span>
 
-                Premium Café Experience
+                Luxury
 
             </span>
 
-            <!-- TITLE -->
+        </h1>
 
-            <h1>
+        <p>
 
-                Crafted Coffee,
-                Gourmet Burgers
-                & Premium Café Vibes
+            Discover handcrafted burgers,
+            signature coffee and premium
+            café vibes only at Hungroo Café.
 
-            </h1>
+        </p>
 
-            <!-- TEXT -->
+        <div class="hero-buttons">
 
-            <p>
+            <a
+            href="menu.php"
 
-                Experience handcrafted meals,
-                café drinks and luxury food ordering
-                with a modern premium experience.
+            class="hero-btn primary">
 
-            </p>
+                Explore Menu
 
-            <!-- BUTTONS -->
+            </a>
 
-            <div class="hero-buttons">
+            <a
+            href="reservation-history.php"
 
-                <a
-                href="menu.php"
-                class="hero-btn-primary">
+            class="hero-btn secondary">
 
-                    Explore Menu
+                Book Table
 
-                </a>
-
-                <a
-                href="#popular"
-                class="hero-btn-secondary">
-
-                    Most Loved
-
-                </a>
-
-            </div>
-
-            <!-- FEATURES -->
-
-            <div class="hero-features">
-
-                <div class="hero-feature-card">
-
-                    <i class="fa-solid fa-star"></i>
-
-                    4.9 Rating
-
-                </div>
-
-                <div class="hero-feature-card">
-
-                    <i class="fa-solid fa-bolt"></i>
-
-                    Fast Delivery
-
-                </div>
-
-                <div class="hero-feature-card">
-
-                    <i class="fa-solid fa-shield-heart"></i>
-
-                    Premium Quality
-
-                </div>
-
-            </div>
+            </a>
 
         </div>
 
-        <!-- RIGHT -->
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="hero-right">
 
         <div class="hero-image">
 
             <img
-            src="assets/images/promo-2.png"
-            alt="Hungroo Food">
+            src="https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1600&auto=format&fit=crop"
+            alt="Hungroo Café">
 
-            <!-- FLOATING -->
+        </div>
 
-            <div class="floating-card floating-1">
+        <div class="hero-card">
 
-                <i class="fa-solid fa-burger"></i>
+            <h3>
 
-                <div>
+                25K+
 
-                    <h4>
+            </h3>
 
-                        Premium Burgers
+            <p>
 
-                    </h4>
+                Happy Customers
 
-                    <p>
+            </p>
 
-                        Fresh & Hot
+        </div>
 
-                    </p>
+    </div>
 
-                </div>
+</section>
+
+<!-- =========================================================
+FEATURED SECTION
+========================================================= -->
+
+<section class="home-section">
+
+    <div class="section-top">
+
+        <span>
+
+            Featured Menu
+
+        </span>
+
+        <h2>
+
+            Popular Dishes
+
+        </h2>
+
+        <p>
+
+            Premium handcrafted meals,
+            desserts and signature drinks.
+
+        </p>
+
+    </div>
+
+    <!-- GRID -->
+
+    <div class="food-grid">
+
+        <?php foreach($featuredItems as $item): ?>
+
+        <div class="food-card">
+
+            <!-- IMAGE -->
+
+            <div class="food-image">
+
+                <img
+                src="<?php echo $item['image']; ?>"
+                alt="<?php echo $item['name']; ?>">
 
             </div>
 
-            <div class="floating-card floating-2">
+            <!-- CONTENT -->
 
-                <i class="fa-solid fa-mug-hot"></i>
+            <div class="food-content">
 
-                <div>
+                <h3>
 
-                    <h4>
+                    <?php echo $item['name']; ?>
 
-                        Café Coffee
+                </h3>
 
-                    </h4>
+                <p>
 
-                    <p>
+                    Premium handcrafted food
+                    with unforgettable taste.
 
-                        Fresh Brewed
+                </p>
 
-                    </p>
+                <div class="food-bottom">
+
+                    <div class="food-price">
+
+                        ₹<?php echo $item['price']; ?>
+
+                    </div>
+
+                    <!-- ADD BUTTON -->
+
+                    <button
+                    class="food-btn"
+
+                    onclick='addToCart(
+
+                    <?php echo json_encode($item); ?>
+
+                    )'>
+
+                        Add To Cart
+
+                    </button>
 
                 </div>
 
@@ -249,180 +289,385 @@ MAIN
 
         </div>
 
-    </section>
+        <?php endforeach; ?>
 
-    <!-- =====================================================
-    OFFERS
-    ===================================================== -->
+    </div>
 
-    <section class="offers-strip">
+</section>
 
-        <div class="offers-track">
+<!-- =========================================================
+CART OVERLAY
+========================================================= -->
 
-            <?php for($i=0;$i<3;$i++){ ?>
+<div class="cart-overlay" id="cartOverlay"></div>
 
-            <div class="offer-card">
+<!-- =========================================================
+SIDE CART
+========================================================= -->
 
-                <i class="fa-solid fa-fire"></i>
+<div class="side-cart" id="sideCart">
 
-                Flat 50% OFF Today
+    <!-- TOP -->
 
-            </div>
+    <div class="side-cart-top">
 
-            <div class="offer-card">
+        <h2>
 
-                <i class="fa-solid fa-burger"></i>
+            Your Cart
 
-                Buy 1 Get Fries Free
+        </h2>
 
-            </div>
+        <button
+        class="cart-close"
 
-            <div class="offer-card">
+        onclick="closeCart()">
 
-                <i class="fa-solid fa-truck-fast"></i>
+            <i class="fa-solid fa-xmark"></i>
 
-                Free Delivery Above ₹499
+        </button>
 
-            </div>
+    </div>
 
-            <div class="offer-card">
+    <!-- ITEMS -->
 
-                <i class="fa-solid fa-pizza-slice"></i>
+    <div
+    class="cart-items"
 
-                Stone Oven Pizza Specials
+    id="cartItems">
 
-            </div>
+    </div>
 
-            <div class="offer-card">
+    <!-- BOTTOM -->
 
-                <i class="fa-solid fa-ice-cream"></i>
+    <div class="cart-bottom">
 
-                Dessert Combo Deals
-
-            </div>
-
-            <?php } ?>
-
-        </div>
-
-    </section>
-
-    <!-- =====================================================
-    CATEGORIES
-    ===================================================== -->
-
-    <section class="food-categories">
-
-        <div class="section-title">
+        <div class="cart-total">
 
             <span>
 
-                Explore Categories
+                Total
 
             </span>
 
-            <h2>
+            <h3 id="cartTotal">
 
-                What Are You Craving Today?
+                ₹0
 
-            </h2>
-
-        </div>
-
-        <div class="categories-grid">
-
-            <a
-            href="menu.php?category=Veg"
-            class="category-card">
-
-                <div class="category-wave"></div>
-
-                <img
-                src="assets/images/cat-burger.png"
-                alt="Burger">
-
-                <h3>
-
-                    Veg Meals
-
-                </h3>
-
-            </a>
-
-            <a
-            href="menu.php?category=Coffee"
-            class="category-card">
-
-                <div class="category-wave"></div>
-
-                <img
-                src="assets/images/cat-coffee.png"
-                alt="Coffee">
-
-                <h3>
-
-                    Café Coffee
-
-                </h3>
-
-            </a>
-
-            <a
-            href="menu.php?category=Dessert"
-            class="category-card">
-
-                <div class="category-wave"></div>
-
-                <img
-                src="assets/images/cat-dessert.png"
-                alt="Dessert">
-
-                <h3>
-
-                    Desserts
-
-                </h3>
-
-            </a>
-
-            <a
-            href="menu.php?category=Boba"
-            class="category-card">
-
-                <div class="category-wave"></div>
-
-                <img
-                src="assets/images/cat-boba.png"
-                alt="Boba">
-
-                <h3>
-
-                    Boba Drinks
-
-                </h3>
-
-            </a>
+            </h3>
 
         </div>
 
-    </section>
+        <button
+        class="checkout-btn"
 
-</main>
+        onclick=
+        "window.location.href='cart.php'">
 
-<!-- =====================================================
-FOOTER
-===================================================== -->
+            Checkout
+
+        </button>
+
+    </div>
+
+</div>
 
 <?php include "footer.php"; ?>
 
-<!-- =====================================================
-CART JS
-===================================================== -->
+<!-- JS -->
 
-<script
-src="cart.js">
+<script>
+
+/* =========================================================
+CART DATA
+========================================================= */
+
+let cart =
+
+JSON.parse(
+localStorage.getItem("hungrooCart")
+) || [];
+
+/* =========================================================
+ADD TO CART
+========================================================= */
+
+function addToCart(item){
+
+    const existing =
+
+    cart.find(product=>
+    product.id === item.id
+    );
+
+    if(existing){
+
+        existing.qty += 1;
+
+    }
+
+    else{
+
+        cart.push({
+
+            ...item,
+
+            qty:1
+
+        });
+
+    }
+
+    saveCart();
+
+    openCart();
+
+}
+
+/* =========================================================
+SAVE CART
+========================================================= */
+
+function saveCart(){
+
+    localStorage.setItem(
+
+        "hungrooCart",
+
+        JSON.stringify(cart)
+
+    );
+
+    updateCart();
+
+}
+
+/* =========================================================
+UPDATE CART
+========================================================= */
+
+function updateCart(){
+
+    const cartItems =
+
+    document.getElementById(
+    "cartItems"
+    );
+
+    const cartTotal =
+
+    document.getElementById(
+    "cartTotal"
+    );
+
+    const cartCount =
+
+    document.querySelector(
+    ".cart-count"
+    );
+
+    if(!cartItems){
+
+        return;
+
+    }
+
+    cartItems.innerHTML = "";
+
+    let total = 0;
+
+    let count = 0;
+
+    cart.forEach((item,index)=>{
+
+        total +=
+        item.price * item.qty;
+
+        count += item.qty;
+
+        cartItems.innerHTML += `
+
+        <div class="cart-item">
+
+            <img
+            src="${item.image}"
+            alt="${item.name}">
+
+            <div class="cart-item-content">
+
+                <h4>
+
+                    ${item.name}
+
+                </h4>
+
+                <p>
+
+                    ₹${item.price}
+
+                </p>
+
+                <div class="qty-box">
+
+                    <button
+                    onclick="decreaseQty(${index})">
+
+                        -
+
+                    </button>
+
+                    <span>
+
+                        ${item.qty}
+
+                    </span>
+
+                    <button
+                    onclick="increaseQty(${index})">
+
+                        +
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+    cartTotal.innerText =
+    `₹${total}`;
+
+    if(cartCount){
+
+        cartCount.innerText =
+        count;
+
+    }
+
+}
+
+/* =========================================================
+INCREASE
+========================================================= */
+
+function increaseQty(index){
+
+    cart[index].qty++;
+
+    saveCart();
+
+}
+
+/* =========================================================
+DECREASE
+========================================================= */
+
+function decreaseQty(index){
+
+    if(cart[index].qty > 1){
+
+        cart[index].qty--;
+
+    }
+
+    else{
+
+        cart.splice(index,1);
+
+    }
+
+    saveCart();
+
+}
+
+/* =========================================================
+OPEN CART
+========================================================= */
+
+function openCart(){
+
+    document.getElementById(
+    "sideCart"
+    ).classList.add("active");
+
+    document.getElementById(
+    "cartOverlay"
+    ).classList.add("active");
+
+}
+
+/* =========================================================
+CLOSE CART
+========================================================= */
+
+function closeCart(){
+
+    document.getElementById(
+    "sideCart"
+    ).classList.remove("active");
+
+    document.getElementById(
+    "cartOverlay"
+    ).classList.remove("active");
+
+}
+
+/* =========================================================
+NAVBAR CART CLICK
+========================================================= */
+
+const navCart =
+
+document.querySelector(
+".nav-cart"
+);
+
+if(navCart){
+
+    navCart.addEventListener(
+
+        "click",
+
+        (e)=>{
+
+            e.preventDefault();
+
+            openCart();
+
+        }
+
+    );
+
+}
+
+/* =========================================================
+OVERLAY CLOSE
+========================================================= */
+
+document.getElementById(
+"cartOverlay"
+).addEventListener(
+
+    "click",
+
+    closeCart
+
+);
+
+/* =========================================================
+INIT
+========================================================= */
+
+updateCart();
 
 </script>
+
+<script src="assets/js/theme.js"></script>
+<script src="assets/js/preloader.js"></script>
 
 </body>
 </html>

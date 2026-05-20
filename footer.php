@@ -1,216 +1,108 @@
-<?php
-/* =========================================================
-FOOTER COMPONENT
-HUNGROO CAFÉ
-========================================================= */
-?>
-
-<!-- =========================================================
-FOOTER CSS
-========================================================= -->
+<!-- =====================================================
+FOOTER
+===================================================== -->
 
 <link
 rel="stylesheet"
 href="assets/css/footer.css">
 
-<!-- =========================================================
-FOOTER
-========================================================= -->
+<footer class="footer">
 
-<footer
-class="footer"
-id="footer">
-
-    <!-- =====================================================
-    NEWSLETTER
-    ===================================================== -->
-
-    <section class="footer-newsletter">
-
-        <div class="footer-newsletter-content">
-
-            <span>
-
-                Hungroo Premium Club
-
-            </span>
-
-            <h2>
-
-                Get Exclusive Offers,
-                Combo Deals & Café Updates
-
-            </h2>
-
-            <p>
-
-                Subscribe now and receive
-                premium food offers,
-                discounts and special café rewards.
-
-            </p>
-
-        </div>
-
-        <!-- FORM -->
-
-        <form
-        class="footer-newsletter-form">
-
-            <div class="newsletter-input-box">
-
-                <i class="fa-solid fa-envelope"></i>
-
-                <input
-                type="email"
-
-                placeholder=
-                "Enter your email address">
-
-            </div>
-
-            <button
-            type="submit">
-
-                Subscribe
-
-            </button>
-
-        </form>
-
-    </section>
-
-    <!-- =====================================================
-    MAIN FOOTER
-    ===================================================== -->
+    <!-- =================================================
+    CONTAINER
+    ================================================== -->
 
     <div class="footer-container">
 
-        <!-- =====================================================
-        BRAND
-        ===================================================== -->
+        <!-- =============================================
+        TOP
+        ============================================== -->
 
-        <div class="footer-box footer-brand">
+        <div class="footer-top">
 
-            <!-- LOGO -->
+            <!-- BRAND -->
 
-            <a
-            href="home.php"
-            class="footer-logo">
+            <div class="footer-brand">
 
-                <img
-                src="hlogo.png"
-                alt="Hungroo Café">
+                <a
+                href="index.php"
 
-                <span>
+                class="footer-logo">
 
-                    Hungroo Café
+                    <img
+                    src="assets/images/hlogo.png"
+                    alt="Hungroo Café">
 
-                </span>
+                    <div>
 
-            </a>
+                        <h2>
 
-            <!-- TEXT -->
+                            Hungroo Café
 
-            <p class="footer-description">
+                        </h2>
 
-                Premium burgers, café coffee,
-                pizzas, desserts and handcrafted
-                meals served with modern luxury café vibes.
+                        <span>
 
-            </p>
+                            Premium Café & Restaurant
 
-            <!-- FEATURES -->
+                        </span>
 
-            <div class="footer-feature-list">
+                    </div>
 
-                <div class="footer-feature-item">
+                </a>
 
-                    <i class="fa-solid fa-truck-fast"></i>
+                <p>
 
-                    Fast Delivery
+                    Premium burgers, artisan coffee,
+                    handcrafted meals and luxury café
+                    vibes served with fast delivery
+                    and unforgettable taste.
+
+                </p>
+
+                <!-- SOCIAL -->
+
+                <div class="footer-social">
+
+                    <a href="#">
+
+                        <i class="fa-brands fa-instagram"></i>
+
+                    </a>
+
+                    <a href="#">
+
+                        <i class="fa-brands fa-facebook-f"></i>
+
+                    </a>
+
+                    <a href="#">
+
+                        <i class="fa-brands fa-x-twitter"></i>
+
+                    </a>
+
+                    <a href="#">
+
+                        <i class="fa-brands fa-youtube"></i>
+
+                    </a>
 
                 </div>
 
-                <div class="footer-feature-item">
-
-                    <i class="fa-solid fa-star"></i>
-
-                    Premium Quality
-
-                </div>
-
             </div>
 
-            <!-- SOCIAL -->
-
-            <div class="footer-socials">
-
-                <a
-                href="#"
-                aria-label="Instagram">
-
-                    <i class=
-                    "fa-brands fa-instagram"></i>
-
-                </a>
-
-                <a
-                href="#"
-                aria-label="Facebook">
-
-                    <i class=
-                    "fa-brands fa-facebook-f"></i>
-
-                </a>
-
-                <a
-                href="#"
-                aria-label="WhatsApp">
-
-                    <i class=
-                    "fa-brands fa-whatsapp"></i>
-
-                </a>
-
-                <a
-                href="#"
-                aria-label="YouTube">
-
-                    <i class=
-                    "fa-brands fa-youtube"></i>
-
-                </a>
-
-            </div>
-
-        </div>
-
-        <!-- =====================================================
-        EXPLORE
-        ===================================================== -->
-
-        <div class="footer-box">
-
-            <div class="footer-title">
-
-                <span>
-
-                    Navigation
-
-                </span>
-
-                <h3>
-
-                    Explore
-
-                </h3>
-
-            </div>
+            <!-- LINKS -->
 
             <div class="footer-links">
 
-                <a href="home.php">
+                <h3>
+
+                    Navigation
+
+                </h3>
+
+                <a href="index.php">
 
                     Home
 
@@ -222,19 +114,61 @@ id="footer">
 
                 </a>
 
-                <a href="Cart.php">
+                <a href="offers.php">
 
-                    Cart
-
-                </a>
-
-                <a href="checkout.php">
-
-                    Checkout
+                    Offers
 
                 </a>
 
-                <a href="home.php#reviews">
+                <a href="gallery.php">
+
+                    Gallery
+
+                </a>
+
+                <a href="booking.php">
+
+                    Book Table
+
+                </a>
+
+            </div>
+
+            <!-- SUPPORT -->
+
+            <div class="footer-links">
+
+                <h3>
+
+                    Support
+
+                </h3>
+
+                <a href="contact.php">
+
+                    Contact Us
+
+                </a>
+
+                <a href="faq.php">
+
+                    FAQ
+
+                </a>
+
+                <a href="track-order.php">
+
+                    Track Order
+
+                </a>
+
+                <a href="privacy-policy.php">
+
+                    Privacy Policy
+
+                </a>
+
+                <a href="reviews.php">
 
                     Reviews
 
@@ -242,319 +176,149 @@ id="footer">
 
             </div>
 
-        </div>
+            <!-- CONTACT -->
 
-        <!-- =====================================================
-        OPENING HOURS
-        ===================================================== -->
-
-        <div class="footer-box">
-
-            <div class="footer-title">
-
-                <span>
-
-                    Availability
-
-                </span>
+            <div class="footer-contact">
 
                 <h3>
 
-                    Opening Hours
+                    Contact Info
 
                 </h3>
 
-            </div>
+                <div class="footer-contact-item">
 
-            <div class="footer-hours">
-
-                <div class="footer-hours-row">
-
-                    <p>
-
-                        Monday - Friday
-
-                    </p>
+                    <i class="fa-solid fa-location-dot"></i>
 
                     <span>
 
-                        10 AM - 10 PM
+                        Chandigarh, India
 
                     </span>
 
                 </div>
 
-                <div class="footer-hours-row">
+                <div class="footer-contact-item">
 
-                    <p>
-
-                        Saturday
-
-                    </p>
+                    <i class="fa-solid fa-phone"></i>
 
                     <span>
 
-                        9 AM - 11 PM
+                        +91 99999 99999
 
                     </span>
 
                 </div>
 
-                <div class="footer-hours-row">
+                <div class="footer-contact-item">
 
-                    <p>
-
-                        Sunday
-
-                    </p>
+                    <i class="fa-solid fa-envelope"></i>
 
                     <span>
 
-                        9 AM - 11 PM
+                        hungroo@gmail.com
 
                     </span>
 
                 </div>
 
-            </div>
+                <!-- APPS -->
 
-            <!-- DELIVERY -->
+                <div class="footer-apps">
 
-            <div class="footer-delivery-badge">
+                    <a href="#">
 
-                <i class="fa-solid fa-bolt"></i>
-
-                Delivery Available Everyday
-
-            </div>
-
-        </div>
-
-        <!-- =====================================================
-        CONTACT
-        ===================================================== -->
-
-        <div class="footer-box">
-
-            <div class="footer-title">
-
-                <span>
-
-                    Get In Touch
-
-                </span>
-
-                <h3>
-
-                    Contact
-
-                </h3>
-
-            </div>
-
-            <div class="footer-contact-list">
-
-                <div class="footer-contact-item">
-
-                    <i class=
-                    "fa-solid fa-location-dot"></i>
-
-                    <div>
-
-                        <h4>
-
-                            Location
-
-                        </h4>
-
-                        <p>
-
-                            Chandigarh, India
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="footer-contact-item">
-
-                    <i class=
-                    "fa-solid fa-phone"></i>
-
-                    <div>
-
-                        <h4>
-
-                            Phone
-
-                        </h4>
-
-                        <p>
-
-                            +91 99999 99999
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="footer-contact-item">
-
-                    <i class=
-                    "fa-solid fa-envelope"></i>
-
-                    <div>
-
-                        <h4>
-
-                            Email
-
-                        </h4>
-
-                        <p>
-
-                            hungroo@gmail.com
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- =====================================================
-    APP SECTION
-    ===================================================== -->
-
-    <section class="footer-app-section">
-
-        <div class="footer-app-content">
-
-            <span>
-
-                Mobile Experience
-
-            </span>
-
-            <h2>
-
-                Download Hungroo App Soon
-
-            </h2>
-
-            <p>
-
-                Faster ordering,
-                premium rewards,
-                real-time delivery tracking
-                and café exclusives.
-
-            </p>
-
-        </div>
-
-        <!-- BUTTONS -->
-
-        <div class="footer-app-buttons">
-
-            <a
-            href="#"
-            class="footer-app-btn">
-
-                <i class=
-                "fa-brands fa-google-play"></i>
-
-                <div>
-
-                    <small>
-
-                        GET IT ON
-
-                    </small>
-
-                    <span>
+                        <i class="fa-brands fa-google-play"></i>
 
                         Google Play
 
-                    </span>
+                    </a>
 
-                </div>
+                    <a href="#">
 
-            </a>
-
-            <a
-            href="#"
-            class="footer-app-btn">
-
-                <i class=
-                "fa-brands fa-apple"></i>
-
-                <div>
-
-                    <small>
-
-                        DOWNLOAD ON THE
-
-                    </small>
-
-                    <span>
+                        <i class="fa-brands fa-apple"></i>
 
                         App Store
 
-                    </span>
+                    </a>
 
                 </div>
 
-            </a>
+            </div>
 
         </div>
 
-    </section>
+        <!-- =============================================
+        NEWSLETTER
+        ============================================== -->
 
-    <!-- =====================================================
-    FOOTER BOTTOM
-    ===================================================== -->
+        <div class="footer-newsletter">
 
-    <div class="footer-bottom">
+            <div class="footer-newsletter-text">
 
-        <div class="footer-bottom-container">
+                <h2>
 
-            <!-- COPYRIGHT -->
+                    Subscribe For Exclusive Offers
+
+                </h2>
+
+                <p>
+
+                    Get premium discounts,
+                    combo deals and latest café updates.
+
+                </p>
+
+            </div>
+
+            <form class="footer-newsletter-form">
+
+                <input
+                type="email"
+
+                placeholder=
+                "Enter your email">
+
+                <button type="submit">
+
+                    Subscribe
+
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- =============================================
+        BOTTOM
+        ============================================== -->
+
+        <div class="footer-bottom">
 
             <p>
 
-                © <?php echo date("Y"); ?>
-                Hungroo Café.
+                © 2026 Hungroo Café.
                 All Rights Reserved.
 
             </p>
 
-            <!-- LINKS -->
-
             <div class="footer-bottom-links">
 
-                <a href="#">
+                <a href="privacy-policy.php">
 
-                    Privacy Policy
-
-                </a>
-
-                <a href="#">
-
-                    Terms & Conditions
+                    Privacy
 
                 </a>
 
-                <a href="#">
+                <a href="terms.php">
 
-                    Refund Policy
+                    Terms
+
+                </a>
+
+                <a href="contact.php">
+
+                    Support
 
                 </a>
 

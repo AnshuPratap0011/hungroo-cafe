@@ -1,23 +1,99 @@
 <?php
 
-/* =====================================================
-   Database connection
-   ===================================================== */
+/* =========================================================
+HUNGROO DATABASE CONFIG
+========================================================= */
 
-$host = "localhost";
-$user = "root";
-$password = "";
-$database = "boba_hungroo";
+$host =
+"localhost";
 
-$conn = mysqli_connect($host, $user, $password, $database);
+$username =
+"root";
 
-if (!$conn) {
-    die("Database connection failed. Please check your database settings.");
+$password =
+"";
+
+$database =
+"boba_hungroo";
+
+/* =========================================================
+CONNECTION
+========================================================= */
+
+$conn =
+mysqli_connect(
+
+    $host,
+    $username,
+    $password,
+    $database
+
+);
+
+/* =========================================================
+ERROR
+========================================================= */
+
+if(!$conn){
+
+    die(
+
+        "Database connection failed."
+
+    );
+
 }
 
-mysqli_set_charset($conn, "utf8mb4");
+/* =========================================================
+UTF8
+========================================================= */
 
-function clean_output($value)
-{
-    return htmlspecialchars((string) $value, ENT_QUOTES, "UTF-8");
+mysqli_set_charset(
+$conn,
+"utf8mb4"
+);
+
+/* =========================================================
+SECURE OUTPUT
+========================================================= */
+
+function clean_output($value){
+
+    return htmlspecialchars(
+
+        (string)$value,
+
+        ENT_QUOTES,
+
+        "UTF-8"
+
+    );
+
 }
+
+/* =========================================================
+SITE SETTINGS
+========================================================= */
+
+$siteName =
+"Hungroo Café";
+
+$currency =
+"₹";
+
+/* =========================================================
+BASE URL
+========================================================= */
+
+$baseUrl =
+"http://localhost/hungroo";
+
+/* =========================================================
+TIMEZONE
+========================================================= */
+
+date_default_timezone_set(
+"Asia/Kolkata"
+);
+
+?>
