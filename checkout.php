@@ -1,13 +1,9 @@
 <?php
 
-require_once "db.php";
-
-/* =========================================================
-PAGE TITLE
-========================================================= */
+session_start();
 
 $pageTitle =
-"Hungroo Café | Secure Checkout";
+"Hungroo Café | Checkout";
 
 ?>
 
@@ -23,19 +19,13 @@ $pageTitle =
 name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<meta
-name="description"
-content="Secure premium checkout experience at Hungroo Café.">
-
 <title>
 
 <?php echo $pageTitle; ?>
 
 </title>
 
-<!-- =====================================================
-GOOGLE FONT
-===================================================== -->
+<!-- GOOGLE FONT -->
 
 <link
 rel="preconnect"
@@ -50,792 +40,978 @@ crossorigin>
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- =====================================================
-FONT AWESOME
-===================================================== -->
+<!-- FONT AWESOME -->
 
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<!-- =====================================================
-CSS
-===================================================== -->
+<!-- CSS -->
 
 <link
 rel="stylesheet"
-href="assets/css/checkout.css">
+href="assets/css/navbar.css">
+
+<link
+rel="stylesheet"
+href="assets/css/footer.css">
+
+<style>
+
+/* =========================================================
+ROOT
+========================================================= */
+
+:root{
+
+    --bg:#070707;
+
+    --card:#111111;
+
+    --white:#ffffff;
+
+    --text:#bdbdbd;
+
+    --primary:#ff9a3d;
+
+    --gold:#ffd27a;
+
+    --border:
+    rgba(255,255,255,.08);
+
+}
+
+body.light-mode{
+
+    --bg:#f5f5f7;
+
+    --card:#ffffff;
+
+    --white:#111111;
+
+    --text:#666666;
+
+    --border:
+    rgba(0,0,0,.08);
+
+}
+
+/* =========================================================
+RESET
+========================================================= */
+
+*{
+
+    margin:0;
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+body{
+
+    background:var(--bg);
+
+    color:var(--white);
+
+    font-family:'Poppins',sans-serif;
+
+    overflow-x:hidden;
+
+}
+
+/* =========================================================
+PAGE
+========================================================= */
+
+.checkout-page{
+
+    width:100%;
+
+    max-width:1450px;
+
+    margin:auto;
+
+    padding:
+    130px 16px 90px;
+
+}
+
+/* =========================================================
+TOP
+========================================================= */
+
+.checkout-top{
+
+    text-align:center;
+
+    margin-bottom:50px;
+
+}
+
+.checkout-top span{
+
+    color:var(--primary);
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+.checkout-top h1{
+
+    font-size:
+    clamp(42px,6vw,82px);
+
+    margin:
+    12px 0 16px;
+
+}
+
+.checkout-top p{
+
+    max-width:760px;
+
+    margin:auto;
+
+    color:var(--text);
+
+    line-height:2;
+
+}
+
+/* =========================================================
+WRAPPER
+========================================================= */
+
+.checkout-wrapper{
+
+    display:grid;
+
+    grid-template-columns:
+    1fr .8fr;
+
+    gap:30px;
+
+}
+
+/* =========================================================
+FORM
+========================================================= */
+
+.checkout-form{
+
+    padding:30px;
+
+    border-radius:30px;
+
+    background:
+    rgba(255,255,255,.04);
+
+    border:
+    1px solid var(--border);
+
+}
+
+.checkout-form h2{
+
+    font-size:34px;
+
+    margin-bottom:26px;
+
+}
+
+/* =========================================================
+GRID
+========================================================= */
+
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:20px;
+
+}
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+.form-group.full{
+
+    grid-column:1/-1;
+
+}
+
+.form-group label{
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select{
+
+    width:100%;
+
+    height:60px;
+
+    border:none;
+
+    outline:none;
+
+    padding:
+    0 18px;
+
+    border-radius:18px;
+
+    background:
+    rgba(255,255,255,.04);
+
+    border:
+    1px solid var(--border);
+
+    color:var(--white);
+
+    font-size:14px;
+
+}
+
+body.light-mode
+.form-group input,
+body.light-mode
+.form-group textarea,
+body.light-mode
+.form-group select{
+
+    color:#111;
+
+}
+
+.form-group textarea{
+
+    height:130px;
+
+    padding-top:18px;
+
+    resize:none;
+
+}
+
+/* =========================================================
+SUMMARY
+========================================================= */
+
+.checkout-summary{
+
+    position:sticky;
+
+    top:120px;
+
+    height:max-content;
+
+    padding:30px;
+
+    border-radius:30px;
+
+    background:
+    rgba(255,255,255,.04);
+
+    border:
+    1px solid var(--border);
+
+}
+
+.checkout-summary h2{
+
+    font-size:34px;
+
+    margin-bottom:26px;
+
+}
+
+/* =========================================================
+ITEM
+========================================================= */
+
+.summary-item{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    gap:16px;
+
+    margin-bottom:20px;
+
+    padding-bottom:20px;
+
+    border-bottom:
+    1px solid var(--border);
+
+}
+
+.summary-item-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+.summary-item-left img{
+
+    width:72px;
+    height:72px;
+
+    border-radius:18px;
+
+    object-fit:cover;
+
+}
+
+.summary-item-left h4{
+
+    font-size:16px;
+
+    margin-bottom:6px;
+
+}
+
+.summary-item-left p{
+
+    color:var(--text);
+
+    font-size:13px;
+
+}
+
+/* =========================================================
+TOTAL
+========================================================= */
+
+.checkout-total{
+
+    margin-top:24px;
+
+    padding-top:24px;
+
+    border-top:
+    1px solid var(--border);
+
+}
+
+.total-row{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:16px;
+
+    color:var(--text);
+
+}
+
+.grand-total{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    margin-top:20px;
+
+}
+
+.grand-total h3{
+
+    font-size:34px;
+
+}
+
+/* =========================================================
+BUTTON
+========================================================= */
+
+.place-order-btn{
+
+    width:100%;
+
+    height:62px;
+
+    margin-top:28px;
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:20px;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--gold)
+    );
+
+    color:#000;
+
+}
+
+/* =========================================================
+SUCCESS
+========================================================= */
+
+.order-success{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+    rgba(0,0,0,.6);
+
+    backdrop-filter:
+    blur(8px);
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    z-index:99999;
+
+}
+
+.order-success.active{
+
+    display:flex;
+
+}
+
+.success-box{
+
+    width:95%;
+
+    max-width:500px;
+
+    padding:40px 30px;
+
+    border-radius:30px;
+
+    text-align:center;
+
+    background:var(--card);
+
+    border:
+    1px solid var(--border);
+
+}
+
+.success-box i{
+
+    width:90px;
+    height:90px;
+
+    margin:auto auto 24px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+    linear-gradient(
+    135deg,
+    #3ad66e,
+    #1fb954
+    );
+
+    color:#fff;
+
+    font-size:38px;
+
+}
+
+.success-box h2{
+
+    font-size:38px;
+
+    margin-bottom:14px;
+
+}
+
+.success-box p{
+
+    color:var(--text);
+
+    line-height:1.9;
+
+    margin-bottom:28px;
+
+}
+
+/* =========================================================
+RESPONSIVE
+========================================================= */
+
+@media(max-width:992px){
+
+    .checkout-wrapper{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .checkout-page{
+
+        padding:
+        120px 14px 70px;
+
+    }
+
+    .form-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+</style>
 
 </head>
 
 <body>
 
-<!-- =====================================================
-NAVBAR
-===================================================== -->
-
 <?php include "Navbar.php"; ?>
 
-<!-- =====================================================
-MAIN
-===================================================== -->
+<!-- =========================================================
+PAGE
+========================================================= -->
 
-<main class="checkout-page">
+<section class="checkout-page">
 
-    <!-- =====================================================
-    HERO
-    ===================================================== -->
+    <!-- TOP -->
 
-    <section class="checkout-hero">
+    <div class="checkout-top">
 
-        <!-- GLOW -->
+        <span>
 
-        <div class="checkout-glow"></div>
+            Secure Checkout
 
-        <!-- LEFT -->
+        </span>
 
-        <div class="checkout-hero-content">
+        <h1>
 
-            <span class="checkout-badge">
+            Complete Your Order
 
-                Hungroo Premium Checkout
+        </h1>
 
-            </span>
+        <p>
 
-            <h1>
+            Enter your delivery details
+            and confirm your order.
 
-                Complete Your
-                Delicious Order
+        </p>
 
-            </h1>
+    </div>
 
-            <p>
+    <!-- WRAPPER -->
 
-                Fast checkout,
-                secure payment
-                and premium delivery
-                experience designed
-                for modern café lovers.
+    <div class="checkout-wrapper">
 
-            </p>
+        <!-- FORM -->
 
-            <!-- FEATURES -->
+        <div class="checkout-form">
 
-            <div class="checkout-features">
+            <h2>
 
-                <div class="checkout-feature">
+                Delivery Details
 
-                    <i class="fa-solid fa-lock"></i>
+            </h2>
 
-                    Secure Payment
+            <form id="checkoutForm">
 
-                </div>
+                <div class="form-grid">
 
-                <div class="checkout-feature">
-
-                    <i class="fa-solid fa-bolt"></i>
-
-                    Fast Delivery
-
-                </div>
-
-                <div class="checkout-feature">
-
-                    <i class="fa-solid fa-shield-heart"></i>
-
-                    Premium Quality
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- RIGHT -->
-
-        <div class="checkout-hero-image">
-
-            <img
-            src="assets/images/promo-1.png"
-            alt="Checkout Food">
-
-        </div>
-
-    </section>
-
-    <!-- =====================================================
-    WRAPPER
-    ===================================================== -->
-
-    <section class="checkout-wrapper">
-
-        <!-- =====================================================
-        LEFT
-        ===================================================== -->
-
-        <section class="checkout-left">
-
-            <!-- =====================================================
-            DELIVERY FORM
-            ===================================================== -->
-
-            <div class="checkout-card">
-
-                <!-- TITLE -->
-
-                <div class="checkout-title">
-
-                    <span>
-
-                        Delivery Information
-
-                    </span>
-
-                    <h2>
-
-                        Shipping Details
-
-                    </h2>
-
-                </div>
-
-                <!-- FORM -->
-
-                <form
-                class="checkout-form"
-
-                id="checkoutForm">
-
-                    <!-- GRID -->
-
-                    <div class="checkout-grid">
-
-                        <!-- NAME -->
-
-                        <div class="input-group">
-
-                            <label>
-
-                                Full Name
-
-                            </label>
-
-                            <div class="input-box">
-
-                                <i class="fa-solid fa-user"></i>
-
-                                <input
-                                type="text"
-
-                                placeholder=
-                                "Enter your name"
-
-                                required>
-
-                            </div>
-
-                        </div>
-
-                        <!-- PHONE -->
-
-                        <div class="input-group">
-
-                            <label>
-
-                                Phone Number
-
-                            </label>
-
-                            <div class="input-box">
-
-                                <i class="fa-solid fa-phone"></i>
-
-                                <input
-                                type="tel"
-
-                                placeholder=
-                                "+91 98765 43210"
-
-                                required>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- EMAIL -->
-
-                    <div class="input-group">
+                    <div class="form-group">
 
                         <label>
 
-                            Email Address
+                            Full Name
 
                         </label>
 
-                        <div class="input-box">
-
-                            <i class="fa-solid fa-envelope"></i>
-
-                            <input
-                            type="email"
-
-                            placeholder=
-                            "hungroo@example.com"
-
-                            required>
-
-                        </div>
+                        <input
+                        type="text"
+                        required>
 
                     </div>
 
-                    <!-- ADDRESS -->
-
-                    <div class="input-group">
+                    <div class="form-group">
 
                         <label>
 
-                            Delivery Address
+                            Phone Number
 
                         </label>
 
-                        <div class="input-box textarea">
-
-                            <i class="fa-solid fa-location-dot"></i>
-
-                            <textarea
-
-                            placeholder=
-                            "Enter full delivery address"
-
-                            required>
-
-                            </textarea>
-
-                        </div>
+                        <input
+                        type="tel"
+                        required>
 
                     </div>
 
-                    <!-- GRID -->
+                    <div class="form-group full">
 
-                    <div class="checkout-grid">
+                        <label>
 
-                        <!-- CITY -->
+                            Address
 
-                        <div class="input-group">
+                        </label>
 
-                            <label>
-
-                                City
-
-                            </label>
-
-                            <div class="input-box">
-
-                                <i class="fa-solid fa-city"></i>
-
-                                <input
-                                type="text"
-
-                                placeholder=
-                                "Chandigarh"
-
-                                required>
-
-                            </div>
-
-                        </div>
-
-                        <!-- PIN -->
-
-                        <div class="input-group">
-
-                            <label>
-
-                                Pincode
-
-                            </label>
-
-                            <div class="input-box">
-
-                                <i class="fa-solid fa-map-pin"></i>
-
-                                <input
-                                type="text"
-
-                                placeholder=
-                                "160001"
-
-                                required>
-
-                            </div>
-
-                        </div>
+                        <textarea
+                        required></textarea>
 
                     </div>
 
-                </form>
+                    <div class="form-group">
 
-            </div>
+                        <label>
 
-            <!-- =====================================================
-            PAYMENT
-            ===================================================== -->
+                            Payment Method
 
-            <div class="checkout-card">
+                        </label>
 
-                <!-- TITLE -->
+                        <select required>
 
-                <div class="checkout-title">
-
-                    <span>
-
-                        Payment Methods
-
-                    </span>
-
-                    <h2>
-
-                        Select Payment
-
-                    </h2>
-
-                </div>
-
-                <!-- PAYMENT OPTIONS -->
-
-                <div class="payment-methods">
-
-                    <!-- METHOD -->
-
-                    <label class="payment-card active">
-
-                        <input
-                        type="radio"
-                        name="payment"
-
-                        checked>
-
-                        <div class="payment-icon">
-
-                            <i class=
-                            "fa-solid fa-credit-card"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h3>
-
-                                Credit / Debit Card
-
-                            </h3>
-
-                            <p>
-
-                                Visa, Mastercard & Rupay
-
-                            </p>
-
-                        </div>
-
-                    </label>
-
-                    <!-- METHOD -->
-
-                    <label class="payment-card">
-
-                        <input
-                        type="radio"
-                        name="payment">
-
-                        <div class="payment-icon">
-
-                            <i class=
-                            "fa-brands fa-google-pay"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h3>
-
-                                UPI Payment
-
-                            </h3>
-
-                            <p>
-
-                                Google Pay, PhonePe & Paytm
-
-                            </p>
-
-                        </div>
-
-                    </label>
-
-                    <!-- METHOD -->
-
-                    <label class="payment-card">
-
-                        <input
-                        type="radio"
-                        name="payment">
-
-                        <div class="payment-icon">
-
-                            <i class=
-                            "fa-solid fa-money-bill-wave"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h3>
+                            <option>
 
                                 Cash On Delivery
 
-                            </h3>
+                            </option>
 
-                            <p>
+                            <option>
 
-                                Pay when your order arrives
+                                UPI
 
-                            </p>
+                            </option>
 
-                        </div>
+                            <option>
 
-                    </label>
+                                Card Payment
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>
+
+                            City
+
+                        </label>
+
+                        <input
+                        type="text"
+                        required>
+
+                    </div>
 
                 </div>
 
-            </div>
+            </form>
 
-        </section>
+        </div>
 
-        <!-- =====================================================
-        RIGHT
-        ===================================================== -->
+        <!-- SUMMARY -->
 
-        <aside class="checkout-summary">
+        <div class="checkout-summary">
 
-            <!-- TITLE -->
+            <h2>
 
-            <div class="summary-title">
+                Order Summary
 
-                <span>
+            </h2>
 
-                    Order Summary
+            <div id="summaryItems"></div>
 
-                </span>
+            <div class="checkout-total">
 
-                <h2>
+                <div class="total-row">
 
-                    Checkout Details
-
-                </h2>
-
-            </div>
-
-            <!-- ITEMS -->
-
-            <div
-            class="checkout-items"
-            id="checkout-items">
-
-            </div>
-
-            <!-- SUMMARY -->
-
-            <div class="checkout-summary-box">
-
-                <!-- ROW -->
-
-                <div class="summary-row">
-
-                    <p>
+                    <span>
 
                         Subtotal
 
-                    </p>
+                    </span>
 
-                    <h4>
+                    <span id="subtotal">
 
-                        ₹<span id="checkout-subtotal">
+                        ₹0
 
-                            0
-
-                        </span>
-
-                    </h4>
+                    </span>
 
                 </div>
 
-                <!-- ROW -->
+                <div class="total-row">
 
-                <div class="summary-row">
+                    <span>
 
-                    <p>
+                        Delivery
 
-                        Delivery Fee
+                    </span>
 
-                    </p>
+                    <span>
 
-                    <h4>
+                        ₹49
 
-                        ₹<span id="checkout-delivery">
-
-                            0
-
-                        </span>
-
-                    </h4>
+                    </span>
 
                 </div>
 
-                <!-- ROW -->
+                <div class="grand-total">
 
-                <div class="summary-row">
+                    <span>
 
-                    <p>
+                        Total
 
-                        GST (5%)
+                    </span>
 
-                    </p>
+                    <h3 id="grandTotal">
 
-                    <h4>
-
-                        ₹<span id="checkout-gst">
-
-                            0
-
-                        </span>
-
-                    </h4>
-
-                </div>
-
-                <!-- TOTAL -->
-
-                <div
-                class="summary-row total">
-
-                    <h3>
-
-                        Total Amount
+                        ₹0
 
                     </h3>
 
-                    <h2>
-
-                        ₹<span id="checkout-total">
-
-                            0
-
-                        </span>
-
-                    </h2>
-
                 </div>
 
             </div>
-
-            <!-- ETA -->
-
-            <div class="delivery-time-card">
-
-                <div class="delivery-time-icon">
-
-                    <i class="fa-solid fa-clock"></i>
-
-                </div>
-
-                <div>
-
-                    <h3>
-
-                        Estimated Delivery
-
-                    </h3>
-
-                    <p>
-
-                        15 - 25 Minutes
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <!-- OFFER -->
-
-            <div class="promo-card-checkout">
-
-                <span>
-
-                    Hungroo Special
-
-                </span>
-
-                <h3>
-
-                    Free Cold Coffee
-                    On Orders Above ₹799
-
-                </h3>
-
-            </div>
-
-            <!-- BUTTON -->
 
             <button
             class="place-order-btn"
 
-            id="placeOrderBtn"
-
-            type="button">
-
-                <i class="fa-solid fa-bag-shopping"></i>
+            onclick="placeOrder()">
 
                 Place Order
 
             </button>
 
-        </aside>
+        </div>
 
-    </section>
+    </div>
 
-</main>
+</section>
 
-<!-- =====================================================
-SUCCESS MODAL
-===================================================== -->
+<!-- =========================================================
+SUCCESS
+========================================================= -->
 
 <div
-class="order-success-modal"
-id="orderSuccessModal">
+class="order-success"
+
+id="orderSuccess">
 
     <div class="success-box">
 
-        <!-- ICON -->
-
-        <div class="success-icon">
-
-            <i class="fa-solid fa-check"></i>
-
-        </div>
-
-        <!-- TEXT -->
+        <i class="fa-solid fa-check"></i>
 
         <h2>
 
-            Order Placed Successfully
+            Order Confirmed
 
         </h2>
 
         <p>
 
-            Thank you for ordering from
-            Hungroo Café.
-            Your delicious food is being prepared.
+            Your delicious order has been
+            placed successfully.
 
         </p>
 
-        <!-- BUTTON -->
+        <button
+        class="place-order-btn"
 
-        <a
-        href="home.php"
-        class="success-btn">
+        onclick=
+        "window.location.href='home.php'">
 
             Back To Home
 
-        </a>
+        </button>
 
     </div>
 
 </div>
 
-<!-- =====================================================
-FOOTER
-===================================================== -->
-
-<?php include "footer.php"; ?>
-
-<!-- =====================================================
-CART JS
-===================================================== -->
-
-<script
-src="cart.js">
-
-</script>
-
-<!-- =====================================================
-CHECKOUT JS
-===================================================== -->
+<script src="assets/js/theme.js"></script>
 
 <script>
 
 /* =========================================================
-PAYMENT CARD ACTIVE
+CART
 ========================================================= */
 
-const paymentCards =
-document.querySelectorAll(
-".payment-card"
-);
+let cart =
 
-paymentCards.forEach(card=>{
+JSON.parse(
+localStorage.getItem(
+"hungrooCart"
+)) || [];
 
-    card.addEventListener(
-    "click",
-    ()=>{
+/* =========================================================
+RENDER SUMMARY
+========================================================= */
 
-        paymentCards.forEach(c=>{
+function renderSummary(){
 
-            c.classList.remove(
-            "active"
-            );
+    const summaryItems =
 
-        });
+    document.getElementById(
+    "summaryItems"
+    );
 
-        card.classList.add(
-        "active"
-        );
+    const subtotalText =
+
+    document.getElementById(
+    "subtotal"
+    );
+
+    const grandTotalText =
+
+    document.getElementById(
+    "grandTotal"
+    );
+
+    let subtotal = 0;
+
+    summaryItems.innerHTML = "";
+
+    cart.forEach(item=>{
+
+        subtotal +=
+        item.price * item.qty;
+
+        summaryItems.innerHTML += `
+
+        <div class="summary-item">
+
+            <div class="summary-item-left">
+
+                <img
+                src="${item.image}"
+                alt="${item.name}">
+
+                <div>
+
+                    <h4>
+
+                        ${item.name}
+
+                    </h4>
+
+                    <p>
+
+                        Qty : ${item.qty}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <strong>
+
+                ₹${item.price * item.qty}
+
+            </strong>
+
+        </div>
+
+        `;
 
     });
 
-});
+    const total =
+    subtotal + 49;
+
+    subtotalText.innerText =
+    `₹${subtotal}`;
+
+    grandTotalText.innerText =
+    `₹${total}`;
+
+}
 
 /* =========================================================
-ORDER SUCCESS
+PLACE ORDER
 ========================================================= */
 
-const placeOrderBtn =
-document.getElementById(
-"placeOrderBtn"
-);
+function placeOrder(){
 
-const orderSuccessModal =
-document.getElementById(
-"orderSuccessModal"
-);
+    const form =
 
-placeOrderBtn?.addEventListener(
-"click",
-()=>{
+    document.getElementById(
+    "checkoutForm"
+    );
 
-    orderSuccessModal.classList.add(
+    if(!form.checkValidity()){
+
+        form.reportValidity();
+
+        return;
+
+    }
+
+    localStorage.removeItem(
+    "hungrooCart"
+    );
+
+    document.getElementById(
+    "orderSuccess"
+    ).classList.add(
     "active"
     );
 
-    localStorage.removeItem(
-    "hungroo-cart"
-    );
+}
 
-});
+/* =========================================================
+LOAD
+========================================================= */
+
+renderSummary();
 
 </script>
 

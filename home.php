@@ -15,28 +15,32 @@ $featuredItems = [
         "id"    => 1,
         "name"  => "Premium Burger",
         "price" => 349,
-        "image" => "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1400&auto=format&fit=crop"
+        "image" => "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1400&auto=format&fit=crop",
+        "tag"   => "Best Seller"
     ],
 
     [
         "id"    => 2,
         "name"  => "Cold Coffee",
         "price" => 229,
-        "image" => "https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=1400&auto=format&fit=crop"
+        "image" => "https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=1400&auto=format&fit=crop",
+        "tag"   => "Popular"
     ],
 
     [
         "id"    => 3,
         "name"  => "Italian Pizza",
         "price" => 599,
-        "image" => "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1400&auto=format&fit=crop"
+        "image" => "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1400&auto=format&fit=crop",
+        "tag"   => "Hot"
     ],
 
     [
         "id"    => 4,
         "name"  => "Chocolate Dessert",
         "price" => 279,
-        "image" => "https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1400&auto=format&fit=crop"
+        "image" => "https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1400&auto=format&fit=crop",
+        "tag"   => "Sweet"
     ]
 
 ];
@@ -73,7 +77,7 @@ href="https://fonts.gstatic.com"
 crossorigin>
 
 <link
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
 rel="stylesheet">
 
 <!-- FONT AWESOME -->
@@ -103,6 +107,13 @@ href="assets/css/home.css">
 <?php include "Navbar.php"; ?>
 
 <!-- =========================================================
+BACKGROUND BLUR
+========================================================= -->
+
+<div class="bg-blur blur-1"></div>
+<div class="bg-blur blur-2"></div>
+
+<!-- =========================================================
 HERO
 ========================================================= -->
 
@@ -112,21 +123,21 @@ HERO
 
     <div class="hero-left">
 
-        <span class="hero-badge">
+        <div class="hero-badge">
 
             <i class="fa-solid fa-fire"></i>
 
             Premium Café Experience
 
-        </span>
+        </div>
 
         <h1>
 
-            Taste The
+            Delicious Food
 
             <span>
 
-                Luxury
+                Modern Vibes
 
             </span>
 
@@ -134,11 +145,13 @@ HERO
 
         <p>
 
-            Discover handcrafted burgers,
-            signature coffee and premium
-            café vibes only at Hungroo Café.
+            Experience handcrafted burgers,
+            luxury coffee and premium café
+            atmosphere at Hungroo Café.
 
         </p>
+
+        <!-- BUTTONS -->
 
         <div class="hero-buttons">
 
@@ -152,13 +165,67 @@ HERO
             </a>
 
             <a
-            href="reservation-history.php"
+            href="contact.php"
 
             class="hero-btn secondary">
 
-                Book Table
+                Reserve Table
 
             </a>
+
+        </div>
+
+        <!-- STATS -->
+
+        <div class="hero-stats">
+
+            <div class="hero-stat">
+
+                <h3>
+
+                    25K+
+
+                </h3>
+
+                <p>
+
+                    Happy Customers
+
+                </p>
+
+            </div>
+
+            <div class="hero-stat">
+
+                <h3>
+
+                    120+
+
+                </h3>
+
+                <p>
+
+                    Premium Dishes
+
+                </p>
+
+            </div>
+
+            <div class="hero-stat">
+
+                <h3>
+
+                    4.9★
+
+                </h3>
+
+                <p>
+
+                    Top Rating
+
+                </p>
+
+            </div>
 
         </div>
 
@@ -176,19 +243,21 @@ HERO
 
         </div>
 
-        <div class="hero-card">
+        <!-- FLOATING -->
 
-            <h3>
+        <div class="floating-card card-one">
 
-                25K+
+            <i class="fa-solid fa-burger"></i>
 
-            </h3>
+            Best Burger
 
-            <p>
+        </div>
 
-                Happy Customers
+        <div class="floating-card card-two">
 
-            </p>
+            <i class="fa-solid fa-mug-hot"></i>
+
+            Fresh Coffee
 
         </div>
 
@@ -197,29 +266,31 @@ HERO
 </section>
 
 <!-- =========================================================
-FEATURED SECTION
+POPULAR
 ========================================================= -->
 
 <section class="home-section">
+
+    <!-- TOP -->
 
     <div class="section-top">
 
         <span>
 
-            Featured Menu
+            Popular Dishes
 
         </span>
 
         <h2>
 
-            Popular Dishes
+            Featured Menu
 
         </h2>
 
         <p>
 
-            Premium handcrafted meals,
-            desserts and signature drinks.
+            Premium handcrafted meals
+            with luxury café vibes.
 
         </p>
 
@@ -241,11 +312,54 @@ FEATURED SECTION
                 src="<?php echo $item['image']; ?>"
                 alt="<?php echo $item['name']; ?>">
 
+                <!-- TAG -->
+
+                <div class="food-tag">
+
+                    <?php echo $item['tag']; ?>
+
+                </div>
+
+                <!-- OVERLAY -->
+
+                <div class="food-overlay">
+
+                    <button
+                    type="button"
+
+                    class="overlay-btn"
+
+                    onclick='addToCart({
+
+                        id: <?php echo $item["id"]; ?>,
+
+                        name: <?php echo json_encode($item["name"]); ?>,
+
+                        price: <?php echo $item["price"]; ?>,
+
+                        image: <?php echo json_encode($item["image"]); ?>
+
+                    })'>
+
+                        <i class="fa-solid fa-cart-plus"></i>
+
+                    </button>
+
+                </div>
+
             </div>
 
             <!-- CONTENT -->
 
             <div class="food-content">
+
+                <div class="food-rating">
+
+                    <i class="fa-solid fa-star"></i>
+
+                    4.9
+
+                </div>
 
                 <h3>
 
@@ -255,10 +369,12 @@ FEATURED SECTION
 
                 <p>
 
-                    Premium handcrafted food
-                    with unforgettable taste.
+                    Premium handcrafted
+                    food with unforgettable taste.
 
                 </p>
+
+                <!-- BOTTOM -->
 
                 <div class="food-bottom">
 
@@ -268,20 +384,35 @@ FEATURED SECTION
 
                     </div>
 
-                    <!-- ADD BUTTON -->
+                    <!-- CART ACTION -->
 
-                    <button
-                    class="food-btn"
+                    <div
+                    class="cart-action"
 
-                    onclick='addToCart(
+                    id="action-<?php echo $item['id']; ?>">
 
-                    <?php echo json_encode($item); ?>
+                        <button
+                        type="button"
 
-                    )'>
+                        class="food-btn"
 
-                        Add To Cart
+                        onclick='addToCart({
 
-                    </button>
+                            id: <?php echo $item["id"]; ?>,
+
+                            name: <?php echo json_encode($item["name"]); ?>,
+
+                            price: <?php echo $item["price"]; ?>,
+
+                            image: <?php echo json_encode($item["image"]); ?>
+
+                        })'>
+
+                            Add To Cart
+
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -295,348 +426,77 @@ FEATURED SECTION
 
 </section>
 
-<!-- =========================================================
-CART OVERLAY
-========================================================= -->
-
-<div class="cart-overlay" id="cartOverlay"></div>
-
-<!-- =========================================================
-SIDE CART
-========================================================= -->
-
-<div class="side-cart" id="sideCart">
-
-    <!-- TOP -->
-
-    <div class="side-cart-top">
-
-        <h2>
-
-            Your Cart
-
-        </h2>
-
-        <button
-        class="cart-close"
-
-        onclick="closeCart()">
-
-            <i class="fa-solid fa-xmark"></i>
-
-        </button>
-
-    </div>
-
-    <!-- ITEMS -->
-
-    <div
-    class="cart-items"
-
-    id="cartItems">
-
-    </div>
-
-    <!-- BOTTOM -->
-
-    <div class="cart-bottom">
-
-        <div class="cart-total">
-
-            <span>
-
-                Total
-
-            </span>
-
-            <h3 id="cartTotal">
-
-                ₹0
-
-            </h3>
-
-        </div>
-
-        <button
-        class="checkout-btn"
-
-        onclick=
-        "window.location.href='cart.php'">
-
-            Checkout
-
-        </button>
-
-    </div>
-
-</div>
-
 <?php include "footer.php"; ?>
 
-<!-- JS -->
+<!-- =========================================================
+PRODUCT DATA
+========================================================= -->
 
 <script>
 
-/* =========================================================
-CART DATA
-========================================================= */
+const featuredItemsData =
 
-let cart =
+<?php echo json_encode($featuredItems); ?>;
 
-JSON.parse(
-localStorage.getItem("hungrooCart")
-) || [];
+</script>
 
-/* =========================================================
-ADD TO CART
-========================================================= */
+<!-- =========================================================
+JS
+========================================================= -->
 
-function addToCart(item){
+<script src="assets/js/theme.js"></script>
 
-    const existing =
+<script src="assets/js/cart.js"></script>
 
-    cart.find(product=>
-    product.id === item.id
-    );
+<script src="assets/js/preloader.js"></script>
 
-    if(existing){
+<!-- =========================================================
+INIT
+========================================================= -->
 
-        existing.qty += 1;
+<script>
 
-    }
+window.addEventListener(
 
-    else{
+    "DOMContentLoaded",
 
-        cart.push({
+    ()=>{
 
-            ...item,
+        if(
 
-            qty:1
+            typeof renderCardControllers
+            === "function"
 
-        });
+        ){
 
-    }
+            renderCardControllers();
 
-    saveCart();
-
-    openCart();
-
-}
-
-/* =========================================================
-SAVE CART
-========================================================= */
-
-function saveCart(){
-
-    localStorage.setItem(
-
-        "hungrooCart",
-
-        JSON.stringify(cart)
-
-    );
-
-    updateCart();
-
-}
-
-/* =========================================================
-UPDATE CART
-========================================================= */
-
-function updateCart(){
-
-    const cartItems =
-
-    document.getElementById(
-    "cartItems"
-    );
-
-    const cartTotal =
-
-    document.getElementById(
-    "cartTotal"
-    );
-
-    const cartCount =
-
-    document.querySelector(
-    ".cart-count"
-    );
-
-    if(!cartItems){
-
-        return;
+        }
 
     }
 
-    cartItems.innerHTML = "";
-
-    let total = 0;
-
-    let count = 0;
-
-    cart.forEach((item,index)=>{
-
-        total +=
-        item.price * item.qty;
-
-        count += item.qty;
-
-        cartItems.innerHTML += `
-
-        <div class="cart-item">
-
-            <img
-            src="${item.image}"
-            alt="${item.name}">
-
-            <div class="cart-item-content">
-
-                <h4>
-
-                    ${item.name}
-
-                </h4>
-
-                <p>
-
-                    ₹${item.price}
-
-                </p>
-
-                <div class="qty-box">
-
-                    <button
-                    onclick="decreaseQty(${index})">
-
-                        -
-
-                    </button>
-
-                    <span>
-
-                        ${item.qty}
-
-                    </span>
-
-                    <button
-                    onclick="increaseQty(${index})">
-
-                        +
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        `;
-
-    });
-
-    cartTotal.innerText =
-    `₹${total}`;
-
-    if(cartCount){
-
-        cartCount.innerText =
-        count;
-
-    }
-
-}
-
-/* =========================================================
-INCREASE
-========================================================= */
-
-function increaseQty(index){
-
-    cart[index].qty++;
-
-    saveCart();
-
-}
-
-/* =========================================================
-DECREASE
-========================================================= */
-
-function decreaseQty(index){
-
-    if(cart[index].qty > 1){
-
-        cart[index].qty--;
-
-    }
-
-    else{
-
-        cart.splice(index,1);
-
-    }
-
-    saveCart();
-
-}
-
-/* =========================================================
-OPEN CART
-========================================================= */
-
-function openCart(){
-
-    document.getElementById(
-    "sideCart"
-    ).classList.add("active");
-
-    document.getElementById(
-    "cartOverlay"
-    ).classList.add("active");
-
-}
-
-/* =========================================================
-CLOSE CART
-========================================================= */
-
-function closeCart(){
-
-    document.getElementById(
-    "sideCart"
-    ).classList.remove("active");
-
-    document.getElementById(
-    "cartOverlay"
-    ).classList.remove("active");
-
-}
-
-/* =========================================================
-NAVBAR CART CLICK
-========================================================= */
-
-const navCart =
-
-document.querySelector(
-".nav-cart"
 );
 
-if(navCart){
+</script>
+<script>
 
-    navCart.addEventListener(
+/* =========================================================
+REGISTER SERVICE WORKER
+========================================================= */
 
-        "click",
+if("serviceWorker" in navigator){
 
-        (e)=>{
+    window.addEventListener(
 
-            e.preventDefault();
+        "load",
 
-            openCart();
+        ()=>{
+
+            navigator.serviceWorker.register(
+
+                "service-worker.js"
+
+            );
 
         }
 
@@ -644,30 +504,6 @@ if(navCart){
 
 }
 
-/* =========================================================
-OVERLAY CLOSE
-========================================================= */
-
-document.getElementById(
-"cartOverlay"
-).addEventListener(
-
-    "click",
-
-    closeCart
-
-);
-
-/* =========================================================
-INIT
-========================================================= */
-
-updateCart();
-
 </script>
-
-<script src="assets/js/theme.js"></script>
-<script src="assets/js/preloader.js"></script>
-
 </body>
 </html>

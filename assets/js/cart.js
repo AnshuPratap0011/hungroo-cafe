@@ -1,23 +1,11 @@
 /* =========================================================
-HUNGROO CAFÉ ADVANCED CART SYSTEM
-========================================================= */
-
-/* =========================================================
-LOCAL STORAGE KEY
-========================================================= */
-
-const CART_STORAGE_KEY =
-"hungroo-cart";
-
-/* =========================================================
-GET CART
+CART SYSTEM
 ========================================================= */
 
 let cart =
+
 JSON.parse(
-localStorage.getItem(
-CART_STORAGE_KEY
-)
+localStorage.getItem("cart")
 ) || [];
 
 /* =========================================================
@@ -28,74 +16,110 @@ function saveCart(){
 
     localStorage.setItem(
 
-        CART_STORAGE_KEY,
+        "cart",
 
         JSON.stringify(cart)
 
     );
 
-    updateCartCount();
-
 }
 
 /* =========================================================
-FORMAT PRICE
-========================================================= */
-
-function formatPrice(price){
-
-    return "₹" + Number(price);
-
-}
-
-/* =========================================================
-PARSE PRICE
-========================================================= */
-
-function parsePrice(price){
-
-    if(typeof price === "number"){
-
-        return price;
-
-    }
-
-    return Number(
-
-        String(price)
-        .replace("₹","")
-        .replace(/,/g,"")
-
-    );
-
-}
-
-/* =========================================================
-UPDATE CART COUNT
+UPDATE NAVBAR COUNT
 ========================================================= */
 
 function updateCartCount(){
 
-    const cartCounts =
+    const countElement =
 
-    document.querySelectorAll(
+    document.querySelector(
     ".cart-count"
     );
 
-    let totalQuantity = 0;
+    if(!countElement) return;
+
+    let total = 0;
 
     cart.forEach(item=>{
 
-        totalQuantity += item.quantity;
+        total += item.quantity;
 
     });
 
-    cartCounts.forEach(count=>{
+    countElement.innerText =
+    total;
 
-        count.textContent =
-        totalQuantity;
+}
 
-    });
+/* =========================================================
+OPEN MINI CART
+========================================================= */
+
+function openMiniCart(){
+
+    const miniCart =
+
+    document.getElementById(
+    "miniCart"
+    );
+
+    const overlay =
+
+    document.getElementById(
+    "miniCartOverlay"
+    );
+
+    if(miniCart){
+
+        miniCart.classList.add(
+        "active"
+        );
+
+    }
+
+    if(overlay){
+
+        overlay.classList.add(
+        "active"
+        );
+
+    }
+
+}
+
+/* =========================================================
+CLOSE MINI CART
+========================================================= */
+
+function closeMiniCart(){
+
+    const miniCart =
+
+    document.getElementById(
+    "miniCart"
+    );
+
+    const overlay =
+
+    document.getElementById(
+    "miniCartOverlay"
+    );
+
+    if(miniCart){
+
+        miniCart.classList.remove(
+        "active"
+        );
+
+    }
+
+    if(overlay){
+
+        overlay.classList.remove(
+        "active"
+        );
+
+    }
 
 }
 
@@ -103,25 +127,19 @@ function updateCartCount(){
 ADD TO CART
 ========================================================= */
 
-function addToCart(
+function addToCart(product){
 
-    name,
-    price,
-    image
+    const existing =
 
-){
+    cart.find(item=>{
 
-    const existingItem =
+        return item.id == product.id;
 
-    cart.find(item=>
+    });
 
-        item.name === name
+    if(existing){
 
-    );
-
-    if(existingItem){
-
-        existingItem.quantity += 1;
+        existing.quantity++;
 
     }
 
@@ -129,11 +147,13 @@ function addToCart(
 
         cart.push({
 
-            name:name,
+            id:product.id,
 
-            price:parsePrice(price),
+            name:product.name,
 
-            image:image,
+            price:Number(product.price),
+
+            image:product.image,
 
             quantity:1
 
@@ -143,13 +163,57 @@ function addToCart(
 
     saveCart();
 
-    renderCart();
+    updateCartCount();
 
-    showToast(
+    renderMiniCart();
 
-        name + " added to cart"
+    renderCardControllers();
 
-    );
+    openMiniCart();
+
+}
+
+/* =========================================================
+UPDATE QUANTITY
+========================================================= */
+
+function updateQuantity(id,type){
+
+    cart = cart.map(item=>{
+
+        if(item.id == id){
+
+            if(type === "plus"){
+
+                item.quantity++;
+
+            }
+
+            else{
+
+                item.quantity--;
+
+                if(item.quantity < 1){
+
+                    item.quantity = 1;
+
+                }
+
+            }
+
+        }
+
+        return item;
+
+    });
+
+    saveCart();
+
+    updateCartCount();
+
+    renderMiniCart();
+
+    renderCardControllers();
 
 }
 
@@ -157,261 +221,125 @@ function addToCart(
 REMOVE ITEM
 ========================================================= */
 
-function removeCartItem(index){
+function removeFromCart(id){
 
-    if(index < 0 || index >= cart.length){
+    cart = cart.filter(item=>{
+
+        return item.id != id;
+
+    });
+
+    saveCart();
+
+    updateCartCount();
+
+    renderMiniCart();
+
+    renderCardControllers();
+
+}
+
+/* =========================================================
+RENDER MINI CART
+========================================================= */
+
+function renderMiniCart(){
+
+    const miniCartItems =
+
+    document.getElementById(
+    "miniCartItems"
+    );
+
+    const totalElement =
+
+    document.getElementById(
+    "miniCartTotal"
+    );
+
+    if(!miniCartItems) return;
+
+    /* =====================
+    EMPTY
+    ===================== */
+
+    if(cart.length === 0){
+
+        miniCartItems.innerHTML = `
+
+            <div class="empty-cart">
+
+                <img
+                src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png">
+
+                <h3>
+
+                    Cart Empty
+
+                </h3>
+
+                <p>
+
+                    Add delicious food now
+
+                </p>
+
+            </div>
+
+        `;
+
+        totalElement.innerText =
+        "₹0";
 
         return;
 
     }
 
-    const removedItem =
+    /* =====================
+    ITEMS
+    ===================== */
 
-    cart[index].name;
-
-    cart.splice(index,1);
-
-    saveCart();
-
-    renderCart();
-
-    showToast(
-
-        removedItem + " removed"
-
-    );
-
-}
-
-/* =========================================================
-CLEAR CART
-========================================================= */
-
-function clearCart(){
-
-    cart = [];
-
-    saveCart();
-
-    renderCart();
-
-    showToast(
-
-        "Cart cleared"
-
-    );
-
-}
-
-/* =========================================================
-CHANGE QUANTITY
-========================================================= */
-
-function changeQuantity(
-
-    index,
-    action
-
-){
-
-    if(!cart[index]){
-
-        return;
-
-    }
-
-    if(action === "increase"){
-
-        cart[index].quantity += 1;
-
-    }
-
-    else if(action === "decrease"){
-
-        cart[index].quantity -= 1;
-
-        if(cart[index].quantity <= 0){
-
-            removeCartItem(index);
-
-            return;
-
-        }
-
-    }
-
-    saveCart();
-
-    renderCart();
-
-}
-
-/* =========================================================
-GET TOTAL
-========================================================= */
-
-function getCartTotal(){
+    let html = "";
 
     let total = 0;
 
     cart.forEach(item=>{
 
-        total +=
-
-        item.price *
-        item.quantity;
-
-    });
-
-    return total;
-
-}
-
-/* =========================================================
-RENDER CART
-========================================================= */
-
-function renderCart(){
-
-    const cartContainer =
-
-    document.querySelector(
-    ".cart-items"
-    );
-
-    const totalPrice =
-
-    document.querySelector(
-    ".cart-total-price"
-    );
-
-    const subtotalPrice =
-
-    document.querySelector(
-    ".cart-subtotal-price"
-    );
-
-    const deliveryPrice =
-
-    document.querySelector(
-    ".delivery-price"
-    );
-
-    if(!cartContainer){
-
-        return;
-
-    }
-
-    cartContainer.innerHTML = "";
-
-    /* =====================================================
-    EMPTY CART
-    ===================================================== */
-
-    if(cart.length === 0){
-
-        cartContainer.innerHTML =
-
-        `
-        <div class="empty-cart">
-
-            <div class="empty-cart-icon">
-
-                <i class="fa-solid fa-cart-shopping"></i>
-
-            </div>
-
-            <h2>
-
-                Your cart is empty
-
-            </h2>
-
-            <p>
-
-                Add premium burgers,
-                coffee and desserts.
-
-            </p>
-
-        </div>
-        `;
-
-        if(totalPrice){
-
-            totalPrice.textContent =
-            "₹0";
-
-        }
-
-        if(subtotalPrice){
-
-            subtotalPrice.textContent =
-            "₹0";
-
-        }
-
-        if(deliveryPrice){
-
-            deliveryPrice.textContent =
-            "₹0";
-
-        }
-
-        return;
-
-    }
-
-    /* =====================================================
-    LOOP ITEMS
-    ===================================================== */
-
-    cart.forEach((item,index)=>{
-
         const itemTotal =
 
-        item.price *
-        item.quantity;
+        item.price * item.quantity;
 
-        cartContainer.innerHTML +=
+        total += itemTotal;
 
-        `
-        <div class="cart-card">
+        html += `
 
-            <!-- LEFT -->
+            <div class="mini-cart-item">
 
-            <div class="cart-left">
+                <img
+                src="${item.image}"
 
-                <div class="cart-image">
+                alt="${item.name}">
 
-                    <img
-                    src="${item.image}"
-                    alt="${item.name}">
+                <div class="mini-cart-content">
 
-                </div>
-
-                <div class="cart-info">
-
-                    <h2>
+                    <h4>
 
                         ${item.name}
 
-                    </h2>
+                    </h4>
 
-                    <p class="cart-item-price">
+                    <p>
 
-                        ${formatPrice(item.price)}
+                        ₹${item.price}
 
                     </p>
 
-                    <div class="cart-quantity">
+                    <div class="mini-cart-qty">
 
                         <button
-                        onclick=
-                        "changeQuantity(${index},'decrease')">
+                        onclick="updateQuantity(${item.id},'minus')">
 
-                            <i class="fa-solid fa-minus"></i>
+                            -
 
                         </button>
 
@@ -422,10 +350,18 @@ function renderCart(){
                         </span>
 
                         <button
-                        onclick=
-                        "changeQuantity(${index},'increase')">
+                        onclick="updateQuantity(${item.id},'plus')">
 
-                            <i class="fa-solid fa-plus"></i>
+                            +
+
+                        </button>
+
+                        <button
+                        onclick="removeFromCart(${item.id})"
+
+                        style="margin-left:8px;">
+
+                            <i class="fa-solid fa-trash"></i>
 
                         </button>
 
@@ -435,178 +371,123 @@ function renderCart(){
 
             </div>
 
-            <!-- RIGHT -->
-
-            <div class="cart-right">
-
-                <h3>
-
-                    ${formatPrice(itemTotal)}
-
-                </h3>
-
-                <button
-                class="remove-cart-btn"
-
-                onclick=
-                "removeCartItem(${index})">
-
-                    <i class="fa-solid fa-trash"></i>
-
-                </button>
-
-            </div>
-
-        </div>
         `;
 
     });
 
-    /* =====================================================
-    TOTAL
-    ===================================================== */
+    miniCartItems.innerHTML =
+    html;
 
-    const subtotal =
-
-    getCartTotal();
-
-    const delivery =
-
-    subtotal > 499
-    ?
-    0
-    :
-    49;
-
-    const finalTotal =
-
-    subtotal + delivery;
-
-    if(subtotalPrice){
-
-        subtotalPrice.textContent =
-
-        formatPrice(subtotal);
-
-    }
-
-    if(deliveryPrice){
-
-        deliveryPrice.textContent =
-
-        delivery === 0
-        ?
-        "FREE"
-        :
-        formatPrice(delivery);
-
-    }
-
-    if(totalPrice){
-
-        totalPrice.textContent =
-
-        formatPrice(finalTotal);
-
-    }
+    totalElement.innerText =
+    `₹${total}`;
 
 }
 
 /* =========================================================
-TOAST
+CARD CONTROLLER
 ========================================================= */
 
-function showToast(message){
+function renderCardControllers(){
 
-    let toast =
+    if(
 
-    document.querySelector(
-    ".cart-toast"
-    );
+        typeof featuredItemsData ===
+        "undefined"
 
-    if(!toast){
-
-        toast =
-
-        document.createElement(
-        "div"
-        );
-
-        toast.className =
-        "cart-toast";
-
-        document.body.appendChild(
-        toast
-        );
-
-    }
-
-    toast.innerHTML =
-
-    `
-    <i class="fa-solid fa-circle-check"></i>
-    ${message}
-    `;
-
-    toast.classList.add(
-    "show-toast"
-    );
-
-    setTimeout(()=>{
-
-        toast.classList.remove(
-        "show-toast"
-        );
-
-    },2500);
-
-}
-
-/* =========================================================
-BUY NOW
-========================================================= */
-
-function buyNow(
-
-    name,
-    price,
-    image
-
-){
-
-    addToCart(
-
-        name,
-        price,
-        image
-
-    );
-
-    window.location.href =
-    "cart.php";
-
-}
-
-/* =========================================================
-CHECKOUT
-========================================================= */
-
-function proceedCheckout(){
-
-    if(cart.length === 0){
-
-        showToast(
-
-            "Your cart is empty"
-
-        );
+    ){
 
         return;
 
     }
 
-    window.location.href =
-    "checkout.php";
+    featuredItemsData.forEach(product=>{
+
+        const actionBox =
+
+        document.getElementById(
+        `action-${product.id}`
+        );
+
+        if(!actionBox) return;
+
+        const existing =
+
+        cart.find(item=>{
+
+            return item.id == product.id;
+
+        });
+
+        /* =====================
+        EXISTS
+        ===================== */
+
+        if(existing){
+
+            actionBox.innerHTML = `
+
+                <div class="qty-controller">
+
+                    <button
+                    onclick="updateQuantity(${product.id},'minus')">
+
+                        -
+
+                    </button>
+
+                    <span>
+
+                        ${existing.quantity}
+
+                    </span>
+
+                    <button
+                    onclick="updateQuantity(${product.id},'plus')">
+
+                        +
+
+                    </button>
+
+                </div>
+
+            `;
+
+        }
+
+        /* =====================
+        BUTTON
+        ===================== */
+
+        else{
+
+            actionBox.innerHTML = `
+
+                <button
+                type="button"
+
+                class="menu-btn"
+
+                onclick="addToCart({
+
+                    id:${product.id},
+
+                    name:${JSON.stringify(product.name)},
+
+                    price:${product.price},
+
+                    image:${JSON.stringify(product.image)}
+
+                })">
+
+                    Add To Cart
+
+                </button>
+
+            `;
+
+        }
+
+    });
 
 }
 
@@ -622,30 +503,88 @@ document.addEventListener(
 
         updateCartCount();
 
-        renderCart();
+        renderMiniCart();
+
+        renderCardControllers();
+
+        /* =====================
+        OPEN BTN
+        ===================== */
+
+        const cartButton =
+
+        document.getElementById(
+        "cartButton"
+        );
+
+        if(cartButton){
+
+            cartButton.addEventListener(
+
+                "click",
+
+                ()=>{
+
+                    openMiniCart();
+
+                }
+
+            );
+
+        }
+
+        /* =====================
+        CLOSE BTN
+        ===================== */
+
+        const closeBtn =
+
+        document.getElementById(
+        "closeMiniCart"
+        );
+
+        if(closeBtn){
+
+            closeBtn.addEventListener(
+
+                "click",
+
+                ()=>{
+
+                    closeMiniCart();
+
+                }
+
+            );
+
+        }
+
+        /* =====================
+        OVERLAY
+        ===================== */
+
+        const overlay =
+
+        document.getElementById(
+        "miniCartOverlay"
+        );
+
+        if(overlay){
+
+            overlay.addEventListener(
+
+                "click",
+
+                ()=>{
+
+                    closeMiniCart();
+
+                }
+
+            );
+
+        }
 
     }
 
 );
-
-/* =========================================================
-GLOBAL FUNCTIONS
-========================================================= */
-
-window.addToCart =
-addToCart;
-
-window.removeCartItem =
-removeCartItem;
-
-window.changeQuantity =
-changeQuantity;
-
-window.clearCart =
-clearCart;
-
-window.buyNow =
-buyNow;
-
-window.proceedCheckout =
-proceedCheckout;

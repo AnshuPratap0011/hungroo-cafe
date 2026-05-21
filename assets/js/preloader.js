@@ -1,333 +1,238 @@
 /* =========================================================
-HUNGROO CAFÉ PRELOADER
+PRELOADER SYSTEM
 ========================================================= */
 
-document.addEventListener(
+/* =========================================================
+CREATE PRELOADER
+========================================================= */
 
-    "DOMContentLoaded",
+const preloader =
 
-    function(){
+document.createElement(
+"div"
+);
 
-        /* =====================================================
-        CREATE PRELOADER
-        ===================================================== */
+preloader.className =
+"site-preloader";
 
-        const preloader =
+preloader.innerHTML = `
 
-        document.createElement(
-        "div"
-        );
+    <div class="preloader-box">
 
-        preloader.className =
-        "site-preloader";
+        <div class="loader-ring"></div>
 
-        /* =====================================================
-        HTML
-        ===================================================== */
+        <h2>
 
-        preloader.innerHTML =
+            Hungroo Café
 
-        `
-        <div class="preloader-wrapper">
+        </h2>
 
-            <div class="preloader-logo">
+        <p>
 
-                <span>Hungroo</span> Café
+            Loading Delicious Experience...
 
-            </div>
+        </p>
 
-            <div class="preloader-loader">
+    </div>
 
-                <span></span>
-                <span></span>
-                <span></span>
+`;
 
-            </div>
+document.body.appendChild(
+preloader
+);
 
-            <p>
+/* =========================================================
+STYLE
+========================================================= */
 
-                Preparing Premium Experience...
+const style =
 
-            </p>
+document.createElement(
+"style"
+);
 
-        </div>
-        `;
+style.innerHTML = `
 
-        /* =====================================================
-        APPEND
-        ===================================================== */
+/* =========================================
+PRELOADER
+========================================= */
 
-        document.body.appendChild(
-        preloader
-        );
+.site-preloader{
 
-        /* =====================================================
-        STYLE
-        ===================================================== */
+    position:fixed;
 
-        const style =
+    inset:0;
 
-        document.createElement(
-        "style"
-        );
+    z-index:999999;
 
-        style.innerHTML =
+    display:flex;
 
-        `
-        /* =================================================
-        PRELOADER
-        ================================================= */
+    align-items:center;
+    justify-content:center;
 
-        .site-preloader{
+    background:#070707;
 
-            position:fixed;
+    transition:
+    opacity .6s ease,
+    visibility .6s ease;
 
-            top:0;
-            left:0;
+}
 
-            width:100%;
-            height:100vh;
+/* =========================================
+HIDE
+========================================= */
 
-            display:flex;
+.site-preloader.hide{
 
-            align-items:center;
-            justify-content:center;
+    opacity:0;
 
-            background:
-            radial-gradient(
-            circle at top right,
-            rgba(255,154,61,.12),
-            transparent 30%
-            ),
-            #070707;
+    visibility:hidden;
 
-            z-index:999999;
+}
 
-            transition:
-            opacity .5s ease,
-            visibility .5s ease;
+/* =========================================
+BOX
+========================================= */
 
-        }
+.preloader-box{
 
-        /* =================================================
-        HIDE
-        ================================================= */
+    text-align:center;
 
-        .hide-preloader{
+}
 
-            opacity:0;
+/* =========================================
+RING
+========================================= */
 
-            visibility:hidden;
+.loader-ring{
 
-            pointer-events:none;
+    width:90px;
+    height:90px;
 
-        }
+    margin:auto auto 28px;
 
-        /* =================================================
-        WRAPPER
-        ================================================= */
+    border-radius:50%;
 
-        .preloader-wrapper{
+    border:
+    6px solid rgba(255,255,255,.08);
 
-            text-align:center;
+    border-top:
+    6px solid #ff9a3d;
 
-            padding:20px;
+    border-right:
+    6px solid #ffd27a;
 
-        }
+    animation:
+    rotateLoader 1s linear infinite;
 
-        /* =================================================
-        LOGO
-        ================================================= */
+    box-shadow:
+    0 0 40px rgba(255,154,61,.25);
 
-        .preloader-logo{
+}
 
-            font-size:
-            clamp(42px,7vw,78px);
+/* =========================================
+TEXT
+========================================= */
 
-            font-weight:800;
+.preloader-box h2{
 
-            color:#ffffff;
+    font-size:42px;
 
-            margin-bottom:28px;
+    margin-bottom:10px;
 
-            letter-spacing:-2px;
+    background:
+    linear-gradient(
+    135deg,
+    #ff9a3d,
+    #ffd27a
+    );
 
-        }
+    -webkit-background-clip:text;
 
-        .preloader-logo span{
+    -webkit-text-fill-color:
+    transparent;
 
-            background:
-            linear-gradient(
-            135deg,
-            #ff9a3d,
-            #ffd27a
+    font-family:'Poppins',sans-serif;
+
+}
+
+.preloader-box p{
+
+    color:#bdbdbd;
+
+    font-size:14px;
+
+    letter-spacing:.5px;
+
+    font-family:'Poppins',sans-serif;
+
+}
+
+/* =========================================
+ANIMATION
+========================================= */
+
+@keyframes rotateLoader{
+
+    100%{
+
+        transform:
+        rotate(360deg);
+
+    }
+
+}
+
+/* =========================================
+PHONE
+========================================= */
+
+@media(max-width:768px){
+
+    .loader-ring{
+
+        width:74px;
+        height:74px;
+
+    }
+
+    .preloader-box h2{
+
+        font-size:32px;
+
+    }
+
+}
+
+`;
+
+document.head.appendChild(
+style
+);
+
+/* =========================================================
+WINDOW LOAD
+========================================================= */
+
+window.addEventListener(
+
+    "load",
+
+    ()=>{
+
+        setTimeout(()=>{
+
+            preloader.classList.add(
+            "hide"
             );
 
-            -webkit-background-clip:text;
+            setTimeout(()=>{
 
-            -webkit-text-fill-color:
-            transparent;
+                preloader.remove();
 
-        }
+            },700);
 
-        /* =================================================
-        LOADER
-        ================================================= */
-
-        .preloader-loader{
-
-            display:flex;
-
-            align-items:center;
-            justify-content:center;
-
-            gap:14px;
-
-            margin-bottom:24px;
-
-        }
-
-        /* =================================================
-        DOTS
-        ================================================= */
-
-        .preloader-loader span{
-
-            width:18px;
-            height:18px;
-
-            border-radius:50%;
-
-            background:
-            linear-gradient(
-            135deg,
-            #ff9a3d,
-            #ffd27a
-            );
-
-            animation:
-            loaderBounce 1s infinite ease-in-out;
-
-        }
-
-        .preloader-loader span:nth-child(2){
-
-            animation-delay:.15s;
-
-        }
-
-        .preloader-loader span:nth-child(3){
-
-            animation-delay:.3s;
-
-        }
-
-        /* =================================================
-        ANIMATION
-        ================================================= */
-
-        @keyframes loaderBounce{
-
-            0%{
-
-                transform:
-                translateY(0);
-
-                opacity:.5;
-
-            }
-
-            50%{
-
-                transform:
-                translateY(-12px);
-
-                opacity:1;
-
-            }
-
-            100%{
-
-                transform:
-                translateY(0);
-
-                opacity:.5;
-
-            }
-
-        }
-
-        /* =================================================
-        TEXT
-        ================================================= */
-
-        .preloader-wrapper p{
-
-            color:#bdbdbd;
-
-            font-size:15px;
-
-            letter-spacing:.5px;
-
-        }
-
-        /* =================================================
-        RESPONSIVE
-        ================================================= */
-
-        @media(max-width:768px){
-
-            .preloader-logo{
-
-                font-size:52px;
-
-            }
-
-            .preloader-loader span{
-
-                width:15px;
-                height:15px;
-
-            }
-
-        }
-        `;
-
-        document.head.appendChild(
-        style
-        );
-
-        /* =====================================================
-        WINDOW LOAD
-        ===================================================== */
-
-        window.addEventListener(
-
-            "load",
-
-            function(){
-
-                setTimeout(function(){
-
-                    preloader.classList.add(
-                    "hide-preloader"
-                    );
-
-                    setTimeout(function(){
-
-                        if(preloader){
-
-                            preloader.remove();
-
-                        }
-
-                    },600);
-
-                },700);
-
-            }
-
-        );
+        },500);
 
     }
 

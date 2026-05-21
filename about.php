@@ -1,9 +1,7 @@
 <?php
 
-session_start();
-
 $pageTitle =
-"Hungroo Café | About Us";
+"Hungroo Café | About";
 
 ?>
 
@@ -25,22 +23,17 @@ content="width=device-width, initial-scale=1.0">
 
 </title>
 
-<!-- GOOGLE FONT -->
+<!-- FONT -->
 
 <link
 rel="preconnect"
 href="https://fonts.googleapis.com">
 
 <link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- FONT AWESOME -->
+<!-- ICON -->
 
 <link
 rel="stylesheet"
@@ -56,10 +49,6 @@ href="assets/css/navbar.css">
 rel="stylesheet"
 href="assets/css/footer.css">
 
-<link
-rel="stylesheet"
-href="assets/css/responsive.css">
-
 <style>
 
 /* =========================================================
@@ -70,7 +59,7 @@ ROOT
 
     --bg:#070707;
 
-    --card:#121212;
+    --card:#111111;
 
     --white:#ffffff;
 
@@ -113,33 +102,126 @@ RESET
 
 }
 
-/* =========================================================
-BODY
-========================================================= */
-
 body{
 
-    overflow-x:hidden;
-
-    background:
-    radial-gradient(
-    circle at top right,
-    rgba(255,154,61,.08),
-    transparent 30%
-    ),
-    var(--bg);
+    background:var(--bg);
 
     color:var(--white);
 
     font-family:'Poppins',sans-serif;
 
+    overflow-x:hidden;
+
 }
 
 /* =========================================================
-PAGE
+HERO
 ========================================================= */
 
-.about-page{
+.about-hero{
+
+    width:100%;
+
+    min-height:70vh;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    padding:
+    140px 16px 90px;
+
+}
+
+.about-hero-content{
+
+    width:100%;
+
+    max-width:950px;
+
+}
+
+.about-hero-content span{
+
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:
+    10px 20px;
+
+    border-radius:999px;
+
+    background:
+    rgba(255,154,61,.10);
+
+    border:
+    1px solid rgba(255,154,61,.14);
+
+    color:#ffb15e;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    margin-bottom:24px;
+
+}
+
+.about-hero-content h1{
+
+    font-size:
+    clamp(52px,8vw,110px);
+
+    line-height:1.05;
+
+    margin-bottom:24px;
+
+}
+
+.about-hero-content h1 span{
+
+    padding:0;
+
+    border:none;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--gold)
+    );
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:
+    transparent;
+
+}
+
+.about-hero-content p{
+
+    max-width:760px;
+
+    margin:auto;
+
+    line-height:2;
+
+    color:var(--text);
+
+    font-size:15px;
+
+}
+
+/* =========================================================
+SECTION
+========================================================= */
+
+.about-section{
 
     width:100%;
 
@@ -148,70 +230,24 @@ PAGE
     margin:auto;
 
     padding:
-    130px 16px 80px;
+    0 16px 90px;
 
 }
 
 /* =========================================================
-TOP
+GRID
 ========================================================= */
 
-.about-top{
-
-    text-align:center;
-
-    margin-bottom:70px;
-
-}
-
-.about-top span{
-
-    color:var(--primary);
-
-    font-size:13px;
-
-    font-weight:600;
-
-}
-
-.about-top h1{
-
-    font-size:
-    clamp(42px,6vw,86px);
-
-    margin:
-    10px 0 18px;
-
-}
-
-.about-top p{
-
-    max-width:820px;
-
-    margin:auto;
-
-    line-height:2;
-
-    color:var(--text);
-
-}
-
-/* =========================================================
-WRAPPER
-========================================================= */
-
-.about-wrapper{
+.about-grid{
 
     display:grid;
 
     grid-template-columns:
-    1fr 1fr;
+    repeat(2,1fr);
 
-    gap:34px;
+    gap:50px;
 
     align-items:center;
-
-    margin-bottom:70px;
 
 }
 
@@ -223,25 +259,17 @@ IMAGE
 
     position:relative;
 
-    overflow:hidden;
-
-    border-radius:36px;
-
-    border:
-    1px solid var(--border);
-
 }
 
 .about-image img{
 
     width:100%;
-    height:100%;
 
-    min-height:520px;
+    height:650px;
 
     object-fit:cover;
 
-    display:block;
+    border-radius:40px;
 
 }
 
@@ -249,49 +277,14 @@ IMAGE
 CONTENT
 ========================================================= */
 
-.about-content{
-
-    padding:10px;
-
-}
-
-.about-badge{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    padding:
-    12px 18px;
-
-    border-radius:999px;
-
-    margin-bottom:26px;
-
-    background:
-    rgba(255,154,61,.10);
-
-    border:
-    1px solid rgba(255,154,61,.16);
-
-    color:var(--primary);
-
-    font-size:13px;
-
-    font-weight:600;
-
-}
-
 .about-content h2{
 
     font-size:
-    clamp(34px,5vw,58px);
+    clamp(38px,5vw,70px);
 
-    line-height:1.2;
+    line-height:1.1;
 
-    margin-bottom:20px;
+    margin-bottom:24px;
 
 }
 
@@ -316,17 +309,17 @@ FEATURES
     grid-template-columns:
     repeat(2,1fr);
 
-    gap:18px;
+    gap:20px;
 
-    margin-top:30px;
+    margin-top:40px;
 
 }
 
 .about-feature{
 
-    padding:22px;
+    padding:24px;
 
-    border-radius:24px;
+    border-radius:26px;
 
     background:
     rgba(255,255,255,.04);
@@ -336,16 +329,24 @@ FEATURES
 
 }
 
+body.light-mode
+.about-feature{
+
+    background:#fff;
+
+}
+
 .about-feature i{
 
-    width:62px;
-    height:62px;
+    width:60px;
+    height:60px;
 
     margin-bottom:18px;
 
     border-radius:18px;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
@@ -364,17 +365,15 @@ FEATURES
 
 .about-feature h3{
 
-    font-size:22px;
+    margin-bottom:12px;
 
-    margin-bottom:10px;
+    font-size:20px;
 
 }
 
 .about-feature p{
 
     margin:0;
-
-    font-size:14px;
 
     line-height:1.8;
 
@@ -393,15 +392,17 @@ STATS
 
     gap:24px;
 
+    margin-top:80px;
+
 }
 
 .about-stat{
 
-    padding:30px;
-
-    text-align:center;
+    padding:34px;
 
     border-radius:30px;
+
+    text-align:center;
 
     background:
     rgba(255,255,255,.04);
@@ -411,12 +412,18 @@ STATS
 
 }
 
+body.light-mode
+.about-stat{
+
+    background:#fff;
+
+}
+
 .about-stat h2{
 
-    font-size:
-    clamp(34px,5vw,54px);
+    font-size:54px;
 
-    margin-bottom:12px;
+    margin-bottom:10px;
 
     background:
     linear-gradient(
@@ -436,8 +443,6 @@ STATS
 
     color:var(--text);
 
-    line-height:1.8;
-
 }
 
 /* =========================================================
@@ -446,7 +451,7 @@ RESPONSIVE
 
 @media(max-width:992px){
 
-    .about-wrapper{
+    .about-grid{
 
         grid-template-columns:1fr;
 
@@ -463,36 +468,33 @@ RESPONSIVE
 
 @media(max-width:768px){
 
-    .about-page{
+    .about-hero{
+
+        min-height:auto;
 
         padding:
         120px 14px 70px;
 
     }
 
-    .about-image{
+    .about-section{
 
-        border-radius:24px;
+        padding:
+        0 12px 70px;
 
     }
 
     .about-image img{
 
-        min-height:320px;
+        height:420px;
+
+        border-radius:28px;
 
     }
 
     .about-features{
 
         grid-template-columns:1fr;
-
-    }
-
-    .about-stat{
-
-        padding:24px 18px;
-
-        border-radius:22px;
 
     }
 
@@ -516,47 +518,60 @@ RESPONSIVE
 
 <?php include "Navbar.php"; ?>
 
-<main class="about-page">
+<!-- =========================================================
+HERO
+========================================================= -->
 
-    <!-- TOP -->
+<section class="about-hero">
 
-    <div class="about-top">
+    <div class="about-hero-content">
 
         <span>
 
-            Premium Café Experience
+            About Hungroo Café
 
         </span>
 
         <h1>
 
-            About Hungroo Café
+            More Than Just
+
+            <span>
+
+                Delicious Food
+
+            </span>
 
         </h1>
 
         <p>
 
-            Hungroo Café blends premium dining,
-            handcrafted coffee and luxury café vibes
-            into one unforgettable experience.
-            From gourmet burgers to signature desserts,
-            every meal is crafted with passion.
+            Hungroo Café is a premium modern café
+            built for food lovers who enjoy delicious
+            flavours, luxury ambience and unforgettable
+            experiences.
 
         </p>
 
     </div>
 
-    <!-- WRAPPER -->
+</section>
 
-    <div class="about-wrapper">
+<!-- =========================================================
+ABOUT
+========================================================= -->
+
+<section class="about-section">
+
+    <div class="about-grid">
 
         <!-- IMAGE -->
 
         <div class="about-image">
 
             <img
-            src="assets/images/cafe.jpg"
-            alt="Hungroo Café">
+            src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1600&auto=format&fit=crop"
+            alt="Cafe">
 
         </div>
 
@@ -564,34 +579,27 @@ RESPONSIVE
 
         <div class="about-content">
 
-            <div class="about-badge">
-
-                <i class="fa-solid fa-fire"></i>
-
-                Modern Luxury Café
-
-            </div>
-
             <h2>
 
-                Crafted For Premium Food Lovers
+                Crafted With Passion & Taste
 
             </h2>
 
             <p>
 
-                We focus on premium quality,
-                aesthetic interiors and rich flavors
-                to deliver the best café experience.
+                We combine premium ingredients,
+                luxury presentation and modern café
+                vibes to create a memorable food
+                experience for everyone.
 
             </p>
 
             <p>
 
-                Whether it’s handcrafted coffee,
-                loaded burgers or premium desserts,
-                Hungroo Café creates moments
-                people remember.
+                From handcrafted burgers and cheesy
+                pizzas to refreshing drinks and
+                desserts — every item is carefully
+                prepared with love.
 
             </p>
 
@@ -605,14 +613,14 @@ RESPONSIVE
 
                     <h3>
 
-                        Premium Meals
+                        Premium Food
 
                     </h3>
 
                     <p>
 
-                        Fresh handcrafted burgers,
-                        pizzas and signature dishes.
+                        Fresh ingredients and
+                        handcrafted recipes.
 
                     </p>
 
@@ -624,14 +632,14 @@ RESPONSIVE
 
                     <h3>
 
-                        Café Coffee
+                        Café Vibes
 
                     </h3>
 
                     <p>
 
-                        Authentic premium coffee
-                        with luxury café vibes.
+                        Modern ambience with
+                        luxury comfort.
 
                     </p>
 
@@ -649,8 +657,8 @@ RESPONSIVE
 
                     <p>
 
-                        Quick and secure delivery
-                        across your city.
+                        Quick and secure
+                        delivery service.
 
                     </p>
 
@@ -662,14 +670,14 @@ RESPONSIVE
 
                     <h3>
 
-                        Top Rated
+                        Best Experience
 
                     </h3>
 
                     <p>
 
-                        Loved by thousands of
-                        premium food lovers.
+                        Trusted by thousands
+                        of happy customers.
 
                     </p>
 
@@ -681,7 +689,9 @@ RESPONSIVE
 
     </div>
 
-    <!-- STATS -->
+    <!-- =====================================================
+    STATS
+    ====================================================== -->
 
     <div class="about-stats">
 
@@ -689,7 +699,7 @@ RESPONSIVE
 
             <h2>
 
-                25K+
+                10K+
 
             </h2>
 
@@ -705,7 +715,7 @@ RESPONSIVE
 
             <h2>
 
-                150+
+                120+
 
             </h2>
 
@@ -751,12 +761,12 @@ RESPONSIVE
 
     </div>
 
-</main>
+</section>
 
 <?php include "footer.php"; ?>
 
 <script src="assets/js/theme.js"></script>
-
+<script src="assets/js/cart.js"></script>
 <script src="assets/js/preloader.js"></script>
 
 </body>

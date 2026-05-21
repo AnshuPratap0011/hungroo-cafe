@@ -1,133 +1,111 @@
-/* =====================================================
-ROOT VARIABLES
-===================================================== */
-
-:root{
-
-    --footer-bg:#0b0b0b;
-
-    --footer-card:#151515;
-
-    --footer-text:#bdbdbd;
-
-    --footer-white:#ffffff;
-
-    --footer-primary:#ff9a3d;
-
-    --footer-gold:#ffd27a;
-
-    --footer-border:
-    rgba(255,255,255,.08);
-
-    --footer-shadow:
-    0 10px 40px rgba(0,0,0,.22);
-
-}
-
-/* =====================================================
-LIGHT MODE
-===================================================== */
-
-body.light-mode{
-
-    --footer-bg:#f5f5f7;
-
-    --footer-card:#ffffff;
-
-    --footer-text:#666666;
-
-    --footer-white:#111111;
-
-    --footer-border:
-    rgba(0,0,0,.08);
-
-    --footer-shadow:
-    0 10px 35px rgba(0,0,0,.06);
-
-}
-
-/* =====================================================
-RESET
-===================================================== */
-
-.footer *,
-.footer *::before,
-.footer *::after{
-
-    margin:0;
-    padding:0;
-
-    box-sizing:border-box;
-
-}
-
-/* =====================================================
+/* =========================================================
 FOOTER
-===================================================== */
+========================================================= */
 
 .footer{
 
     position:relative;
 
-    width:100%;
+    margin-top:100px;
+
+    padding:
+    70px 16px 30px;
+
+    background:
+    #0b0b0b;
+
+    border-top:
+    1px solid rgba(255,255,255,.06);
 
     overflow:hidden;
 
-    background:
-    radial-gradient(
-    circle at top right,
-    rgba(255,154,61,.10),
-    transparent 25%
-    ),
-    var(--footer-bg);
+}
 
-    border-top:
-    1px solid var(--footer-border);
+body.light-mode
+.footer{
 
-    margin-top:80px;
+    background:#ffffff;
+
+    border-color:
+    rgba(0,0,0,.06);
 
 }
 
-/* =====================================================
-CONTAINER
-===================================================== */
+/* =========================================================
+TOP
+========================================================= */
 
-.footer-container{
+.footer-top{
 
     width:100%;
 
-    max-width:1400px;
+    max-width:1450px;
 
     margin:auto;
-
-    padding:
-    70px 18px 26px;
-
-}
-
-/* =====================================================
-TOP GRID
-===================================================== */
-
-.footer-top{
 
     display:grid;
 
     grid-template-columns:
-    1.5fr
-    1fr
-    1fr
-    1.2fr;
+    1.4fr 1fr 1fr 1fr 1fr;
 
-    gap:34px;
-
-    margin-bottom:42px;
+    gap:40px;
 
 }
 
-/* =====================================================
+/* =========================================================
+BOX
+========================================================= */
+
+.footer-box{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.footer-box h3{
+
+    font-size:22px;
+
+    margin-bottom:24px;
+
+    color:#fff;
+
+}
+
+body.light-mode
+.footer-box h3{
+
+    color:#111;
+
+}
+
+/* =========================================================
+BRAND
+========================================================= */
+
+.footer-brand p{
+
+    color:#bdbdbd;
+
+    line-height:2;
+
+    margin:
+    24px 0;
+
+}
+
+body.light-mode
+.footer-brand p{
+
+    color:#666;
+
+}
+
+/* =========================================================
 LOGO
-===================================================== */
+========================================================= */
 
 .footer-logo{
 
@@ -135,197 +113,221 @@ LOGO
 
     align-items:center;
 
-    gap:14px;
-
-    text-decoration:none;
-
-    margin-bottom:22px;
+    gap:16px;
 
 }
 
 .footer-logo img{
 
-    width:68px;
-    height:68px;
+    width:72px;
+    height:72px;
+
+    border-radius:22px;
 
     object-fit:cover;
 
-    border-radius:18px;
-
-    flex-shrink:0;
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.25);
 
 }
 
 .footer-logo h2{
 
-    color:var(--footer-white);
-
-    font-size:30px;
+    font-size:36px;
 
     line-height:1.1;
 
-    margin-bottom:4px;
+    background:
+    linear-gradient(
+    135deg,
+    #ff9a3d,
+    #ffd27a
+    );
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:
+    transparent;
 
 }
 
-.footer-logo span{
+/* =========================================================
+LINKS
+========================================================= */
 
-    color:var(--footer-text);
+.footer-box a{
 
-    font-size:13px;
+    width:max-content;
+
+    margin-bottom:16px;
+
+    text-decoration:none;
+
+    color:#bdbdbd;
+
+    transition:.35s;
+
+    position:relative;
 
 }
 
-/* =====================================================
-BRAND TEXT
-===================================================== */
+body.light-mode
+.footer-box a{
 
-.footer-brand{
+    color:#666;
+
+}
+
+.footer-box a::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    bottom:-4px;
+
+    width:0%;
+    height:2px;
+
+    background:#ff9a3d;
+
+    transition:.35s;
+
+}
+
+.footer-box a:hover{
+
+    color:#ff9a3d;
+
+    transform:
+    translateX(6px);
+
+}
+
+.footer-box a:hover::before{
 
     width:100%;
 
 }
 
-.footer-brand p{
-
-    color:var(--footer-text);
-
-    line-height:1.9;
-
-    margin-bottom:24px;
-
-    max-width:420px;
-
-    word-break:break-word;
-
-}
-
-/* =====================================================
+/* =========================================================
 SOCIAL
-===================================================== */
+========================================================= */
 
-.footer-social{
+.footer-socials{
 
     display:flex;
 
-    flex-wrap:wrap;
+    align-items:center;
 
-    gap:12px;
+    gap:14px;
 
 }
 
-.footer-social a{
+.footer-socials a{
 
-    width:48px;
-    height:48px;
+    width:50px;
+    height:50px;
 
-    border-radius:16px;
+    margin:0;
+
+    border-radius:18px;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
-    text-decoration:none;
-
     background:
-    rgba(255,255,255,.04);
+    rgba(255,255,255,.05);
 
     border:
-    1px solid var(--footer-border);
+    1px solid rgba(255,255,255,.08);
 
-    color:var(--footer-white);
+    color:#fff;
 
-    transition:.35s ease;
-
-    flex-shrink:0;
+    font-size:18px;
 
 }
 
-.footer-social a:hover{
+body.light-mode
+.footer-socials a{
+
+    background:#f5f5f5;
+
+    border-color:
+    rgba(0,0,0,.06);
+
+    color:#111;
+
+}
+
+.footer-socials a:hover{
 
     transform:
-    translateY(-4px);
+    translateY(-6px);
 
     background:
     linear-gradient(
     135deg,
-    var(--footer-primary),
-    var(--footer-gold)
+    #ff9a3d,
+    #ffd27a
     );
 
     color:#000;
 
 }
 
-/* =====================================================
-HEADINGS
-===================================================== */
+/* =========================================================
+HOURS
+========================================================= */
 
-.footer-links h3,
-.footer-contact h3{
+.footer-hours{
 
-    color:var(--footer-white);
-
-    font-size:24px;
-
-    margin-bottom:24px;
-
-    line-height:1.2;
+    margin-bottom:18px;
 
 }
 
-/* =====================================================
-LINKS
-===================================================== */
+.footer-hours p{
 
-.footer-links{
+    color:#fff;
 
-    display:flex;
+    margin-bottom:6px;
 
-    flex-direction:column;
+    font-size:15px;
 
-    gap:14px;
+    font-weight:600;
 
 }
 
-.footer-links a{
+body.light-mode
+.footer-hours p{
 
-    width:fit-content;
-
-    max-width:100%;
-
-    text-decoration:none;
-
-    color:var(--footer-text);
-
-    transition:.3s ease;
-
-    line-height:1.8;
-
-    word-break:break-word;
+    color:#111;
 
 }
 
-.footer-links a:hover{
+.footer-hours span{
 
-    color:var(--footer-primary);
+    color:#bdbdbd;
 
-    transform:
-    translateX(4px);
+    font-size:14px;
 
 }
 
-/* =====================================================
+body.light-mode
+.footer-hours span{
+
+    color:#666;
+
+}
+
+/* =========================================================
 CONTACT
-===================================================== */
+========================================================= */
 
 .footer-contact{
-
-    width:100%;
-
-}
-
-.footer-contact-item{
 
     display:flex;
 
@@ -333,99 +335,173 @@ CONTACT
 
     gap:14px;
 
-    margin-bottom:18px;
-
-    color:var(--footer-text);
-
-    line-height:1.8;
-
-    word-break:break-word;
+    margin-bottom:20px;
 
 }
 
-.footer-contact-item i{
+.footer-contact i{
 
-    color:var(--footer-primary);
+    width:42px;
+    height:42px;
 
-    margin-top:4px;
+    border-radius:14px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+    rgba(255,154,61,.10);
+
+    color:#ff9a3d;
 
     flex-shrink:0;
 
 }
 
-/* =====================================================
-APPS
-===================================================== */
+.footer-contact p{
 
-.footer-apps{
+    color:#bdbdbd;
 
-    display:flex;
-
-    flex-direction:column;
-
-    gap:14px;
-
-    margin-top:24px;
+    line-height:1.7;
 
 }
 
-.footer-apps a{
+body.light-mode
+.footer-contact p{
+
+    color:#666;
+
+}
+
+/* =========================================================
+BOTTOM
+========================================================= */
+
+.footer-bottom{
 
     width:100%;
 
-    min-height:56px;
+    max-width:1450px;
 
-    padding:
-    0 18px;
+    margin:
+    50px auto 0;
 
-    border-radius:18px;
+    padding-top:28px;
+
+    border-top:
+    1px solid rgba(255,255,255,.08);
 
     display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+}
+
+body.light-mode
+.footer-bottom{
+
+    border-color:
+    rgba(0,0,0,.06);
+
+}
+
+.footer-bottom p{
+
+    color:#bdbdbd;
+
+    font-size:14px;
+
+}
+
+body.light-mode
+.footer-bottom p{
+
+    color:#666;
+
+}
+
+/* =========================================================
+PAYMENT
+========================================================= */
+
+.footer-payments{
+
+    display:flex;
+
     align-items:center;
 
-    gap:12px;
+    gap:14px;
 
-    text-decoration:none;
+}
+
+.footer-payments i{
+
+    width:54px;
+    height:54px;
+
+    border-radius:16px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
 
     background:
-    rgba(255,255,255,.04);
+    rgba(255,255,255,.05);
 
     border:
-    1px solid var(--footer-border);
+    1px solid rgba(255,255,255,.08);
 
-    color:var(--footer-white);
+    color:#fff;
 
-    transition:.35s ease;
-
-    font-weight:600;
-
-    overflow:hidden;
+    font-size:24px;
 
 }
 
-.footer-apps a:hover{
+body.light-mode
+.footer-payments i{
 
-    transform:
-    translateY(-4px);
+    background:#f5f5f5;
 
-    background:
-    rgba(255,255,255,.08);
+    border-color:
+    rgba(0,0,0,.06);
 
-}
-
-.footer-apps i{
-
-    font-size:22px;
-
-    flex-shrink:0;
+    color:#111;
 
 }
 
-/* =====================================================
-NEWSLETTER
-===================================================== */
+/* =========================================================
+NEWSLETTER SMALL BOTTOM
+========================================================= */
 
 .footer-newsletter{
+
+    width:100%;
+
+    max-width:1450px;
+
+    margin: 60px auto 30px;
+
+    padding:28px;
+
+    border-radius:30px;
+
+    background:
+    linear-gradient(
+    135deg,
+    rgba(255,154,61,.10),
+    rgba(255,210,122,.06)
+    );
+
+    border:
+    1px solid rgba(255,154,61,.10);
 
     display:flex;
 
@@ -436,108 +512,137 @@ NEWSLETTER
 
     flex-wrap:wrap;
 
-    width:100%;
+    backdrop-filter:
+    blur(12px);
 
-    overflow:hidden;
+}
 
-    padding:30px;
+.newsletter-content{
 
-    margin-bottom:36px;
+    flex:1;
 
-    border-radius:32px;
+    min-width:260px;
+
+}
+
+.newsletter-content span{
+
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:
+    8px 16px;
+
+    border-radius:999px;
+
+    margin-bottom:12px;
 
     background:
-    rgba(255,255,255,.04);
+    rgba(255,154,61,.10);
 
-    border:
-    1px solid var(--footer-border);
+    color:#ffb15e;
 
-    box-shadow:var(--footer-shadow);
+    font-size:11px;
 
-}
-
-/* =====================================================
-NEWSLETTER TEXT
-===================================================== */
-
-.footer-newsletter-text{
-
-    flex:1 1 320px;
-
-    min-width:0;
+    font-weight:700;
 
 }
 
-.footer-newsletter-text h2{
+.newsletter-content h2{
 
-    color:var(--footer-white);
-
-    font-size:36px;
+    font-size:
+    clamp(24px,3vw,38px);
 
     line-height:1.2;
 
     margin-bottom:10px;
 
-    word-break:break-word;
+    color:#fff;
 
 }
 
-.footer-newsletter-text p{
+body.light-mode
+.newsletter-content h2{
 
-    color:var(--footer-text);
+    color:#111;
+
+}
+
+.newsletter-content p{
+
+    color:#bdbdbd;
 
     line-height:1.8;
 
+    font-size:14px;
+
+    max-width:620px;
+
 }
 
-/* =====================================================
-NEWSLETTER FORM
-===================================================== */
+body.light-mode
+.newsletter-content p{
 
-.footer-newsletter-form{
+    color:#666;
 
-    flex:1 1 420px;
+}
+
+/* =========================================================
+FORM
+========================================================= */
+
+.newsletter-form{
+
+    width:100%;
+
+    max-width:460px;
 
     display:flex;
 
     align-items:center;
 
-    justify-content:flex-end;
-
-    gap:14px;
-
-    flex-wrap:wrap;
-
-    min-width:0;
-
-}
-
-.footer-newsletter-form input{
-
-    flex:1;
-
-    min-width:220px;
-
-    max-width:100%;
-
-    height:58px;
-
-    border:none;
-
-    outline:none;
-
-    border-radius:18px;
-
-    padding:
-    0 18px;
+    gap:12px;
 
     background:
     rgba(255,255,255,.04);
 
     border:
-    1px solid var(--footer-border);
+    1px solid rgba(255,255,255,.06);
 
-    color:var(--footer-white);
+    padding:10px;
+
+    border-radius:22px;
+
+}
+
+body.light-mode
+.newsletter-form{
+
+    background:#fff;
+
+    border-color:
+    rgba(0,0,0,.06);
+
+}
+
+.newsletter-form input{
+
+    flex:1;
+
+    height:54px;
+
+    border:none;
+
+    outline:none;
+
+    background:transparent;
+
+    padding:
+    0 14px;
+
+    color:#fff;
 
     font-size:14px;
 
@@ -545,122 +650,56 @@ NEWSLETTER FORM
 
 }
 
-.footer-newsletter-form input::placeholder{
+body.light-mode
+.newsletter-form input{
 
-    color:#999;
+    color:#111;
 
 }
 
-.footer-newsletter-form button{
+.newsletter-form button{
 
-    height:58px;
+    min-width:140px;
 
-    padding:
-    0 24px;
+    height:54px;
 
     border:none;
 
-    outline:none;
-
     cursor:pointer;
 
-    border-radius:18px;
+    border-radius:16px;
 
     background:
     linear-gradient(
     135deg,
-    var(--footer-primary),
-    var(--footer-gold)
+    #ff9a3d,
+    #ffd27a
     );
 
     color:#000;
 
-    font-size:14px;
+    font-size:13px;
 
     font-weight:700;
 
-    transition:.35s ease;
+    transition:.35s;
 
-    white-space:nowrap;
+    font-family:'Poppins',sans-serif;
 
 }
 
-.footer-newsletter-form button:hover{
+.newsletter-form button:hover{
 
     transform:
-    translateY(-4px);
+    translateY(-3px);
 
 }
 
-/* =====================================================
-BOTTOM
-===================================================== */
-
-.footer-bottom{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:space-between;
-
-    gap:18px;
-
-    flex-wrap:wrap;
-
-    padding-top:26px;
-
-    border-top:
-    1px solid var(--footer-border);
-
-}
-
-.footer-bottom p{
-
-    color:var(--footer-text);
-
-    line-height:1.8;
-
-    word-break:break-word;
-
-}
-
-/* =====================================================
-BOTTOM LINKS
-===================================================== */
-
-.footer-bottom-links{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:20px;
-
-    flex-wrap:wrap;
-
-}
-
-.footer-bottom-links a{
-
-    text-decoration:none;
-
-    color:var(--footer-text);
-
-    transition:.3s ease;
-
-}
-
-.footer-bottom-links a:hover{
-
-    color:var(--footer-primary);
-
-}
-
-/* =====================================================
+/* =========================================================
 TABLET
-===================================================== */
+========================================================= */
 
-@media(max-width:1100px){
+@media(max-width:1200px){
 
     .footer-top{
 
@@ -669,40 +708,18 @@ TABLET
 
     }
 
-    .footer-newsletter{
-
-        flex-direction:column;
-
-        align-items:flex-start;
-
-    }
-
-    .footer-newsletter-form{
-
-        width:100%;
-
-        justify-content:flex-start;
-
-    }
-
 }
 
-/* =====================================================
-MOBILE
-===================================================== */
+/* =========================================================
+PHONE
+========================================================= */
 
 @media(max-width:768px){
 
     .footer{
 
-        margin-top:60px;
-
-    }
-
-    .footer-container{
-
         padding:
-        55px 14px 24px;
+        60px 12px 24px;
 
     }
 
@@ -714,53 +731,9 @@ MOBILE
 
     }
 
-    .footer-logo{
-
-        align-items:flex-start;
-
-    }
-
     .footer-logo h2{
 
-        font-size:26px;
-
-    }
-
-    .footer-newsletter{
-
-        padding:22px 18px;
-
-        border-radius:24px;
-
-    }
-
-    .footer-newsletter-text h2{
-
         font-size:28px;
-
-    }
-
-    .footer-newsletter-form{
-
-        width:100%;
-
-        flex-direction:column;
-
-        align-items:stretch;
-
-    }
-
-    .footer-newsletter-form input{
-
-        width:100%;
-
-        min-width:100%;
-
-    }
-
-    .footer-newsletter-form button{
-
-        width:100%;
 
     }
 
@@ -768,64 +741,55 @@ MOBILE
 
         flex-direction:column;
 
-        align-items:flex-start;
+        text-align:center;
 
     }
 
-    .footer-bottom-links{
+    .footer-newsletter{
 
-        gap:14px;
+        padding:22px;
+
+        border-radius:24px;
+
+    }
+
+    .newsletter-form{
+
+        flex-direction:column;
+
+    }
+
+    .newsletter-form input,
+    .newsletter-form button{
+
+        width:100%;
+
+    }
+
+    .newsletter-content h2{
+
+        font-size:28px;
 
     }
 
 }
 
-/* =====================================================
-SMALL MOBILE
-===================================================== */
+/* =========================================================
+SMALL PHONE
+========================================================= */
 
 @media(max-width:480px){
 
+    .footer-logo{
+
+        align-items:flex-start;
+
+    }
+
     .footer-logo img{
 
-        width:58px;
-        height:58px;
-
-    }
-
-    .footer-logo h2{
-
-        font-size:22px;
-
-    }
-
-    .footer-links h3,
-    .footer-contact h3{
-
-        font-size:20px;
-
-    }
-
-    .footer-newsletter-text h2{
-
-        font-size:24px;
-
-    }
-
-    .footer-social a{
-
-        width:44px;
-        height:44px;
-
-        border-radius:14px;
-
-    }
-
-    .footer-apps a{
-
-        min-height:52px;
-
-        border-radius:16px;
+        width:60px;
+        height:60px;
 
     }
 

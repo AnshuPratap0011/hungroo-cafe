@@ -1,17 +1,9 @@
 <?php
 
-require_once "db.php";
-
-/* =========================================================
-PAGE TITLE
-========================================================= */
+session_start();
 
 $pageTitle =
-"Hungroo Café | Premium Cart";
-
-/* =========================================================
-INCLUDE NAVBAR
-========================================================= */
+"Hungroo Café | Cart";
 
 ?>
 
@@ -27,225 +19,743 @@ INCLUDE NAVBAR
 name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<meta
-name="description"
-content="Review your Hungroo Café cart, update quantities and proceed to checkout.">
-
 <title>
 
 <?php echo $pageTitle; ?>
 
 </title>
 
-<!-- =====================================================
-GOOGLE FONT
-===================================================== -->
+<!-- FONT -->
 
 <link
 rel="preconnect"
 href="https://fonts.googleapis.com">
 
 <link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- =====================================================
-FONT AWESOME
-===================================================== -->
+<!-- ICON -->
 
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<!-- =====================================================
-CSS
-===================================================== -->
+<style>
 
-<link
-rel="stylesheet"
-href="assets/css/cart.css">
+/* =========================================================
+ROOT
+========================================================= */
+
+:root{
+
+    --bg:#070707;
+
+    --card:#111111;
+
+    --white:#ffffff;
+
+    --text:#bdbdbd;
+
+    --primary:#ff9a3d;
+
+    --gold:#ffd27a;
+
+    --border:
+    rgba(255,255,255,.08);
+
+}
+
+/* =========================================================
+LIGHT MODE
+========================================================= */
+
+body.light-mode{
+
+    --bg:#f5f5f7;
+
+    --card:#ffffff;
+
+    --white:#111111;
+
+    --text:#666666;
+
+    --border:
+    rgba(0,0,0,.08);
+
+}
+
+/* =========================================================
+RESET
+========================================================= */
+
+*{
+
+    margin:0;
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+body{
+
+    background:var(--bg);
+
+    color:var(--white);
+
+    font-family:'Poppins',sans-serif;
+
+    overflow-x:hidden;
+
+}
+
+/* =========================================================
+WRAPPER
+========================================================= */
+
+.cart-wrapper{
+
+    width:100%;
+
+    max-width:1450px;
+
+    margin:auto;
+
+    padding:
+    130px 16px 80px;
+
+}
+
+/* =========================================================
+TOP
+========================================================= */
+
+.cart-top{
+
+    margin-bottom:40px;
+
+}
+
+.cart-top h1{
+
+    font-size:56px;
+
+    margin-bottom:14px;
+
+}
+
+.cart-top p{
+
+    color:var(--text);
+
+    font-size:15px;
+
+}
+
+/* =========================================================
+LAYOUT
+========================================================= */
+
+.cart-layout{
+
+    display:grid;
+
+    grid-template-columns:
+    1.4fr .6fr;
+
+    gap:28px;
+
+}
+
+/* =========================================================
+LEFT
+========================================================= */
+
+.cart-left{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:22px;
+
+}
+
+/* =========================================================
+ITEM
+========================================================= */
+
+.cart-item{
+
+    display:flex;
+
+    gap:20px;
+
+    padding:22px;
+
+    border-radius:30px;
+
+    background:
+    rgba(255,255,255,.04);
+
+    border:
+    1px solid var(--border);
+
+}
+
+body.light-mode
+.cart-item{
+
+    background:#fff;
+
+}
+
+.cart-item-image{
+
+    width:150px;
+    height:150px;
+
+    border-radius:24px;
+
+    overflow:hidden;
+
+    flex-shrink:0;
+
+}
+
+.cart-item-image img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+}
+
+.cart-item-content{
+
+    width:100%;
+
+}
+
+.cart-item-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:16px;
+
+    margin-bottom:18px;
+
+}
+
+.cart-item-top h2{
+
+    font-size:28px;
+
+}
+
+.cart-item-price{
+
+    font-size:26px;
+
+    font-weight:800;
+
+}
+
+/* =========================================================
+QTY
+========================================================= */
+
+.qty-controller{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    margin-bottom:18px;
+
+}
+
+.qty-controller button{
+
+    width:42px;
+    height:42px;
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:14px;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--gold)
+    );
+
+    color:#000;
+
+    font-size:18px;
+
+    font-weight:800;
+
+}
+
+.qty-controller span{
+
+    min-width:20px;
+
+    text-align:center;
+
+    font-size:18px;
+
+    font-weight:700;
+
+}
+
+/* =========================================================
+REMOVE
+========================================================= */
+
+.remove-btn{
+
+    width:max-content;
+
+    border:none;
+
+    cursor:pointer;
+
+    background:none;
+
+    color:#ff6b6b;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+/* =========================================================
+RIGHT
+========================================================= */
+
+.cart-summary{
+
+    position:sticky;
+
+    top:120px;
+
+    height:max-content;
+
+    padding:28px;
+
+    border-radius:30px;
+
+    background:
+    rgba(255,255,255,.04);
+
+    border:
+    1px solid var(--border);
+
+}
+
+body.light-mode
+.cart-summary{
+
+    background:#fff;
+
+}
+
+.cart-summary h2{
+
+    font-size:34px;
+
+    margin-bottom:26px;
+
+}
+
+/* =========================================================
+SUMMARY ROW
+========================================================= */
+
+.summary-row{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:20px;
+
+    color:var(--text);
+
+}
+
+.summary-total{
+
+    margin-top:26px;
+
+    padding-top:24px;
+
+    border-top:
+    1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+}
+
+.summary-total h3{
+
+    font-size:34px;
+
+}
+
+/* =========================================================
+BUTTON
+========================================================= */
+
+.checkout-btn{
+
+    width:100%;
+
+    height:60px;
+
+    margin-top:26px;
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:18px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:10px;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--gold)
+    );
+
+    color:#000;
+
+    font-size:15px;
+
+    font-weight:800;
+
+    text-decoration:none;
+
+}
+
+/* =========================================================
+EMPTY
+========================================================= */
+
+.empty-cart{
+
+    width:100%;
+
+    min-height:60vh;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+}
+
+.empty-cart img{
+
+    width:220px;
+
+    margin-bottom:30px;
+
+}
+
+.empty-cart h2{
+
+    font-size:42px;
+
+    margin-bottom:14px;
+
+}
+
+.empty-cart p{
+
+    color:var(--text);
+
+    margin-bottom:26px;
+
+}
+
+.shop-btn{
+
+    min-width:220px;
+
+    height:58px;
+
+    border:none;
+
+    border-radius:18px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    text-decoration:none;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--gold)
+    );
+
+    color:#000;
+
+    font-size:15px;
+
+    font-weight:800;
+
+}
+
+/* =========================================================
+RESPONSIVE
+========================================================= */
+
+@media(max-width:992px){
+
+    .cart-layout{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .cart-wrapper{
+
+        padding:
+        110px 12px 70px;
+
+    }
+
+    .cart-top h1{
+
+        font-size:42px;
+
+    }
+
+    .cart-item{
+
+        flex-direction:column;
+
+    }
+
+    .cart-item-image{
+
+        width:100%;
+        height:240px;
+
+    }
+
+    .cart-item-top{
+
+        flex-direction:column;
+
+    }
+
+}
+
+</style>
 
 </head>
 
 <body>
 
-<!-- =====================================================
-NAVBAR
-===================================================== -->
-
 <?php include "Navbar.php"; ?>
 
-<!-- =====================================================
-MAIN
-===================================================== -->
+<!-- =========================================================
+WRAPPER
+========================================================= -->
 
-<main class="cart-page">
-
-    <!-- =====================================================
-    HERO
-    ===================================================== -->
-
-    <section class="cart-hero">
-
-        <!-- BG -->
-
-        <div class="cart-hero-glow"></div>
-
-        <!-- LEFT -->
-
-        <div class="cart-hero-content">
-
-            <span class="cart-badge">
-
-                Hungroo Premium Cart
-
-            </span>
-
-            <h1>
-
-                Your Delicious
-                Order Is Waiting
-
-            </h1>
-
-            <p>
-
-                Review your selected meals,
-                update quantities and continue
-                to secure checkout for a premium
-                café ordering experience.
-
-            </p>
-
-            <!-- FEATURES -->
-
-            <div class="cart-features">
-
-                <div class="cart-feature-box">
-
-                    <i class="fa-solid fa-bolt"></i>
-
-                    Fast Delivery
-
-                </div>
-
-                <div class="cart-feature-box">
-
-                    <i class="fa-solid fa-shield-heart"></i>
-
-                    Secure Checkout
-
-                </div>
-
-                <div class="cart-feature-box">
-
-                    <i class="fa-solid fa-star"></i>
-
-                    Premium Quality
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- RIGHT -->
-
-        <div class="cart-hero-image">
-
-            <img
-            src="assets/images/promo-4.png"
-            alt="Cart Food">
-
-        </div>
-
-    </section>
+<div class="cart-wrapper">
 
     <!-- =====================================================
-    WRAPPER
-    ===================================================== -->
+    TOP
+    ====================================================== -->
 
-    <section class="cart-wrapper">
+    <div class="cart-top">
 
-        <!-- =====================================================
-        CART ITEMS
-        ===================================================== -->
+        <h1>
 
-        <section class="cart-items-section">
+            Your Cart
 
-            <!-- TOPBAR -->
+        </h1>
 
-            <div class="cart-topbar">
+        <p>
 
-                <div>
+            Delicious food waiting for you 🍔
 
-                    <span>
+        </p>
 
-                        Hungroo Order
+    </div>
 
-                    </span>
+    <!-- =====================================================
+    CART CONTENT
+    ====================================================== -->
 
-                    <h2>
+    <div
+    id="cartContainer">
 
-                        Cart Items
+    </div>
 
-                    </h2>
+</div>
 
-                </div>
+<!-- =========================================================
+JS
+========================================================= -->
 
-                <!-- COUNT -->
+<script>
 
-                <div class="cart-count-box">
+let cart =
 
-                    <i class="fa-solid fa-cart-shopping"></i>
+JSON.parse(
+localStorage.getItem("cart")
+) || [];
 
-                    <p>
+const cartContainer =
 
-                        <span id="cart-page-count">
+document.getElementById(
+"cartContainer"
+);
 
-                            0
+/* =========================================================
+SAVE
+========================================================= */
 
-                        </span>
+function saveCart(){
 
-                        Items
+    localStorage.setItem(
 
-                    </p>
+        "cart",
 
-                </div>
+        JSON.stringify(cart)
 
-            </div>
+    );
 
-            <!-- EMPTY -->
+}
 
-            <div
-            class="empty-cart hidden"
-            id="empty-cart">
+/* =========================================================
+UPDATE
+========================================================= */
+
+function updateQty(id,type){
+
+    cart = cart.map(item=>{
+
+        if(item.id == id){
+
+            if(type === "plus"){
+
+                item.quantity++;
+
+            }
+
+            else{
+
+                item.quantity--;
+
+                if(item.quantity < 1){
+
+                    item.quantity = 1;
+
+                }
+
+            }
+
+        }
+
+        return item;
+
+    });
+
+    saveCart();
+
+    renderCart();
+
+}
+
+/* =========================================================
+REMOVE
+========================================================= */
+
+function removeItem(id){
+
+    cart = cart.filter(item=>{
+
+        return item.id != id;
+
+    });
+
+    saveCart();
+
+    renderCart();
+
+}
+
+/* =========================================================
+RENDER
+========================================================= */
+
+function renderCart(){
+
+    if(cart.length === 0){
+
+        cartContainer.innerHTML = `
+
+            <div class="empty-cart">
 
                 <img
-                src="assets/images/empty-cart.png"
-                alt="Empty Cart">
+                src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png">
 
                 <h2>
 
-                    Your Cart Is Empty
+                    Cart Is Empty
 
                 </h2>
 
                 <p>
 
-                    Explore premium meals and
-                    add delicious food now.
+                    Add delicious food now
 
                 </p>
 
                 <a
                 href="menu.php"
-                class="empty-cart-btn">
+
+                class="shop-btn">
 
                     Explore Menu
 
@@ -253,198 +763,176 @@ MAIN
 
             </div>
 
-            <!-- ITEMS -->
+        `;
 
-            <div
-            class="cart-page-items"
-            id="cart-page-items">
+        return;
+
+    }
+
+    let subtotal = 0;
+
+    let html = `
+
+        <div class="cart-layout">
+
+            <div class="cart-left">
+
+    `;
+
+    cart.forEach(item=>{
+
+        const total =
+
+        item.price * item.quantity;
+
+        subtotal += total;
+
+        html += `
+
+            <div class="cart-item">
+
+                <div class="cart-item-image">
+
+                    <img
+                    src="${item.image}">
+
+                </div>
+
+                <div class="cart-item-content">
+
+                    <div class="cart-item-top">
+
+                        <div>
+
+                            <h2>
+
+                                ${item.name}
+
+                            </h2>
+
+                        </div>
+
+                        <div class="cart-item-price">
+
+                            ₹${total}
+
+                        </div>
+
+                    </div>
+
+                    <div class="qty-controller">
+
+                        <button
+                        onclick="updateQty(${item.id},'minus')">
+
+                            -
+
+                        </button>
+
+                        <span>
+
+                            ${item.quantity}
+
+                        </span>
+
+                        <button
+                        onclick="updateQty(${item.id},'plus')">
+
+                            +
+
+                        </button>
+
+                    </div>
+
+                    <button
+                    class="remove-btn"
+
+                    onclick="removeItem(${item.id})">
+
+                        Remove Item
+
+                    </button>
+
+                </div>
 
             </div>
 
-        </section>
+        `;
 
-        <!-- =====================================================
-        SUMMARY
-        ===================================================== -->
+    });
 
-        <aside class="cart-summary">
+    const delivery = 49;
 
-            <!-- TITLE -->
+    const total = subtotal + delivery;
 
-            <div class="summary-title">
+    html += `
 
-                <span>
+            </div>
 
-                    Payment Summary
+            <!-- SUMMARY -->
 
-                </span>
+            <div class="cart-summary">
 
                 <h2>
 
-                    Order Details
+                    Order Summary
 
                 </h2>
 
-            </div>
-
-            <!-- SUMMARY BOX -->
-
-            <div class="summary-box">
-
-                <!-- ROW -->
-
                 <div class="summary-row">
 
-                    <p>
+                    <span>
 
                         Subtotal
 
-                    </p>
+                    </span>
 
-                    <h4>
+                    <span>
 
-                        ₹<span id="cart-subtotal">
+                        ₹${subtotal}
 
-                            0
-
-                        </span>
-
-                    </h4>
+                    </span>
 
                 </div>
-
-                <!-- ROW -->
 
                 <div class="summary-row">
 
-                    <p>
+                    <span>
 
-                        Delivery Fee
+                        Delivery
 
-                    </p>
+                    </span>
 
-                    <h4>
+                    <span>
 
-                        ₹<span id="cart-delivery">
+                        ₹${delivery}
 
-                            0
-
-                        </span>
-
-                    </h4>
+                    </span>
 
                 </div>
 
-                <!-- ROW -->
+                <div class="summary-total">
 
-                <div class="summary-row">
-
-                    <p>
-
-                        GST (5%)
-
-                    </p>
-
-                    <h4>
-
-                        ₹<span id="cart-gst">
-
-                            0
-
-                        </span>
-
-                    </h4>
-
-                </div>
-
-                <!-- TOTAL -->
-
-                <div
-                class="summary-row total">
-
-                    <h3>
+                    <span>
 
                         Total
 
-                    </h3>
-
-                    <h2>
-
-                        ₹<span id="cart-total-page">
-
-                            0
-
-                        </span>
-
-                    </h2>
-
-                </div>
-
-            </div>
-
-            <!-- DELIVERY -->
-
-            <div class="delivery-card">
-
-                <div class="delivery-icon">
-
-                    <i class="fa-solid fa-truck-fast"></i>
-
-                </div>
-
-                <div>
+                    </span>
 
                     <h3>
 
-                        Fast Delivery
+                        ₹${total}
 
                     </h3>
 
-                    <p>
-
-                        Estimated arrival
-                        within 15-25 minutes.
-
-                    </p>
-
                 </div>
-
-            </div>
-
-            <!-- OFFER -->
-
-            <div class="cart-offer-card">
-
-                <span>
-
-                    Special Offer
-
-                </span>
-
-                <h3>
-
-                    Free Fries On Orders
-                    Above ₹599
-
-                </h3>
-
-            </div>
-
-            <!-- BUTTONS -->
-
-            <div class="cart-buttons">
-
-                <a
-                href="menu.php"
-                class="cart-btn-outline">
-
-                    Continue Shopping
-
-                </a>
 
                 <a
                 href="checkout.php"
-                class="cart-btn-primary">
+
+                class="checkout-btn">
+
+                    <i class="fa-solid fa-bag-shopping"></i>
 
                     Proceed To Checkout
 
@@ -452,24 +940,20 @@ MAIN
 
             </div>
 
-        </aside>
+        </div>
 
-    </section>
+    `;
 
-</main>
+    cartContainer.innerHTML =
+    html;
 
-<!-- =====================================================
-FOOTER
-===================================================== -->
+}
 
-<?php include "footer.php"; ?>
+/* =========================================================
+INIT
+========================================================= */
 
-<!-- =====================================================
-CART JS
-===================================================== -->
-
-<script
-src="cart.js">
+renderCart();
 
 </script>
 

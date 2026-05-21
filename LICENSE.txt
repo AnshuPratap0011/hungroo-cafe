@@ -1,0 +1,25 @@
+Hungroo Café Website License
+
+Copyright (c) 2026 Hungroo Café
+
+Permission is granted to use, modify and distribute
+this project for personal and commercial use.
+
+You may:
+
+- Modify the source code
+- Use for café or restaurant websites
+- Customize the design
+- Add new features
+
+You may not:
+
+- Resell this exact source code as your own
+- Remove original credits completely
+- Use for illegal purposes
+
+THE SOFTWARE IS PROVIDED "AS IS",
+WITHOUT WARRANTY OF ANY KIND.
+
+Hungroo Café Project
+Modern Premium Café Website

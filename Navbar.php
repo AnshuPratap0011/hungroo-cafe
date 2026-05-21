@@ -31,73 +31,100 @@ NAVBAR
 <nav class="navbar">
 
     <!-- =====================================================
-    LOGO
+    LEFT
     ====================================================== -->
 
-    <a
-    href="index.php"
+    <div class="navbar-left">
 
-    class="navbar-logo">
+        <!-- LOGO -->
 
-        <span>
+        <a
+        href="home.php"
 
-            Hungroo
+        class="navbar-logo">
 
-        </span>
+            <div class="logo-circle">
 
-        Café
+                <img
+                src="assets/images/logo.png"
+                alt="Hungroo Café">
 
-    </a>
+            </div>
+
+            <div class="logo-text">
+
+                <span>
+
+                    Hungroo
+
+                </span>
+
+                Café
+
+            </div>
+
+        </a>
+
+    </div>
 
     <!-- =====================================================
-    DESKTOP LINKS
+    CENTER LINKS
     ====================================================== -->
 
-    <div class="navbar-links">
+    <div
+    class="navbar-links"
 
-        <a href="index.php">
+    id="navbarLinks">
+
+        <a
+        href="home.php"
+
+        class="nav-link">
 
             Home
 
         </a>
 
-        <a href="menu.php">
+        <a
+        href="menu.php"
+
+        class="nav-link">
 
             Menu
 
         </a>
 
-        <a href="offers.php">
+        <a
+        href="offers.php"
+
+        class="nav-link">
 
             Offers
 
         </a>
 
-        <a href="gallery.php">
+        <a
+        href="gallery.php"
+
+        class="nav-link">
 
             Gallery
 
         </a>
 
-        <a href="about.php">
+        <a
+        href="about.php"
+
+        class="nav-link">
 
             About
 
         </a>
 
-        <a href="team.php">
+        <a
+        href="contact.php"
 
-            Team
-
-        </a>
-
-        <a href="blog.php">
-
-            Blog
-
-        </a>
-
-        <a href="contact.php">
+        class="nav-link">
 
             Contact
 
@@ -106,43 +133,54 @@ NAVBAR
     </div>
 
     <!-- =====================================================
-    RIGHT SIDE
+    RIGHT
     ====================================================== -->
 
     <div class="navbar-right">
 
-        <!-- THEME -->
-
-        <button class="theme-toggle">
-
-            <i class="fa-solid fa-sun"></i>
-
-        </button>
-
         <!-- SEARCH -->
 
-        <button class="nav-icon-btn">
+        <button
+        type="button"
+
+        class="nav-icon-btn search-btn">
 
             <i class="fa-solid fa-magnifying-glass"></i>
 
         </button>
 
+        <!-- THEME -->
+
+        <button
+        type="button"
+
+        class="theme-toggle"
+
+        id="themeToggle">
+
+            <i class="fa-solid fa-moon"></i>
+
+        </button>
+
         <!-- CART -->
 
-        <a
-        href="cart.php"
+        <button
+        type="button"
 
-        class="nav-cart">
+        class="nav-cart"
+
+        id="cartButton">
 
             <i class="fa-solid fa-cart-shopping"></i>
 
-            <span class="cart-count">
+            <span
+            class="cart-count">
 
                 0
 
             </span>
 
-        </a>
+        </button>
 
         <!-- PROFILE -->
 
@@ -155,9 +193,14 @@ NAVBAR
 
         </a>
 
-        <!-- MOBILE MENU -->
+        <!-- MOBILE TOGGLE -->
 
-        <button class="menu-toggle">
+        <button
+        type="button"
+
+        class="menu-toggle"
+
+        id="menuToggle">
 
             <span></span>
             <span></span>
@@ -173,9 +216,13 @@ NAVBAR
 MOBILE MENU
 ========================================================= -->
 
-<div class="mobile-menu">
+<div
+class="mobile-menu"
 
-    <a href="index.php">
+id="mobileMenu">
+
+    <a
+    href="home.php">
 
         <i class="fa-solid fa-house"></i>
 
@@ -183,7 +230,8 @@ MOBILE MENU
 
     </a>
 
-    <a href="menu.php">
+    <a
+    href="menu.php">
 
         <i class="fa-solid fa-utensils"></i>
 
@@ -191,7 +239,8 @@ MOBILE MENU
 
     </a>
 
-    <a href="offers.php">
+    <a
+    href="offers.php">
 
         <i class="fa-solid fa-tags"></i>
 
@@ -199,7 +248,8 @@ MOBILE MENU
 
     </a>
 
-    <a href="gallery.php">
+    <a
+    href="gallery.php">
 
         <i class="fa-solid fa-image"></i>
 
@@ -207,7 +257,8 @@ MOBILE MENU
 
     </a>
 
-    <a href="about.php">
+    <a
+    href="about.php">
 
         <i class="fa-solid fa-circle-info"></i>
 
@@ -215,23 +266,8 @@ MOBILE MENU
 
     </a>
 
-    <a href="team.php">
-
-        <i class="fa-solid fa-users"></i>
-
-        Team
-
-    </a>
-
-    <a href="blog.php">
-
-        <i class="fa-solid fa-blog"></i>
-
-        Blog
-
-    </a>
-
-    <a href="contact.php">
+    <a
+    href="contact.php">
 
         <i class="fa-solid fa-envelope"></i>
 
@@ -239,21 +275,137 @@ MOBILE MENU
 
     </a>
 
-    <a href="dashboard.php">
+</div>
 
-        <i class="fa-solid fa-chart-line"></i>
+<!-- =========================================================
+MINI CART OVERLAY
+========================================================= -->
 
-        Dashboard
+<div
+class="mini-cart-overlay"
 
-    </a>
+id="miniCartOverlay">
 
-    <a href="reservation-history.php">
+</div>
 
-        <i class="fa-solid fa-calendar-check"></i>
+<!-- =========================================================
+MINI CART
+========================================================= -->
 
-        Reservations
+<div
+class="mini-cart"
 
-    </a>
+id="miniCart">
+
+    <!-- =====================================================
+    TOP
+    ====================================================== -->
+
+    <div class="mini-cart-top">
+
+        <!-- IMAGE -->
+
+        <div class="mini-cart-image">
+
+            <img
+            src="https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1600&auto=format&fit=crop"
+            alt="Hungroo Café">
+
+            <!-- LAYER -->
+
+            <div class="mini-cart-layer">
+
+                <h2>
+
+                    Hungroo Café
+
+                </h2>
+
+                <p>
+
+                    Premium Food Experience
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- CLOSE -->
+
+        <button
+        type="button"
+
+        class="mini-cart-close"
+
+        id="closeMiniCart">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+    <!-- =====================================================
+    ITEMS
+    ====================================================== -->
+
+    <div
+    class="mini-cart-items"
+
+    id="miniCartItems">
+
+    </div>
+
+    <!-- =====================================================
+    BOTTOM
+    ====================================================== -->
+
+    <div class="mini-cart-bottom">
+
+        <!-- TOTAL -->
+
+        <div class="mini-cart-total">
+
+            <span>
+
+                Total
+
+            </span>
+
+            <h3 id="miniCartTotal">
+
+                ₹0
+
+            </h3>
+
+        </div>
+
+        <!-- BUTTONS -->
+
+        <div class="mini-cart-buttons">
+
+            <a
+            href="cart.php"
+
+            class="mini-cart-btn secondary">
+
+                View Cart
+
+            </a>
+
+            <a
+            href="checkout.php"
+
+            class="mini-cart-btn">
+
+                Checkout
+
+            </a>
+
+        </div>
+
+    </div>
 
 </div>
 
@@ -264,22 +416,22 @@ NAVBAR SCRIPT
 <script>
 
 /* =========================================================
-MENU TOGGLE
+MOBILE MENU
 ========================================================= */
 
 const menuToggle =
 
-document.querySelector(
-".menu-toggle"
+document.getElementById(
+"menuToggle"
 );
 
 const mobileMenu =
 
-document.querySelector(
-".mobile-menu"
+document.getElementById(
+"mobileMenu"
 );
 
-if(menuToggle && mobileMenu){
+if(menuToggle){
 
     menuToggle.addEventListener(
 
@@ -287,11 +439,11 @@ if(menuToggle && mobileMenu){
 
         ()=>{
 
-            mobileMenu.classList.toggle(
+            menuToggle.classList.toggle(
             "active"
             );
 
-            menuToggle.classList.toggle(
+            mobileMenu.classList.toggle(
             "active"
             );
 
@@ -311,13 +463,13 @@ window.location.pathname
 .split("/")
 .pop();
 
-const navLinks =
+const allLinks =
 
 document.querySelectorAll(
 ".navbar-links a, .mobile-menu a"
 );
 
-navLinks.forEach(link=>{
+allLinks.forEach(link=>{
 
     const href =
 
@@ -336,7 +488,7 @@ navLinks.forEach(link=>{
 });
 
 /* =========================================================
-NAVBAR SCROLL EFFECT
+SCROLL EFFECT
 ========================================================= */
 
 window.addEventListener(
@@ -351,13 +503,7 @@ window.addEventListener(
         ".navbar"
         );
 
-        if(!navbar){
-
-            return;
-
-        }
-
-        if(window.scrollY > 20){
+        if(window.scrollY > 10){
 
             navbar.classList.add(
             "navbar-scrolled"
@@ -378,35 +524,49 @@ window.addEventListener(
 );
 
 /* =========================================================
-AUTO CLOSE MOBILE MENU
+ESC CLOSE
 ========================================================= */
 
-const mobileLinks =
+document.addEventListener(
 
-document.querySelectorAll(
-".mobile-menu a"
-);
+    "keydown",
 
-mobileLinks.forEach(link=>{
+    (e)=>{
 
-    link.addEventListener(
+        if(e.key === "Escape"){
 
-        "click",
+            const miniCart =
 
-        ()=>{
-
-            mobileMenu.classList.remove(
-            "active"
+            document.getElementById(
+            "miniCart"
             );
 
-            menuToggle.classList.remove(
-            "active"
+            const overlay =
+
+            document.getElementById(
+            "miniCartOverlay"
             );
+
+            if(miniCart){
+
+                miniCart.classList.remove(
+                "active"
+                );
+
+            }
+
+            if(overlay){
+
+                overlay.classList.remove(
+                "active"
+                );
+
+            }
 
         }
 
-    );
+    }
 
-});
+);
 
 </script>

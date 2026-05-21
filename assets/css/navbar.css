@@ -1,5 +1,5 @@
 /* =========================================================
-HUNGROO CAFÉ NAVBAR CSS
+NAVBAR CSS
 ========================================================= */
 
 /* =========================================================
@@ -10,7 +10,7 @@ ROOT
 
     --bg:#070707;
 
-    --card:#121212;
+    --card:#111111;
 
     --white:#ffffff;
 
@@ -27,6 +27,10 @@ ROOT
     0 10px 40px rgba(0,0,0,.35);
 
 }
+
+/* =========================================================
+LIGHT MODE
+========================================================= */
 
 body.light-mode{
 
@@ -72,7 +76,10 @@ NAVBAR
 
     width:100%;
 
-    height:88px;
+    height:90px;
+
+    padding:
+    0 28px;
 
     display:flex;
 
@@ -81,12 +88,7 @@ NAVBAR
 
     gap:20px;
 
-    padding:
-    0 32px;
-
     z-index:9999;
-
-    transition:.35s ease;
 
     background:
     rgba(7,7,7,.72);
@@ -97,15 +99,20 @@ NAVBAR
     border-bottom:
     1px solid transparent;
 
+    transition:.35s ease;
+
 }
 
-/* =========================================================
-SCROLLED
-========================================================= */
+body.light-mode .navbar{
 
-.navbar.navbar-scrolled{
+    background:
+    rgba(255,255,255,.75);
 
-    height:78px;
+}
+
+.navbar-scrolled{
+
+    height:80px;
 
     border-bottom:
     1px solid var(--border);
@@ -121,21 +128,67 @@ LOGO
 
 .navbar-logo{
 
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
     text-decoration:none;
-
-    color:var(--white);
-
-    font-size:34px;
-
-    font-weight:800;
-
-    letter-spacing:-1px;
 
     flex-shrink:0;
 
 }
 
-.navbar-logo span{
+.logo-circle{
+
+    width:56px;
+    height:56px;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    border:
+    1px solid var(--border);
+
+    background:
+    rgba(255,255,255,.04);
+
+    transition:.35s;
+
+}
+
+.logo-circle:hover{
+
+    transform:
+    rotate(-5deg)
+    scale(1.05);
+
+}
+
+.logo-circle img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+}
+
+.logo-text{
+
+    font-size:30px;
+
+    font-weight:800;
+
+    color:var(--white);
+
+    letter-spacing:-1px;
+
+}
+
+.logo-text span{
 
     background:
     linear-gradient(
@@ -161,17 +214,18 @@ LINKS
 
     align-items:center;
 
-    gap:10px;
+    gap:8px;
 
 }
-
-/* =========================================================
-LINK
-========================================================= */
 
 .navbar-links a{
 
     position:relative;
+
+    padding:
+    12px 18px;
+
+    border-radius:16px;
 
     text-decoration:none;
 
@@ -181,14 +235,7 @@ LINK
 
     font-weight:500;
 
-    padding:
-    12px 18px;
-
-    border-radius:14px;
-
     transition:.35s;
-
-    white-space:nowrap;
 
 }
 
@@ -197,7 +244,10 @@ LINK
     color:var(--primary);
 
     background:
-    rgba(255,255,255,.04);
+    rgba(255,255,255,.05);
+
+    transform:
+    translateY(-2px);
 
 }
 
@@ -220,14 +270,12 @@ RIGHT
 
     align-items:center;
 
-    gap:14px;
-
-    flex-shrink:0;
+    gap:12px;
 
 }
 
 /* =========================================================
-BUTTONS
+ICON BUTTONS
 ========================================================= */
 
 .theme-toggle,
@@ -265,19 +313,22 @@ BUTTONS
 
     font-size:18px;
 
-    transition:.35s;
+    overflow:hidden;
 
-    flex-shrink:0;
+    transition:.35s;
 
 }
 
-.theme-toggle:hover,
-.nav-icon-btn:hover,
-.nav-cart:hover,
-.nav-profile:hover{
+.theme-toggle::before,
+.nav-icon-btn::before,
+.nav-cart::before,
+.nav-profile::before{
 
-    transform:
-    translateY(-4px);
+    content:"";
+
+    position:absolute;
+
+    inset:0;
 
     background:
     linear-gradient(
@@ -286,7 +337,41 @@ BUTTONS
     var(--gold)
     );
 
+    opacity:0;
+
+    transition:.35s;
+
+}
+
+.theme-toggle i,
+.nav-icon-btn i,
+.nav-cart i,
+.nav-profile i{
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+.theme-toggle:hover::before,
+.nav-icon-btn:hover::before,
+.nav-cart:hover::before,
+.nav-profile:hover::before{
+
+    opacity:1;
+
+}
+
+.theme-toggle:hover,
+.nav-icon-btn:hover,
+.nav-cart:hover,
+.nav-profile:hover{
+
     color:#000;
+
+    transform:
+    translateY(-4px);
 
 }
 
@@ -298,8 +383,8 @@ CART COUNT
 
     position:absolute;
 
-    top:-6px;
-    right:-6px;
+    top:-4px;
+    right:-4px;
 
     min-width:22px;
     height:22px;
@@ -318,7 +403,7 @@ CART COUNT
     linear-gradient(
     135deg,
     #ff4d4d,
-    #ff8a8a
+    #ff7a7a
     );
 
     color:#fff;
@@ -330,6 +415,8 @@ CART COUNT
     border:
     2px solid var(--bg);
 
+    z-index:3;
+
 }
 
 /* =========================================================
@@ -338,14 +425,16 @@ MENU TOGGLE
 
 .menu-toggle{
 
-    width:52px;
-    height:52px;
+    width:50px;
+    height:50px;
 
     border:none;
 
     outline:none;
 
     cursor:pointer;
+
+    border-radius:16px;
 
     display:none;
 
@@ -356,15 +445,11 @@ MENU TOGGLE
 
     gap:6px;
 
-    border-radius:18px;
-
     background:
     rgba(255,255,255,.05);
 
     border:
     1px solid var(--border);
-
-    transition:.35s;
 
 }
 
@@ -380,10 +465,6 @@ MENU TOGGLE
     transition:.35s;
 
 }
-
-/* =========================================================
-MENU ACTIVE
-========================================================= */
 
 .menu-toggle.active span:nth-child(1){
 
@@ -415,7 +496,7 @@ MOBILE MENU
 
     position:fixed;
 
-    top:88px;
+    top:90px;
     left:0;
 
     width:100%;
@@ -428,7 +509,7 @@ MOBILE MENU
 
     flex-direction:column;
 
-    gap:8px;
+    gap:10px;
 
     padding:
     0 18px;
@@ -445,23 +526,24 @@ MOBILE MENU
 
 }
 
+body.light-mode .mobile-menu{
+
+    background:
+    rgba(255,255,255,.96);
+
+}
+
 .mobile-menu.active{
 
     height:
-    calc(100vh - 88px);
+    calc(100vh - 90px);
 
     padding:
     24px 18px;
 
 }
 
-/* =========================================================
-MOBILE LINK
-========================================================= */
-
 .mobile-menu a{
-
-    width:100%;
 
     min-height:60px;
 
@@ -471,41 +553,33 @@ MOBILE LINK
 
     gap:16px;
 
-    text-decoration:none;
-
-    color:var(--white);
-
-    font-size:15px;
-
-    font-weight:600;
-
     padding:
     0 20px;
 
     border-radius:18px;
 
+    text-decoration:none;
+
+    color:var(--white);
+
     background:
     rgba(255,255,255,.04);
 
-    border:
-    1px solid transparent;
-
     transition:.35s;
+
+    font-size:15px;
+
+    font-weight:600;
 
 }
 
 .mobile-menu a i{
-
-    font-size:18px;
 
     color:var(--primary);
 
 }
 
 .mobile-menu a:hover{
-
-    border-color:
-    rgba(255,154,61,.18);
 
     background:
     rgba(255,154,61,.08);
@@ -514,24 +588,463 @@ MOBILE LINK
 
 .mobile-menu a.active{
 
-    color:var(--primary);
-
-    border-color:
-    rgba(255,154,61,.18);
-
     background:
-    rgba(255,154,61,.08);
+    rgba(255,154,61,.12);
+
+    color:var(--primary);
 
 }
 
 /* =========================================================
-LIGHT MODE MOBILE
+OVERLAY
 ========================================================= */
 
-body.light-mode .mobile-menu{
+.mini-cart-overlay{
+
+    position:fixed;
+
+    inset:0;
 
     background:
-    rgba(255,255,255,.96);
+    rgba(0,0,0,.55);
+
+    backdrop-filter:
+    blur(5px);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:.35s;
+
+    z-index:9998;
+
+}
+
+.mini-cart-overlay.active{
+
+    opacity:1;
+
+    visibility:visible;
+
+}
+
+/* =========================================================
+MINI CART
+========================================================= */
+
+.mini-cart{
+
+    position:fixed;
+
+    top:0;
+    right:-100%;
+
+    width:100%;
+
+    max-width:430px;
+
+    height:100vh;
+
+    background:var(--card);
+
+    border-left:
+    1px solid var(--border);
+
+    z-index:9999;
+
+    transition:.45s ease;
+
+    display:flex;
+
+    flex-direction:column;
+
+    overflow:hidden;
+
+    box-shadow:
+    -10px 0 40px rgba(0,0,0,.45);
+
+}
+
+.mini-cart.active{
+
+    right:0;
+
+}
+
+/* =========================================================
+TOP IMAGE
+========================================================= */
+
+.mini-cart-image{
+
+    position:relative;
+
+    height:220px;
+
+    overflow:hidden;
+
+}
+
+.mini-cart-image img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.5s;
+
+}
+
+.mini-cart:hover
+.mini-cart-image img{
+
+    transform:
+    scale(1.08);
+
+}
+
+.mini-cart-layer{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:flex-end;
+
+    padding:24px;
+
+    background:
+    linear-gradient(
+    to top,
+    rgba(0,0,0,.78),
+    rgba(0,0,0,.12)
+    );
+
+}
+
+.mini-cart-layer h2{
+
+    font-size:34px;
+
+    color:#fff;
+
+    margin-bottom:8px;
+
+}
+
+.mini-cart-layer p{
+
+    color:#e8e8e8;
+
+}
+
+/* =========================================================
+CLOSE
+========================================================= */
+
+.mini-cart-close{
+
+    position:absolute;
+
+    top:18px;
+    right:18px;
+
+    width:48px;
+    height:48px;
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:16px;
+
+    background:
+    rgba(0,0,0,.45);
+
+    backdrop-filter:
+    blur(12px);
+
+    color:#fff;
+
+    font-size:18px;
+
+    transition:.35s;
+
+}
+
+.mini-cart-close:hover{
+
+    transform:
+    rotate(90deg);
+
+}
+
+/* =========================================================
+ITEMS
+========================================================= */
+
+.mini-cart-items{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:24px;
+
+}
+
+/* =========================================================
+ITEM
+========================================================= */
+
+.mini-cart-item{
+
+    display:flex;
+
+    gap:16px;
+
+    margin-bottom:22px;
+
+    padding-bottom:22px;
+
+    border-bottom:
+    1px solid var(--border);
+
+}
+
+.mini-cart-item img{
+
+    width:92px;
+    height:92px;
+
+    border-radius:20px;
+
+    object-fit:cover;
+
+    flex-shrink:0;
+
+}
+
+.mini-cart-content{
+
+    width:100%;
+
+}
+
+.mini-cart-content h4{
+
+    font-size:18px;
+
+    margin-bottom:8px;
+
+}
+
+.mini-cart-content p{
+
+    color:var(--text);
+
+    margin-bottom:14px;
+
+}
+
+/* =========================================================
+QTY
+========================================================= */
+
+.mini-cart-qty{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+.mini-cart-qty button{
+
+    width:36px;
+    height:36px;
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:12px;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--gold)
+    );
+
+    color:#000;
+
+    font-size:18px;
+
+    font-weight:700;
+
+}
+
+.mini-cart-qty span{
+
+    font-size:17px;
+
+    font-weight:700;
+
+}
+
+/* =========================================================
+BOTTOM
+========================================================= */
+
+.mini-cart-bottom{
+
+    padding:24px;
+
+    border-top:
+    1px solid var(--border);
+
+    background:
+    rgba(255,255,255,.02);
+
+}
+
+.mini-cart-total{
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:20px;
+
+}
+
+.mini-cart-total span{
+
+    color:var(--text);
+
+}
+
+.mini-cart-total h3{
+
+    font-size:32px;
+
+}
+
+/* =========================================================
+BUTTONS
+========================================================= */
+
+.mini-cart-buttons{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+.mini-cart-btn{
+
+    flex:1;
+
+    height:56px;
+
+    border:none;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:18px;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    transition:.35s;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--gold)
+    );
+
+    color:#000;
+
+}
+
+.mini-cart-btn.secondary{
+
+    background:
+    rgba(255,255,255,.05);
+
+    border:
+    1px solid var(--border);
+
+    color:var(--white);
+
+}
+
+.mini-cart-btn:hover{
+
+    transform:
+    translateY(-4px);
+
+}
+
+/* =========================================================
+EMPTY
+========================================================= */
+
+.empty-cart{
+
+    width:100%;
+
+    min-height:420px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    padding:20px;
+
+}
+
+.empty-cart img{
+
+    width:140px;
+
+    margin-bottom:24px;
+
+}
+
+.empty-cart h3{
+
+    font-size:30px;
+
+    margin-bottom:12px;
+
+}
+
+.empty-cart p{
+
+    color:var(--text);
 
 }
 
@@ -539,33 +1052,7 @@ body.light-mode .mobile-menu{
 RESPONSIVE
 ========================================================= */
 
-@media(max-width:1200px){
-
-    .navbar-links{
-
-        gap:4px;
-
-    }
-
-    .navbar-links a{
-
-        padding:
-        10px 14px;
-
-        font-size:14px;
-
-    }
-
-}
-
 @media(max-width:992px){
-
-    .navbar{
-
-        padding:
-        0 18px;
-
-    }
 
     .navbar-links{
 
@@ -592,15 +1079,16 @@ RESPONSIVE
 
     }
 
-    .navbar-logo{
+    .logo-text{
 
-        font-size:28px;
+        font-size:22px;
 
     }
 
-    .navbar-right{
+    .logo-circle{
 
-        gap:10px;
+        width:48px;
+        height:48px;
 
     }
 
@@ -610,12 +1098,10 @@ RESPONSIVE
     .nav-profile,
     .menu-toggle{
 
-        width:46px;
-        height:46px;
+        width:44px;
+        height:44px;
 
-        border-radius:16px;
-
-        font-size:16px;
+        border-radius:14px;
 
     }
 
@@ -632,6 +1118,12 @@ RESPONSIVE
 
     }
 
+    .mini-cart{
+
+        max-width:100%;
+
+    }
+
 }
 
 @media(max-width:480px){
@@ -643,42 +1135,60 @@ RESPONSIVE
 
     }
 
-    .navbar-logo{
+    .logo-text{
 
-        font-size:24px;
-
-    }
-
-    .navbar-right{
-
-        gap:8px;
+        font-size:19px;
 
     }
 
-    .theme-toggle,
-    .nav-icon-btn,
-    .nav-cart,
-    .nav-profile,
-    .menu-toggle{
+    .mini-cart-image{
 
-        width:42px;
-        height:42px;
+        height:190px;
 
-        border-radius:14px;
+    }
+
+    .mini-cart-layer h2{
+
+        font-size:26px;
+
+    }
+
+    .mini-cart-item{
+
+        gap:12px;
+
+    }
+
+    .mini-cart-item img{
+
+        width:78px;
+        height:78px;
+
+    }
+
+    .mini-cart-buttons{
+
+        flex-direction:column;
 
     }
 
 }
 
 /* =========================================================
-NO SCREEN OUT FIX
+SCROLLBAR
 ========================================================= */
 
-.navbar,
-.mobile-menu{
+.mini-cart-items::-webkit-scrollbar{
 
-    max-width:100vw;
+    width:6px;
 
-    overflow-x:hidden;
+}
+
+.mini-cart-items::-webkit-scrollbar-thumb{
+
+    background:
+    rgba(255,154,61,.45);
+
+    border-radius:999px;
 
 }

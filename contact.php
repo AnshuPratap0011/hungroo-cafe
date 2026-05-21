@@ -1,13 +1,85 @@
 <?php
 
-require_once "db.php";
-
-/* =========================================================
-PAGE TITLE
-========================================================= */
+include "config/config.php";
 
 $pageTitle =
 "Hungroo Café | Contact";
+
+/* =========================================================
+FORM SUBMIT
+========================================================= */
+
+if(isset($_POST['send_message'])){
+
+    $full_name =
+
+    mysqli_real_escape_string(
+    $conn,
+    $_POST['full_name']
+    );
+
+    $email =
+
+    mysqli_real_escape_string(
+    $conn,
+    $_POST['email']
+    );
+
+    $phone =
+
+    mysqli_real_escape_string(
+    $conn,
+    $_POST['phone']
+    );
+
+    $subject =
+
+    mysqli_real_escape_string(
+    $conn,
+    $_POST['subject']
+    );
+
+    $message =
+
+    mysqli_real_escape_string(
+    $conn,
+    $_POST['message']
+    );
+
+    /* =====================================================
+    INSERT
+    ====================================================== */
+
+    $query =
+
+    "INSERT INTO contact_messages (
+
+        full_name,
+        email,
+        phone,
+        subject,
+        message
+
+    )
+
+    VALUES (
+
+        '$full_name',
+        '$email',
+        '$phone',
+        '$subject',
+        '$message'
+
+    )";
+
+    mysqli_query(
+    $conn,
+    $query
+    );
+
+    $success = true;
+
+}
 
 ?>
 
@@ -29,22 +101,17 @@ content="width=device-width, initial-scale=1.0">
 
 </title>
 
-<!-- GOOGLE FONT -->
+<!-- FONT -->
 
 <link
 rel="preconnect"
 href="https://fonts.googleapis.com">
 
 <link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- FONT AWESOME -->
+<!-- ICON -->
 
 <link
 rel="stylesheet"
@@ -60,98 +127,133 @@ href="assets/css/navbar.css">
 rel="stylesheet"
 href="assets/css/footer.css">
 
-<link
-rel="stylesheet"
-href="assets/css/animations.css">
-
 <style>
+
+/* =========================================================
+ROOT
+========================================================= */
 
 :root{
 
     --bg:#070707;
-    --card:#121212;
-    --white:#fff;
+
+    --card:#111111;
+
+    --white:#ffffff;
+
     --text:#bdbdbd;
+
     --primary:#ff9a3d;
+
     --gold:#ffd27a;
-    --border:rgba(255,255,255,.08);
+
+    --border:
+    rgba(255,255,255,.08);
 
 }
 
 body.light-mode{
 
     --bg:#f5f5f7;
-    --card:#fff;
-    --white:#111;
-    --text:#666;
-    --border:rgba(0,0,0,.08);
+
+    --card:#ffffff;
+
+    --white:#111111;
+
+    --text:#666666;
+
+    --border:
+    rgba(0,0,0,.08);
 
 }
+
+/* =========================================================
+RESET
+========================================================= */
 
 *{
 
     margin:0;
     padding:0;
+
     box-sizing:border-box;
 
 }
 
 body{
 
-    overflow-x:hidden;
-
-    background:
-    radial-gradient(
-    circle at top right,
-    rgba(255,154,61,.08),
-    transparent 30%
-    ),
-    var(--bg);
+    background:var(--bg);
 
     color:var(--white);
 
     font-family:'Poppins',sans-serif;
 
+    overflow-x:hidden;
+
 }
 
-.contact-page{
+/* =========================================================
+WRAPPER
+========================================================= */
+
+.contact-wrapper{
 
     width:100%;
 
-    max-width:1400px;
+    max-width:1450px;
 
     margin:auto;
 
     padding:
-    130px 16px 80px;
+    140px 16px 90px;
 
 }
+
+/* =========================================================
+TOP
+========================================================= */
 
 .contact-top{
 
     text-align:center;
 
-    margin-bottom:60px;
+    margin-bottom:70px;
 
 }
 
 .contact-top span{
 
-    color:var(--primary);
+    display:inline-flex;
+
+    padding:
+    10px 20px;
+
+    border-radius:999px;
+
+    background:
+    rgba(255,154,61,.10);
+
+    border:
+    1px solid rgba(255,154,61,.14);
+
+    color:#ffb15e;
 
     font-size:13px;
 
-    font-weight:600;
+    font-weight:700;
+
+    margin-bottom:24px;
 
 }
 
 .contact-top h1{
 
     font-size:
-    clamp(40px,6vw,80px);
+    clamp(50px,7vw,100px);
 
-    margin:
-    10px 0 16px;
+    line-height:1.05;
+
+    margin-bottom:20px;
 
 }
 
@@ -161,45 +263,30 @@ body{
 
     margin:auto;
 
-    line-height:1.9;
-
     color:var(--text);
+
+    line-height:2;
 
 }
 
-.contact-wrapper{
+/* =========================================================
+GRID
+========================================================= */
+
+.contact-grid{
 
     display:grid;
 
     grid-template-columns:
-    1fr 1fr;
+    .9fr 1.1fr;
 
-    gap:30px;
-
-}
-
-/* CARD */
-
-.contact-card{
-
-    background:
-    rgba(255,255,255,.04);
-
-    border:
-    1px solid var(--border);
-
-    border-radius:34px;
-
-    padding:34px;
-
-    backdrop-filter:
-    blur(18px);
-
-    overflow:hidden;
+    gap:34px;
 
 }
 
-/* INFO */
+/* =========================================================
+INFO
+========================================================= */
 
 .contact-info{
 
@@ -207,30 +294,42 @@ body{
 
     flex-direction:column;
 
-    gap:24px;
+    gap:22px;
 
 }
 
-.contact-box{
+.contact-card{
 
-    display:flex;
+    padding:28px;
 
-    align-items:flex-start;
+    border-radius:30px;
 
-    gap:18px;
+    background:
+    rgba(255,255,255,.04);
+
+    border:
+    1px solid var(--border);
 
 }
 
-.contact-icon{
+body.light-mode
+.contact-card{
 
-    width:70px;
-    height:70px;
+    background:#fff;
 
-    border-radius:22px;
+}
 
-    flex-shrink:0;
+.contact-card i{
+
+    width:62px;
+    height:62px;
+
+    margin-bottom:18px;
+
+    border-radius:18px;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
@@ -243,19 +342,19 @@ body{
 
     color:#000;
 
-    font-size:28px;
+    font-size:24px;
 
 }
 
-.contact-text h2{
+.contact-card h3{
 
-    font-size:26px;
+    font-size:24px;
 
-    margin-bottom:10px;
+    margin-bottom:12px;
 
 }
 
-.contact-text p{
+.contact-card p{
 
     color:var(--text);
 
@@ -263,26 +362,15 @@ body{
 
 }
 
-/* FORM */
+/* =========================================================
+FORM
+========================================================= */
 
 .contact-form{
 
-    display:flex;
+    padding:34px;
 
-    flex-direction:column;
-
-    gap:20px;
-
-}
-
-.contact-form input,
-.contact-form textarea{
-
-    width:100%;
-
-    border:none;
-
-    outline:none;
+    border-radius:34px;
 
     background:
     rgba(255,255,255,.04);
@@ -290,41 +378,149 @@ body{
     border:
     1px solid var(--border);
 
-    border-radius:20px;
+}
+
+body.light-mode
+.contact-form{
+
+    background:#fff;
+
+}
+
+.contact-form h2{
+
+    font-size:42px;
+
+    margin-bottom:30px;
+
+}
+
+/* =========================================================
+SUCCESS
+========================================================= */
+
+.success-box{
+
+    margin-bottom:24px;
 
     padding:18px;
 
+    border-radius:18px;
+
+    background:
+    rgba(76,175,80,.12);
+
+    border:
+    1px solid rgba(76,175,80,.18);
+
+    color:#4caf50;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+/* =========================================================
+FORM GRID
+========================================================= */
+
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:20px;
+
+}
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+.form-group.full{
+
+    grid-column:1/-1;
+
+}
+
+.form-group label{
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.form-group input,
+.form-group textarea{
+
+    width:100%;
+
+    border:none;
+
+    outline:none;
+
+    padding:18px;
+
+    border-radius:18px;
+
+    background:
+    rgba(255,255,255,.04);
+
+    border:
+    1px solid var(--border);
+
     color:var(--white);
 
-    font-size:15px;
+    font-size:14px;
 
     font-family:'Poppins',sans-serif;
 
 }
 
-.contact-form textarea{
+body.light-mode
+.form-group input,
+body.light-mode
+.form-group textarea{
 
-    min-height:180px;
+    color:#111;
+
+}
+
+.form-group textarea{
+
+    height:160px;
 
     resize:none;
 
 }
 
-.contact-btn{
+/* =========================================================
+BUTTON
+========================================================= */
 
-    height:58px;
+.submit-btn{
+
+    width:100%;
+
+    height:62px;
+
+    margin-top:24px;
 
     border:none;
 
     cursor:pointer;
 
-    border-radius:20px;
-
-    font-size:15px;
-
-    font-weight:700;
-
-    transition:.35s;
+    border-radius:18px;
 
     background:
     linear-gradient(
@@ -335,45 +531,28 @@ body{
 
     color:#000;
 
+    font-size:15px;
+
+    font-weight:800;
+
+    transition:.35s;
+
 }
 
-.contact-btn:hover{
+.submit-btn:hover{
 
     transform:
     translateY(-4px);
 
 }
 
-/* MAP */
+/* =========================================================
+RESPONSIVE
+========================================================= */
 
-.contact-map{
+@media(max-width:992px){
 
-    margin-top:30px;
-
-    overflow:hidden;
-
-    border-radius:30px;
-
-    border:
-    1px solid var(--border);
-
-}
-
-.contact-map iframe{
-
-    width:100%;
-
-    height:320px;
-
-    border:none;
-
-}
-
-/* RESPONSIVE */
-
-@media(max-width:900px){
-
-    .contact-wrapper{
+    .contact-grid{
 
         grid-template-columns:1fr;
 
@@ -383,35 +562,30 @@ body{
 
 @media(max-width:768px){
 
-    .contact-page{
+    .contact-wrapper{
 
         padding:
-        120px 14px 70px;
+        120px 12px 70px;
 
     }
 
-    .contact-card{
+    .form-grid{
 
-        padding:24px 18px;
-
-        border-radius:24px;
+        grid-template-columns:1fr;
 
     }
 
-    .contact-icon{
+    .contact-form{
 
-        width:60px;
-        height:60px;
+        padding:24px;
 
-        font-size:22px;
-
-        border-radius:18px;
+        border-radius:26px;
 
     }
 
-    .contact-text h2{
+    .contact-form h2{
 
-        font-size:22px;
+        font-size:32px;
 
     }
 
@@ -425,7 +599,11 @@ body{
 
 <?php include "Navbar.php"; ?>
 
-<main class="contact-page">
+<!-- =========================================================
+WRAPPER
+========================================================= -->
+
+<div class="contact-wrapper">
 
     <!-- TOP -->
 
@@ -433,174 +611,201 @@ body{
 
         <span>
 
-            Get In Touch
+            Contact Hungroo Café
 
         </span>
 
         <h1>
 
-            Contact Us
+            Let's Talk
 
         </h1>
 
         <p>
 
-            Reach out to Hungroo Café
-            for reservations, support,
-            feedback or premium dining assistance.
+            Have questions, suggestions or want
+            to connect with us? We'd love to hear
+            from you.
 
         </p>
 
     </div>
 
-    <!-- WRAPPER -->
+    <!-- GRID -->
 
-    <div class="contact-wrapper">
+    <div class="contact-grid">
 
-        <!-- LEFT -->
+        <!-- INFO -->
 
-        <div class="contact-card">
+        <div class="contact-info">
 
-            <div class="contact-info">
+            <div class="contact-card">
 
-                <!-- ITEM -->
+                <i class="fa-solid fa-location-dot"></i>
 
-                <div class="contact-box">
+                <h3>
 
-                    <div class="contact-icon">
+                    Address
 
-                        <i class="fa-solid fa-location-dot"></i>
+                </h3>
 
-                    </div>
+                <p>
 
-                    <div class="contact-text">
+                    India
 
-                        <h2>
-
-                            Address
-
-                        </h2>
-
-                        <p>
-
-                            Chandigarh, India
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <!-- ITEM -->
-
-                <div class="contact-box">
-
-                    <div class="contact-icon">
-
-                        <i class="fa-solid fa-phone"></i>
-
-                    </div>
-
-                    <div class="contact-text">
-
-                        <h2>
-
-                            Phone
-
-                        </h2>
-
-                        <p>
-
-                            +91 99999 99999
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <!-- ITEM -->
-
-                <div class="contact-box">
-
-                    <div class="contact-icon">
-
-                        <i class="fa-solid fa-envelope"></i>
-
-                    </div>
-
-                    <div class="contact-text">
-
-                        <h2>
-
-                            Email
-
-                        </h2>
-
-                        <p>
-
-                            hungroo@gmail.com
-
-                        </p>
-
-                    </div>
-
-                </div>
+                </p>
 
             </div>
 
-            <!-- MAP -->
+            <div class="contact-card">
 
-            <div class="contact-map">
+                <i class="fa-solid fa-phone"></i>
 
-                <iframe
-                src=
-                "https://maps.google.com/maps?q=chandigarh&t=&z=13&ie=UTF8&iwloc=&output=embed">
-                </iframe>
+                <h3>
+
+                    Phone
+
+                </h3>
+
+                <p>
+
+                    +91 9876543210
+
+                </p>
+
+            </div>
+
+            <div class="contact-card">
+
+                <i class="fa-solid fa-envelope"></i>
+
+                <h3>
+
+                    Email
+
+                </h3>
+
+                <p>
+
+                    support@hungroo.com
+
+                </p>
 
             </div>
 
         </div>
 
-        <!-- RIGHT -->
+        <!-- FORM -->
 
-        <div class="contact-card">
+        <div class="contact-form">
 
-            <form class="contact-form">
+            <h2>
 
-                <input
-                type="text"
+                Send Message
 
-                placeholder=
-                "Full Name"
+            </h2>
 
-                required>
+            <?php if(isset($success)): ?>
 
-                <input
-                type="email"
+            <div class="success-box">
 
-                placeholder=
-                "Email Address"
+                Message sent successfully.
 
-                required>
+            </div>
 
-                <input
-                type="text"
+            <?php endif; ?>
 
-                placeholder=
-                "Subject"
+            <form method="POST">
 
-                required>
+                <div class="form-grid">
 
-                <textarea
-                placeholder=
-                "Write your message..."
-                required></textarea>
+                    <div class="form-group">
+
+                        <label>
+
+                            Full Name
+
+                        </label>
+
+                        <input
+                        type="text"
+
+                        name="full_name"
+
+                        required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>
+
+                            Email
+
+                        </label>
+
+                        <input
+                        type="email"
+
+                        name="email"
+
+                        required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>
+
+                            Phone
+
+                        </label>
+
+                        <input
+                        type="text"
+
+                        name="phone">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>
+
+                            Subject
+
+                        </label>
+
+                        <input
+                        type="text"
+
+                        name="subject">
+
+                    </div>
+
+                    <div class="form-group full">
+
+                        <label>
+
+                            Message
+
+                        </label>
+
+                        <textarea
+                        name="message"
+
+                        required></textarea>
+
+                    </div>
+
+                </div>
 
                 <button
                 type="submit"
 
-                class="contact-btn">
+                name="send_message"
+
+                class="submit-btn">
 
                     Send Message
 
@@ -612,11 +817,13 @@ body{
 
     </div>
 
-</main>
+</div>
 
 <?php include "footer.php"; ?>
 
 <script src="assets/js/theme.js"></script>
+<script src="assets/js/cart.js"></script>
+<script src="assets/js/preloader.js"></script>
 
 </body>
 </html>
