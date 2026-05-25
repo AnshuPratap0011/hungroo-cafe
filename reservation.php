@@ -1,13 +1,18 @@
 <?php
 
-include "config/config.php";
+session_start();
 
-$pageTitle =
-"Hungroo Café | Table Reservation";
+/* =========================================================
+CONFIG
+========================================================= */
+
+include "config/config.php";
 
 /* =========================================================
 BOOK TABLE
 ========================================================= */
+
+$success = "";
 
 if(isset($_POST['book_table'])){
 
@@ -64,7 +69,7 @@ if(isset($_POST['book_table'])){
     INSERT
     ====================================================== */
 
-    $query =
+    $insertQuery =
 
     "INSERT INTO reservations (
 
@@ -74,7 +79,8 @@ if(isset($_POST['book_table'])){
         total_people,
         reservation_date,
         reservation_time,
-        special_note
+        special_note,
+        status
 
     )
 
@@ -86,16 +92,18 @@ if(isset($_POST['book_table'])){
         '$total_people',
         '$reservation_date',
         '$reservation_time',
-        '$special_note'
+        '$special_note',
+        'pending'
 
     )";
 
     mysqli_query(
     $conn,
-    $query
+    $insertQuery
     );
 
-    $success = true;
+    $success =
+    "Table booked successfully.";
 
 }
 
@@ -115,9 +123,19 @@ content="width=device-width, initial-scale=1.0">
 
 <title>
 
-<?php echo $pageTitle; ?>
+Book Table
 
 </title>
+
+<!-- CSS -->
+
+<link
+rel="stylesheet"
+href="assets/css/navbar.css">
+
+<link
+rel="stylesheet"
+href="assets/css/footer.css">
 
 <!-- FONT -->
 
@@ -135,65 +153,34 @@ rel="stylesheet">
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<!-- CSS -->
-
-<link
-rel="stylesheet"
-href="assets/css/navbar.css">
-
-<link
-rel="stylesheet"
-href="assets/css/footer.css">
-
 <style>
-
-/* =========================================================
-ROOT
-========================================================= */
 
 :root{
 
     --bg:#070707;
-
-    --card:#111111;
-
+    --card:#121212;
     --white:#ffffff;
-
     --text:#bdbdbd;
-
     --primary:#ff9a3d;
-
     --gold:#ffd27a;
-
-    --border:
-    rgba(255,255,255,.08);
+    --border:rgba(255,255,255,.08);
 
 }
 
 body.light-mode{
 
-    --bg:#f5f5f7;
-
+    --bg:#f7f7f7;
     --card:#ffffff;
-
     --white:#111111;
-
     --text:#666666;
-
-    --border:
-    rgba(0,0,0,.08);
+    --border:rgba(0,0,0,.08);
 
 }
-
-/* =========================================================
-RESET
-========================================================= */
 
 *{
 
     margin:0;
     padding:0;
-
     box-sizing:border-box;
 
 }
@@ -201,29 +188,21 @@ RESET
 body{
 
     background:var(--bg);
-
     color:var(--white);
-
     font-family:'Poppins',sans-serif;
 
-    overflow-x:hidden;
+    transition:.35s;
 
 }
 
 /* =========================================================
-WRAPPER
+PAGE
 ========================================================= */
 
-.reservation-wrapper{
-
-    width:100%;
-
-    max-width:1450px;
-
-    margin:auto;
+.reservation-page{
 
     padding:
-    140px 16px 90px;
+    140px 5% 80px;
 
 }
 
@@ -235,159 +214,53 @@ TOP
 
     text-align:center;
 
-    margin-bottom:70px;
-
-}
-
-.reservation-top span{
-
-    display:inline-flex;
-
-    padding:
-    10px 20px;
-
-    border-radius:999px;
-
-    background:
-    rgba(255,154,61,.10);
-
-    border:
-    1px solid rgba(255,154,61,.14);
-
-    color:#ffb15e;
-
-    font-size:13px;
-
-    font-weight:700;
-
-    margin-bottom:24px;
+    margin-bottom:60px;
 
 }
 
 .reservation-top h1{
 
-    font-size:
-    clamp(50px,7vw,100px);
+    font-size:60px;
 
-    line-height:1.05;
-
-    margin-bottom:20px;
+    margin-bottom:14px;
 
 }
 
 .reservation-top p{
 
-    max-width:760px;
+    color:var(--text);
+
+    max-width:700px;
 
     margin:auto;
 
-    color:var(--text);
-
-    line-height:2;
+    line-height:1.9;
 
 }
 
 /* =========================================================
-GRID
+BOX
 ========================================================= */
 
-.reservation-grid{
+.reservation-box{
 
-    display:grid;
+    max-width:1000px;
 
-    grid-template-columns:
-    .9fr 1.1fr;
+    margin:auto;
 
-    gap:34px;
-
-}
-
-/* =========================================================
-IMAGE
-========================================================= */
-
-.reservation-image{
-
-    position:relative;
-
-    overflow:hidden;
+    padding:36px;
 
     border-radius:36px;
 
-}
-
-.reservation-image img{
-
-    width:100%;
-    height:100%;
-
-    object-fit:cover;
-
-    min-height:700px;
-
-}
-
-/* =========================================================
-FORM
-========================================================= */
-
-.reservation-form{
-
-    padding:34px;
-
-    border-radius:34px;
-
-    background:
-    rgba(255,255,255,.04);
+    background:var(--card);
 
     border:
     1px solid var(--border);
 
 }
 
-body.light-mode
-.reservation-form{
-
-    background:#fff;
-
-}
-
-.reservation-form h2{
-
-    font-size:42px;
-
-    margin-bottom:30px;
-
-}
-
 /* =========================================================
-SUCCESS
-========================================================= */
-
-.success-box{
-
-    margin-bottom:24px;
-
-    padding:18px;
-
-    border-radius:18px;
-
-    background:
-    rgba(76,175,80,.12);
-
-    border:
-    1px solid rgba(76,175,80,.18);
-
-    color:#4caf50;
-
-    font-size:14px;
-
-    font-weight:600;
-
-}
-
-/* =========================================================
-GRID
+FORM
 ========================================================= */
 
 .form-grid{
@@ -397,7 +270,7 @@ GRID
     grid-template-columns:
     repeat(2,1fr);
 
-    gap:20px;
+    gap:24px;
 
 }
 
@@ -452,18 +325,9 @@ GRID
 
 }
 
-body.light-mode
-.form-group input,
-body.light-mode
 .form-group textarea{
 
-    color:#111;
-
-}
-
-.form-group textarea{
-
-    height:150px;
+    height:170px;
 
     resize:none;
 
@@ -473,13 +337,13 @@ body.light-mode
 BUTTON
 ========================================================= */
 
-.reserve-btn{
+.book-btn{
 
     width:100%;
 
-    height:62px;
+    height:64px;
 
-    margin-top:24px;
+    margin-top:30px;
 
     border:none;
 
@@ -500,14 +364,31 @@ BUTTON
 
     font-weight:800;
 
-    transition:.35s;
-
 }
 
-.reserve-btn:hover{
+/* =========================================================
+SUCCESS
+========================================================= */
 
-    transform:
-    translateY(-4px);
+.success-box{
+
+    margin-bottom:24px;
+
+    padding:18px;
+
+    border-radius:18px;
+
+    background:
+    rgba(76,175,80,.12);
+
+    border:
+    1px solid rgba(76,175,80,.18);
+
+    color:#4caf50;
+
+    font-size:14px;
+
+    font-weight:600;
 
 }
 
@@ -515,38 +396,22 @@ BUTTON
 RESPONSIVE
 ========================================================= */
 
-@media(max-width:992px){
-
-    .reservation-grid{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .reservation-image img{
-
-        min-height:420px;
-
-    }
-
-}
-
 @media(max-width:768px){
 
-    .reservation-wrapper{
+    .reservation-page{
 
         padding:
-        120px 12px 70px;
+        120px 4% 70px;
 
     }
 
-    .form-grid{
+    .reservation-top h1{
 
-        grid-template-columns:1fr;
+        font-size:42px;
 
     }
 
-    .reservation-form{
+    .reservation-box{
 
         padding:24px;
 
@@ -554,9 +419,9 @@ RESPONSIVE
 
     }
 
-    .reservation-form h2{
+    .form-grid{
 
-        font-size:32px;
+        grid-template-columns:1fr;
 
     }
 
@@ -570,215 +435,180 @@ RESPONSIVE
 
 <?php include "Navbar.php"; ?>
 
-<!-- =========================================================
-WRAPPER
-========================================================= -->
-
-<div class="reservation-wrapper">
+<section class="reservation-page">
 
     <!-- TOP -->
 
     <div class="reservation-top">
 
-        <span>
-
-            Premium Table Booking
-
-        </span>
-
         <h1>
 
-            Reserve Your Table
+            Book A Table
 
         </h1>
 
         <p>
 
-            Book your table now and enjoy
-            a premium dining experience at
-            Hungroo Café.
+            Reserve your table and enjoy delicious
+            premium café experience.
 
         </p>
 
     </div>
 
-    <!-- GRID -->
+    <!-- FORM BOX -->
 
-    <div class="reservation-grid">
+    <div class="reservation-box">
 
-        <!-- IMAGE -->
+        <?php if(!empty($success)): ?>
 
-        <div class="reservation-image">
+        <div class="success-box">
 
-            <img
-            src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1600&auto=format&fit=crop"
-            alt="Reservation">
+            <?php echo $success; ?>
 
         </div>
 
-        <!-- FORM -->
+        <?php endif; ?>
 
-        <div class="reservation-form">
+        <form method="POST">
 
-            <h2>
+            <div class="form-grid">
 
-                Book Table
+                <div class="form-group">
 
-            </h2>
+                    <label>
 
-            <?php if(isset($success)): ?>
+                        Full Name
 
-            <div class="success-box">
+                    </label>
 
-                Table booked successfully.
+                    <input
+                    type="text"
 
-            </div>
+                    name="full_name"
 
-            <?php endif; ?>
-
-            <form method="POST">
-
-                <div class="form-grid">
-
-                    <div class="form-group">
-
-                        <label>
-
-                            Full Name
-
-                        </label>
-
-                        <input
-                        type="text"
-
-                        name="full_name"
-
-                        required>
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>
-
-                            Phone Number
-
-                        </label>
-
-                        <input
-                        type="text"
-
-                        name="phone"
-
-                        required>
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>
-
-                            Email Address
-
-                        </label>
-
-                        <input
-                        type="email"
-
-                        name="email">
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>
-
-                            Total People
-
-                        </label>
-
-                        <input
-                        type="number"
-
-                        name="total_people"
-
-                        required>
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>
-
-                            Reservation Date
-
-                        </label>
-
-                        <input
-                        type="date"
-
-                        name="reservation_date"
-
-                        required>
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>
-
-                            Reservation Time
-
-                        </label>
-
-                        <input
-                        type="time"
-
-                        name="reservation_time"
-
-                        required>
-
-                    </div>
-
-                    <div class="form-group full">
-
-                        <label>
-
-                            Special Note
-
-                        </label>
-
-                        <textarea
-                        name="special_note"></textarea>
-
-                    </div>
+                    required>
 
                 </div>
 
-                <button
-                type="submit"
+                <div class="form-group">
 
-                name="book_table"
+                    <label>
 
-                class="reserve-btn">
+                        Phone Number
 
-                    Reserve Table
+                    </label>
 
-                </button>
+                    <input
+                    type="text"
 
-            </form>
+                    name="phone"
 
-        </div>
+                    required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Email Address
+
+                    </label>
+
+                    <input
+                    type="email"
+
+                    name="email"
+
+                    required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Total People
+
+                    </label>
+
+                    <input
+                    type="number"
+
+                    name="total_people"
+
+                    required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Reservation Date
+
+                    </label>
+
+                    <input
+                    type="date"
+
+                    name="reservation_date"
+
+                    required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Reservation Time
+
+                    </label>
+
+                    <input
+                    type="time"
+
+                    name="reservation_time"
+
+                    required>
+
+                </div>
+
+                <div class="form-group full">
+
+                    <label>
+
+                        Special Note
+
+                    </label>
+
+                    <textarea
+                    name="special_note"></textarea>
+
+                </div>
+
+            </div>
+
+            <button
+            type="submit"
+
+            name="book_table"
+
+            class="book-btn">
+
+                Book Table
+
+            </button>
+
+        </form>
 
     </div>
 
-</div>
+</section>
 
 <?php include "footer.php"; ?>
-
-<script src="assets/js/theme.js"></script>
-<script src="assets/js/cart.js"></script>
-<script src="assets/js/preloader.js"></script>
 
 </body>
 </html>

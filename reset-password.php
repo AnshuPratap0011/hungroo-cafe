@@ -2,8 +2,148 @@
 
 session_start();
 
-$pageTitle =
-"Hungroo Café | Reset Password";
+/* =========================================================
+CONFIG
+========================================================= */
+
+include "config/config.php";
+
+/* =========================================================
+CHECK RESET EMAIL
+========================================================= */
+
+if(!isset($_SESSION['reset_email'])){
+
+    header(
+    "Location: forgot-password.php"
+    );
+
+    exit();
+
+}
+
+$email =
+
+$_SESSION['reset_email'];
+
+$message = "";
+$success = "";
+
+/* =========================================================
+RESET PASSWORD
+========================================================= */
+
+if(isset($_POST['reset_password'])){
+
+    $otp =
+
+    mysqli_real_escape_string(
+    $conn,
+    $_POST['otp']
+    );
+
+    $password =
+    $_POST['password'];
+
+    $confirm_password =
+    $_POST['confirm_password'];
+
+    /* =====================================================
+    CHECK PASSWORD MATCH
+    ====================================================== */
+
+    if($password != $confirm_password){
+
+        $message =
+        "Passwords do not match.";
+
+    }
+
+    else{
+
+        /* =================================================
+        CHECK OTP
+        ================================================== */
+
+        $checkOTP =
+
+        mysqli_query(
+
+            $conn,
+
+            "SELECT * FROM otp_verifications
+
+            WHERE email='$email'
+
+            AND otp='$otp'
+
+            AND expires_at >= NOW()
+
+            LIMIT 1"
+
+        );
+
+        if(mysqli_num_rows($checkOTP) < 1){
+
+            $message =
+            "Invalid or expired OTP.";
+
+        }
+
+        else{
+
+            /* =============================================
+            HASH PASSWORD
+            ============================================== */
+
+            $hashed_password =
+
+            password_hash(
+
+                $password,
+                PASSWORD_DEFAULT
+
+            );
+
+            /* =============================================
+            UPDATE PASSWORD
+            ============================================== */
+
+            mysqli_query(
+
+                $conn,
+
+                "UPDATE users
+
+                SET password='$hashed_password'
+
+                WHERE email='$email'"
+
+            );
+
+            /* =============================================
+            DELETE OTP
+            ============================================== */
+
+            mysqli_query(
+
+                $conn,
+
+                "DELETE FROM otp_verifications
+                WHERE email='$email'"
+
+            );
+
+            unset($_SESSION['reset_email']);
+
+            $success =
+            "Password reset successful.";
+
+        }
+
+    }
+
+}
 
 ?>
 
@@ -21,297 +161,244 @@ content="width=device-width, initial-scale=1.0">
 
 <title>
 
-<?php echo $pageTitle; ?>
+Reset Password
 
 </title>
-
-<!-- GOOGLE FONT -->
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
 
 <link
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- FONT AWESOME -->
+<style>
 
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+body{
 
-<!-- CSS -->
+    margin:0;
+    background:#070707;
+    color:#fff;
 
-<link
-rel="stylesheet"
-href="assets/css/auth.css">
+    font-family:'Poppins',sans-serif;
 
-<link
-rel="stylesheet"
-href="assets/css/responsive.css">
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    min-height:100vh;
+
+    padding:20px;
+
+}
+
+.box{
+
+    width:100%;
+    max-width:500px;
+
+    padding:40px;
+
+    border-radius:30px;
+
+    background:
+    rgba(255,255,255,.04);
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+}
+
+h1{
+
+    font-size:42px;
+
+    margin-bottom:10px;
+
+}
+
+p{
+
+    color:#aaa;
+
+    margin-bottom:30px;
+
+}
+
+input{
+
+    width:100%;
+    height:60px;
+
+    border:none;
+    outline:none;
+
+    border-radius:18px;
+
+    padding:0 18px;
+
+    background:
+    rgba(255,255,255,.04);
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    color:#fff;
+
+    font-size:14px;
+
+    margin-bottom:20px;
+
+}
+
+button{
+
+    width:100%;
+    height:60px;
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:18px;
+
+    background:
+    linear-gradient(
+    135deg,
+    #ff9a3d,
+    #ffd27a
+    );
+
+    color:#000;
+
+    font-size:15px;
+
+    font-weight:800;
+
+}
+
+.message{
+
+    margin-bottom:20px;
+
+    color:#ff4d4d;
+
+}
+
+.success{
+
+    margin-bottom:20px;
+
+    color:#4caf50;
+
+}
+
+.login-link{
+
+    display:block;
+
+    margin-top:24px;
+
+    text-align:center;
+
+    color:#ffd27a;
+
+    text-decoration:none;
+
+}
+
+</style>
 
 </head>
 
-<body class="auth-body">
+<body>
 
-<!-- =====================================================
-WRAPPER
-===================================================== -->
+<div class="box">
 
-<div class="auth-wrapper">
+    <h1>
 
-    <!-- LEFT -->
+        Reset Password
 
-    <div class="auth-left">
+    </h1>
 
-        <div class="auth-badge">
+    <p>
 
-            <i class="fa-solid fa-key"></i>
+        Enter OTP and create your new password.
 
-            Secure Password Update
+    </p>
 
-        </div>
+    <?php if(!empty($message)): ?>
 
-        <h1>
+    <div class="message">
 
-            Create New Password
-
-        </h1>
-
-        <p>
-
-            Choose a strong password
-            to secure your Hungroo Café
-            account and premium rewards.
-
-        </p>
-
-        <!-- FEATURES -->
-
-        <div class="auth-features">
-
-            <!-- FEATURE -->
-
-            <div class="auth-feature">
-
-                <div class="auth-feature-icon">
-
-                    <i class="fa-solid fa-lock"></i>
-
-                </div>
-
-                <div class="auth-feature-text">
-
-                    <h3>
-
-                        Strong Security
-
-                    </h3>
-
-                    <p>
-
-                        Keep your account protected
-                        with secure passwords.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <!-- FEATURE -->
-
-            <div class="auth-feature">
-
-                <div class="auth-feature-icon">
-
-                    <i class="fa-solid fa-user-shield"></i>
-
-                </div>
-
-                <div class="auth-feature-text">
-
-                    <h3>
-
-                        Safe Account
-
-                    </h3>
-
-                    <p>
-
-                        Protect your orders,
-                        rewards and payment details.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <!-- FEATURE -->
-
-            <div class="auth-feature">
-
-                <div class="auth-feature-icon">
-
-                    <i class="fa-solid fa-check"></i>
-
-                </div>
-
-                <div class="auth-feature-text">
-
-                    <h3>
-
-                        Easy Recovery
-
-                    </h3>
-
-                    <p>
-
-                        Quickly recover access
-                        anytime securely.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
+        <?php echo $message; ?>
 
     </div>
 
-    <!-- RIGHT -->
+    <?php endif; ?>
 
-    <div class="auth-card">
+    <?php if(!empty($success)): ?>
 
-        <!-- TOP -->
+    <div class="success">
 
-        <div class="auth-top">
-
-            <h2>
-
-                Reset Password
-
-            </h2>
-
-            <p>
-
-                Enter your new password below.
-
-            </p>
-
-        </div>
-
-        <!-- FORM -->
-
-        <form
-        class="auth-form"
-
-        action="reset-password-process.php"
-
-        method="POST">
-
-            <!-- PASSWORD -->
-
-            <div class="auth-group">
-
-                <label class="auth-label">
-
-                    New Password
-
-                </label>
-
-                <div class="auth-input-wrap">
-
-                    <i class="fa-solid fa-lock"></i>
-
-                    <input
-                    type="password"
-
-                    name="password"
-
-                    class="auth-input"
-
-                    placeholder=
-                    "Enter new password"
-
-                    required>
-
-                </div>
-
-            </div>
-
-            <!-- CONFIRM PASSWORD -->
-
-            <div class="auth-group">
-
-                <label class="auth-label">
-
-                    Confirm Password
-
-                </label>
-
-                <div class="auth-input-wrap">
-
-                    <i class="fa-solid fa-shield-halved"></i>
-
-                    <input
-                    type="password"
-
-                    name="confirm_password"
-
-                    class="auth-input"
-
-                    placeholder=
-                    "Confirm new password"
-
-                    required>
-
-                </div>
-
-            </div>
-
-            <!-- BUTTON -->
-
-            <button
-            type="submit"
-
-            class="auth-btn">
-
-                Update Password
-
-            </button>
-
-        </form>
-
-        <!-- BOTTOM -->
-
-        <div class="auth-bottom">
-
-            Remembered your password?
-
-            <a href="login.php">
-
-                Back To Login
-
-            </a>
-
-        </div>
+        <?php echo $success; ?>
 
     </div>
+
+    <a
+    href="login.php"
+
+    class="login-link">
+
+        Login Now
+
+    </a>
+
+    <?php else: ?>
+
+    <form method="POST">
+
+        <input
+        type="text"
+
+        name="otp"
+
+        placeholder="Enter OTP"
+
+        maxlength="6"
+
+        required>
+
+        <input
+        type="password"
+
+        name="password"
+
+        placeholder="New Password"
+
+        required>
+
+        <input
+        type="password"
+
+        name="confirm_password"
+
+        placeholder="Confirm Password"
+
+        required>
+
+        <button
+        type="submit"
+
+        name="reset_password">
+
+            Reset Password
+
+        </button>
+
+    </form>
+
+    <?php endif; ?>
 
 </div>
-
-<script src="assets/js/theme.js"></script>
-
-<script src="assets/js/preloader.js"></script>
 
 </body>
 </html>

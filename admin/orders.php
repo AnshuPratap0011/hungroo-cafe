@@ -37,13 +37,15 @@ if(isset($_GET['status']) && isset($_GET['id'])){
 
     $id =
 
-    intval($_GET['id']);
+    intval(
+    $_GET['id']
+    );
 
     $updateQuery =
 
-    "UPDATE orders
+    "UPDATE orders SET
 
-    SET order_status='$status'
+    order_status='$status'
 
     WHERE id='$id'";
 
@@ -64,16 +66,16 @@ if(isset($_GET['status']) && isset($_GET['id'])){
 GET ORDERS
 ========================================================= */
 
-$orderQuery =
+$query =
 
 "SELECT * FROM orders
 ORDER BY id DESC";
 
-$orderResult =
+$result =
 
 mysqli_query(
 $conn,
-$orderQuery
+$query
 );
 
 ?>
@@ -92,7 +94,7 @@ content="width=device-width, initial-scale=1.0">
 
 <title>
 
-Manage Orders
+Orders
 
 </title>
 
@@ -123,8 +125,6 @@ ROOT
     --bg:#070707;
 
     --sidebar:#0f0f0f;
-
-    --card:#151515;
 
     --white:#ffffff;
 
@@ -159,8 +159,6 @@ body{
     color:var(--white);
 
     font-family:'Poppins',sans-serif;
-
-    overflow-x:hidden;
 
 }
 
@@ -316,13 +314,6 @@ TOP
 
 .page-top{
 
-    display:flex;
-
-    align-items:center;
-    justify-content:space-between;
-
-    gap:20px;
-
     margin-bottom:30px;
 
 }
@@ -347,17 +338,15 @@ TABLE
 
 .table-box{
 
-    padding:26px;
+    overflow-x:auto;
 
-    border-radius:28px;
+    border-radius:30px;
 
     background:
     rgba(255,255,255,.04);
 
     border:
     1px solid var(--border);
-
-    overflow-x:auto;
 
 }
 
@@ -371,22 +360,22 @@ table{
 
 table th{
 
+    padding:22px;
+
     text-align:left;
 
-    padding:16px;
-
-    border-bottom:
-    1px solid var(--border);
+    font-size:14px;
 
     color:var(--text);
 
-    font-size:14px;
+    border-bottom:
+    1px solid var(--border);
 
 }
 
 table td{
 
-    padding:18px 16px;
+    padding:22px;
 
     border-bottom:
     1px solid var(--border);
@@ -423,34 +412,16 @@ STATUS
 
 }
 
-.confirmed{
+.processing{
 
     background:
-    rgba(33,150,243,.12);
+    rgba(0,123,255,.12);
 
-    color:#2196f3;
+    color:#4da3ff;
 
 }
 
-.preparing{
-
-    background:
-    rgba(255,152,0,.12);
-
-    color:#ff9800;
-
-}
-
-.out_for_delivery{
-
-    background:
-    rgba(156,39,176,.12);
-
-    color:#9c27b0;
-
-}
-
-.delivered{
+.completed{
 
     background:
     rgba(76,175,80,.12);
@@ -472,7 +443,7 @@ STATUS
 BUTTONS
 ========================================================= */
 
-.action-buttons{
+.actions{
 
     display:flex;
 
@@ -484,31 +455,51 @@ BUTTONS
 
 .action-btn{
 
-    min-width:120px;
+    min-width:90px;
 
-    height:40px;
+    height:42px;
 
     border:none;
 
-    cursor:pointer;
-
-    padding:
-    0 14px;
-
     border-radius:14px;
 
-    color:#000;
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    text-decoration:none;
 
     font-size:12px;
 
     font-weight:700;
 
+}
+
+.view-btn{
+
     background:
-    linear-gradient(
-    135deg,
-    var(--primary),
-    var(--gold)
-    );
+    rgba(255,154,61,.12);
+
+    color:#ffb15e;
+
+}
+
+.complete-btn{
+
+    background:
+    rgba(76,175,80,.12);
+
+    color:#4caf50;
+
+}
+
+.cancel-btn{
+
+    background:
+    rgba(255,77,77,.12);
+
+    color:#ff4d4d;
 
 }
 
@@ -550,6 +541,12 @@ RESPONSIVE
 
     }
 
+    .page-top h1{
+
+        font-size:32px;
+
+    }
+
 }
 
 </style>
@@ -560,9 +557,7 @@ RESPONSIVE
 
 <div class="admin-layout">
 
-    <!-- =====================================================
-    SIDEBAR
-    ====================================================== -->
+    <!-- SIDEBAR -->
 
     <aside class="sidebar">
 
@@ -615,6 +610,38 @@ RESPONSIVE
 
             </a>
 
+            <a href="reservations.php">
+
+                <i class="fa-solid fa-calendar-check"></i>
+
+                Reservations
+
+            </a>
+
+            <a href="messages.php">
+
+                <i class="fa-solid fa-envelope"></i>
+
+                Messages
+
+            </a>
+
+            <a href="settings.php">
+
+                <i class="fa-solid fa-gear"></i>
+
+                Settings
+
+            </a>
+
+            <a href="profile.php">
+
+                <i class="fa-solid fa-user"></i>
+
+                Profile
+
+            </a>
+
             <a href="logout.php">
 
                 <i class="fa-solid fa-right-from-bracket"></i>
@@ -627,37 +654,27 @@ RESPONSIVE
 
     </aside>
 
-    <!-- =====================================================
-    CONTENT
-    ====================================================== -->
+    <!-- CONTENT -->
 
     <main class="main-content">
 
-        <!-- TOP -->
-
         <div class="page-top">
 
-            <div>
+            <h1>
 
-                <h1>
+                Orders
 
-                    Manage Orders
+            </h1>
 
-                </h1>
+            <p>
 
-                <p>
+                Manage all customer orders
 
-                    Track and manage customer orders
-
-                </p>
-
-            </div>
+            </p>
 
         </div>
 
-        <!-- =================================================
-        TABLE
-        ================================================== -->
+        <!-- TABLE -->
 
         <div class="table-box">
 
@@ -667,47 +684,13 @@ RESPONSIVE
 
                     <tr>
 
-                        <th>
-
-                            Order ID
-
-                        </th>
-
-                        <th>
-
-                            Customer
-
-                        </th>
-
-                        <th>
-
-                            Phone
-
-                        </th>
-
-                        <th>
-
-                            Amount
-
-                        </th>
-
-                        <th>
-
-                            Payment
-
-                        </th>
-
-                        <th>
-
-                            Status
-
-                        </th>
-
-                        <th>
-
-                            Action
-
-                        </th>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Phone</th>
+                        <th>Total</th>
+                        <th>Payment</th>
+                        <th>Status</th>
+                        <th>Action</th>
 
                     </tr>
 
@@ -715,46 +698,46 @@ RESPONSIVE
 
                 <tbody>
 
-                    <?php while($order = mysqli_fetch_assoc($orderResult)): ?>
+                    <?php while($row = mysqli_fetch_assoc($result)): ?>
 
                     <tr>
 
                         <td>
 
-                            #<?php echo $order['id']; ?>
+                            #<?php echo $row['id']; ?>
 
                         </td>
 
                         <td>
 
-                            <?php echo $order['customer_name']; ?>
+                            <?php echo $row['customer_name']; ?>
 
                         </td>
 
                         <td>
 
-                            <?php echo $order['customer_phone']; ?>
+                            <?php echo $row['customer_phone']; ?>
 
                         </td>
 
                         <td>
 
-                            ₹<?php echo number_format($order['total_amount']); ?>
+                            ₹<?php echo number_format($row['total_amount']); ?>
 
                         </td>
 
                         <td>
 
-                            <?php echo $order['payment_method']; ?>
+                            <?php echo $row['payment_method']; ?>
 
                         </td>
 
                         <td>
 
                             <div
-                            class="status <?php echo $order['order_status']; ?>">
+                            class="status <?php echo $row['order_status']; ?>">
 
-                                <?php echo ucfirst(str_replace('_',' ',$order['order_status'])); ?>
+                                <?php echo ucfirst($row['order_status']); ?>
 
                             </div>
 
@@ -762,65 +745,32 @@ RESPONSIVE
 
                         <td>
 
-                            <div class="action-buttons">
+                            <div class="actions">
 
                                 <a
-                                href="?id=<?php echo $order['id']; ?>&status=confirmed">
+                                href="view_order.php?id=<?php echo $row['id']; ?>"
 
-                                    <button
-                                    class="action-btn">
+                                class="action-btn view-btn">
 
-                                        Confirm
-
-                                    </button>
+                                    View
 
                                 </a>
 
                                 <a
-                                href="?id=<?php echo $order['id']; ?>&status=preparing">
+                                href="?id=<?php echo $row['id']; ?>&status=completed"
 
-                                    <button
-                                    class="action-btn">
+                                class="action-btn complete-btn">
 
-                                        Preparing
-
-                                    </button>
+                                    Done
 
                                 </a>
 
                                 <a
-                                href="?id=<?php echo $order['id']; ?>&status=out_for_delivery">
+                                href="?id=<?php echo $row['id']; ?>&status=cancelled"
 
-                                    <button
-                                    class="action-btn">
+                                class="action-btn cancel-btn">
 
-                                        Delivery
-
-                                    </button>
-
-                                </a>
-
-                                <a
-                                href="?id=<?php echo $order['id']; ?>&status=delivered">
-
-                                    <button
-                                    class="action-btn">
-
-                                        Delivered
-
-                                    </button>
-
-                                </a>
-
-                                <a
-                                href="?id=<?php echo $order['id']; ?>&status=cancelled">
-
-                                    <button
-                                    class="action-btn">
-
-                                        Cancel
-
-                                    </button>
+                                    Cancel
 
                                 </a>
 

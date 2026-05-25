@@ -2,53 +2,58 @@
 
 session_start();
 
-$pageTitle =
-"Hungroo Café | Home";
+include "config/config.php";
+
+$pageTitle = "Hungroo Café | Home";
 
 /* =========================================================
-FEATURED ITEMS
+FEATURED PRODUCTS
 ========================================================= */
 
-$featuredItems = [
+$featuredItems = [];
 
-    [
-        "id"    => 1,
-        "name"  => "Premium Burger",
-        "price" => 349,
-        "image" => "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1400&auto=format&fit=crop",
-        "tag"   => "Best Seller"
-    ],
+$productQuery = mysqli_query(
 
-    [
-        "id"    => 2,
-        "name"  => "Cold Coffee",
-        "price" => 229,
-        "image" => "https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=1400&auto=format&fit=crop",
-        "tag"   => "Popular"
-    ],
+    $conn,
 
-    [
-        "id"    => 3,
-        "name"  => "Italian Pizza",
-        "price" => 599,
-        "image" => "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1400&auto=format&fit=crop",
-        "tag"   => "Hot"
-    ],
+    "SELECT * FROM products
+    WHERE is_featured='1'
+    AND status='active'
+    LIMIT 4"
 
-    [
-        "id"    => 4,
-        "name"  => "Chocolate Dessert",
-        "price" => 279,
-        "image" => "https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1400&auto=format&fit=crop",
-        "tag"   => "Sweet"
-    ]
+);
 
-];
+while($row = mysqli_fetch_assoc($productQuery)){
+
+    $featuredItems[] = $row;
+
+}
+
+/* =========================================================
+CATEGORIES
+========================================================= */
+
+$categories = [];
+
+$categoryQuery = mysqli_query(
+
+    $conn,
+
+    "SELECT * FROM categories
+    WHERE status='active'
+    LIMIT 4"
+
+);
+
+while($cat = mysqli_fetch_assoc($categoryQuery)){
+
+    $categories[] = $cat;
+
+}
 
 ?>
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -104,6 +109,10 @@ href="assets/css/home.css">
 
 <body>
 
+<!-- =========================================================
+NAVBAR
+========================================================= -->
+
 <?php include "Navbar.php"; ?>
 
 <!-- =========================================================
@@ -114,12 +123,10 @@ BACKGROUND BLUR
 <div class="bg-blur blur-2"></div>
 
 <!-- =========================================================
-HERO
+HERO SECTION
 ========================================================= -->
 
 <section class="hero">
-
-    <!-- LEFT -->
 
     <div class="hero-left">
 
@@ -133,32 +140,31 @@ HERO
 
         <h1>
 
-            Delicious Food
+            Taste The
 
             <span>
 
-                Modern Vibes
+                Luxury
 
             </span>
+
+            Café Experience
 
         </h1>
 
         <p>
 
-            Experience handcrafted burgers,
-            luxury coffee and premium café
-            atmosphere at Hungroo Café.
+            Handcrafted burgers, artisan coffee,
+            desserts and unforgettable café vibes
+            designed for modern food lovers.
 
         </p>
-
-        <!-- BUTTONS -->
 
         <div class="hero-buttons">
 
             <a
             href="menu.php"
-
-            class="hero-btn primary">
+            class="hero-btn primary-btn">
 
                 Explore Menu
 
@@ -166,16 +172,21 @@ HERO
 
             <a
             href="contact.php"
-
-            class="hero-btn secondary">
+            class="hero-btn secondary-btn">
 
                 Reserve Table
 
             </a>
 
-        </div>
+            <a
+            href="offers.php"
+            class="hero-btn third-btn">
 
-        <!-- STATS -->
+                Today's Offers
+
+            </a>
+
+        </div>
 
         <div class="hero-stats">
 
@@ -238,26 +249,24 @@ HERO
         <div class="hero-image">
 
             <img
-            src="https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1600&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1200&auto=format&fit=crop"
             alt="Hungroo Café">
 
         </div>
 
-        <!-- FLOATING -->
-
-        <div class="floating-card card-one">
+        <div class="floating-card card-1">
 
             <i class="fa-solid fa-burger"></i>
 
-            Best Burger
+            Best Burgers
 
         </div>
 
-        <div class="floating-card card-two">
+        <div class="floating-card card-2">
 
             <i class="fa-solid fa-mug-hot"></i>
 
-            Fresh Coffee
+            Premium Coffee
 
         </div>
 
@@ -265,46 +274,41 @@ HERO
 
 </section>
 
+
+
 <!-- =========================================================
-POPULAR
+FEATURED ITEMS
 ========================================================= -->
 
-<section class="home-section">
+<section class="featured-section">
 
-    <!-- TOP -->
-
-    <div class="section-top">
+    <div class="section-header">
 
         <span>
 
-            Popular Dishes
+            Customer Favorites
 
         </span>
 
         <h2>
 
-            Featured Menu
+            Featured Specials
 
         </h2>
 
         <p>
 
-            Premium handcrafted meals
-            with luxury café vibes.
+            Most loved premium dishes by our customers.
 
         </p>
 
     </div>
 
-    <!-- GRID -->
-
-    <div class="food-grid">
+    <div class="featured-grid">
 
         <?php foreach($featuredItems as $item): ?>
 
         <div class="food-card">
-
-            <!-- IMAGE -->
 
             <div class="food-image">
 
@@ -312,44 +316,21 @@ POPULAR
                 src="<?php echo $item['image']; ?>"
                 alt="<?php echo $item['name']; ?>">
 
-                <!-- TAG -->
-
-                <div class="food-tag">
+                <span class="food-tag">
 
                     <?php echo $item['tag']; ?>
 
-                </div>
+                </span>
 
-                <!-- OVERLAY -->
+                <div class="delivery-badge">
 
-                <div class="food-overlay">
+                    <i class="fa-solid fa-bolt"></i>
 
-                    <button
-                    type="button"
-
-                    class="overlay-btn"
-
-                    onclick='addToCart({
-
-                        id: <?php echo $item["id"]; ?>,
-
-                        name: <?php echo json_encode($item["name"]); ?>,
-
-                        price: <?php echo $item["price"]; ?>,
-
-                        image: <?php echo json_encode($item["image"]); ?>
-
-                    })'>
-
-                        <i class="fa-solid fa-cart-plus"></i>
-
-                    </button>
+                    Fast Delivery
 
                 </div>
 
             </div>
-
-            <!-- CONTENT -->
 
             <div class="food-content">
 
@@ -357,7 +338,7 @@ POPULAR
 
                     <i class="fa-solid fa-star"></i>
 
-                    4.9
+                    <?php echo $item['rating']; ?>
 
                 </div>
 
@@ -367,52 +348,37 @@ POPULAR
 
                 </h3>
 
-                <p>
+                <p class="food-description">
 
-                    Premium handcrafted
-                    food with unforgettable taste.
+                    <?php echo $item['short_description']; ?>
 
                 </p>
 
-                <!-- BOTTOM -->
-
                 <div class="food-bottom">
 
-                    <div class="food-price">
+                    <h4>
 
                         ₹<?php echo $item['price']; ?>
 
-                    </div>
+                    </h4>
 
-                    <!-- CART ACTION -->
+                    <button
 
-                    <div
-                    class="cart-action"
+                    class="add-cart"
 
-                    id="action-<?php echo $item['id']; ?>">
+                    data-id="<?php echo $item['id']; ?>"
 
-                        <button
-                        type="button"
+                    data-name="<?php echo $item['name']; ?>"
 
-                        class="food-btn"
+                    data-price="<?php echo $item['price']; ?>"
 
-                        onclick='addToCart({
+                    data-image="<?php echo $item['image']; ?>">
 
-                            id: <?php echo $item["id"]; ?>,
+                        <i class="fa-solid fa-cart-shopping"></i>
 
-                            name: <?php echo json_encode($item["name"]); ?>,
+                        Add To Cart
 
-                            price: <?php echo $item["price"]; ?>,
-
-                            image: <?php echo json_encode($item["image"]); ?>
-
-                        })'>
-
-                            Add To Cart
-
-                        </button>
-
-                    </div>
+                    </button>
 
                 </div>
 
@@ -426,84 +392,414 @@ POPULAR
 
 </section>
 
+<!-- =========================================================
+CATEGORIES
+========================================================= -->
+
+<section class="categories-section">
+
+    <div class="section-header">
+
+        <span>
+
+            Explore Menu
+
+        </span>
+
+        <h2>
+
+            Food Categories
+
+        </h2>
+
+        <p>
+
+            Discover premium meals, drinks and desserts.
+
+        </p>
+
+    </div>
+
+    <div class="categories-grid">
+
+        <?php foreach($categories as $category): ?>
+
+        <a
+
+        href="menu.php?category=<?php echo urlencode($category['slug']); ?>"
+
+        class="category-card">
+
+            <i class="<?php echo $category['icon']; ?>"></i>
+
+            <h3>
+
+                <?php echo $category['name']; ?>
+
+            </h3>
+
+        </a>
+
+        <?php endforeach; ?>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+SLIDE CART
+========================================================= -->
+
+<div class="cart-overlay" id="cartOverlay"></div>
+
+<div class="slide-cart" id="slideCart">
+
+    <div class="slide-cart-top">
+
+        <h2>
+
+            My Cart
+
+        </h2>
+
+        <button class="close-cart" id="closeCart">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+    <div class="slide-cart-items" id="slideCartItems"></div>
+
+    <div class="slide-cart-bottom">
+
+        <div class="slide-total-row">
+
+            <span>
+
+                Total
+
+            </span>
+
+            <h3 id="slideCartTotal">
+
+                ₹0
+
+            </h3>
+
+        </div>
+
+        <a
+        href="Cart.php"
+        class="checkout-btn">
+
+            Checkout
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+FOOTER
+========================================================= -->
+
 <?php include "footer.php"; ?>
 
 <!-- =========================================================
-PRODUCT DATA
+CART SCRIPT
 ========================================================= -->
 
-<script>
-
-const featuredItemsData =
-
-<?php echo json_encode($featuredItems); ?>;
-
-</script>
-
-<!-- =========================================================
-JS
-========================================================= -->
-
-<script src="assets/js/theme.js"></script>
-
-<script src="assets/js/cart.js"></script>
-
-<script src="assets/js/preloader.js"></script>
-
-<!-- =========================================================
-INIT
-========================================================= -->
-
-<script>
-
-window.addEventListener(
-
-    "DOMContentLoaded",
-
-    ()=>{
-
-        if(
-
-            typeof renderCardControllers
-            === "function"
-
-        ){
-
-            renderCardControllers();
-
-        }
-
-    }
-
-);
-
-</script>
 <script>
 
 /* =========================================================
-REGISTER SERVICE WORKER
+ELEMENTS
 ========================================================= */
 
-if("serviceWorker" in navigator){
+const addCartButtons =
+document.querySelectorAll('.add-cart');
 
-    window.addEventListener(
+const slideCart =
+document.getElementById('slideCart');
 
-        "load",
+const cartOverlay =
+document.getElementById('cartOverlay');
 
-        ()=>{
+const closeCart =
+document.getElementById('closeCart');
 
-            navigator.serviceWorker.register(
+const slideCartItems =
+document.getElementById('slideCartItems');
 
-                "service-worker.js"
+const slideCartTotal =
+document.getElementById('slideCartTotal');
 
-            );
+/* =========================================================
+OPEN / CLOSE CART
+========================================================= */
+
+function openCart(){
+
+    slideCart.classList.add('active');
+
+    cartOverlay.classList.add('active');
+
+}
+
+function closeSlideCart(){
+
+    slideCart.classList.remove('active');
+
+    cartOverlay.classList.remove('active');
+
+}
+
+closeCart.addEventListener(
+'click',
+closeSlideCart
+);
+
+cartOverlay.addEventListener(
+'click',
+closeSlideCart
+);
+
+/* =========================================================
+RENDER CART
+========================================================= */
+
+function renderCart(){
+
+    let cart =
+    JSON.parse(
+    localStorage.getItem('cart')
+    ) || [];
+
+    slideCartItems.innerHTML = '';
+
+    let total = 0;
+
+    if(cart.length === 0){
+
+        slideCartItems.innerHTML = `
+
+        <div class="empty-slide-cart">
+
+            <i class="fa-solid fa-cart-shopping"></i>
+
+            <h3>
+
+                Cart is Empty
+
+            </h3>
+
+            <p>
+
+                Add delicious items now.
+
+            </p>
+
+        </div>
+
+        `;
+
+    }
+
+    cart.forEach((item,index)=>{
+
+        if(!item.qty){
+
+            item.qty = 1;
 
         }
 
+        total +=
+        Number(item.price) *
+        item.qty;
+
+        slideCartItems.innerHTML += `
+
+        <div class="slide-cart-card">
+
+            <div class="slide-cart-image">
+
+                <img
+                src="${item.image}"
+                alt="${item.name}">
+
+            </div>
+
+            <div class="slide-cart-content">
+
+                <h4>
+
+                    ${item.name}
+
+                </h4>
+
+                <p>
+
+                    ₹${item.price}
+
+                </p>
+
+                <div class="qty-box">
+
+                    <button onclick="changeQty(${index},-1)">
+
+                        -
+
+                    </button>
+
+                    <span>
+
+                        ${item.qty}
+
+                    </span>
+
+                    <button onclick="changeQty(${index},1)">
+
+                        +
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+    slideCartTotal.innerHTML =
+    `₹${total}`;
+
+    document
+    .querySelectorAll('.cart-count')
+    .forEach(count=>{
+
+        count.innerHTML =
+        cart.length;
+
+    });
+
+    localStorage.setItem(
+    'cart',
+    JSON.stringify(cart)
     );
 
 }
 
+/* =========================================================
+CHANGE QTY
+========================================================= */
+
+function changeQty(index,value){
+
+    let cart =
+    JSON.parse(
+    localStorage.getItem('cart')
+    ) || [];
+
+    cart[index].qty += value;
+
+    if(cart[index].qty <= 0){
+
+        cart.splice(index,1);
+
+    }
+
+    localStorage.setItem(
+    'cart',
+    JSON.stringify(cart)
+    );
+
+    renderCart();
+
+}
+
+/* =========================================================
+ADD TO CART
+========================================================= */
+
+addCartButtons.forEach(button => {
+
+    button.addEventListener('click',()=>{
+
+        const item = {
+
+            id:button.dataset.id,
+
+            name:button.dataset.name,
+
+            price:button.dataset.price,
+
+            image:button.dataset.image,
+
+            qty:1
+
+        };
+
+        let cart =
+        JSON.parse(
+        localStorage.getItem('cart')
+        ) || [];
+
+        const existing =
+        cart.find(product =>
+        product.id === item.id
+        );
+
+        if(existing){
+
+            existing.qty += 1;
+
+        }
+
+        else{
+
+            cart.push(item);
+
+        }
+
+        localStorage.setItem(
+        'cart',
+        JSON.stringify(cart)
+        );
+
+        button.innerHTML =
+        '<i class="fa-solid fa-check"></i> Added';
+
+        setTimeout(()=>{
+
+            button.innerHTML =
+            '<i class="fa-solid fa-cart-shopping"></i> Add To Cart';
+
+        },1500);
+
+        renderCart();
+
+        openCart();
+
+    });
+
+});
+
+/* =========================================================
+INIT
+========================================================= */
+
+renderCart();
+
 </script>
+
+
+<script src="assets/js/theme.js"></script>
+<script src="assets/js/preloader.js"></script>
+
 </body>
 </html>

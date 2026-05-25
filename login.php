@@ -2,8 +2,122 @@
 
 session_start();
 
-$pageTitle =
-"Hungroo Café | Login";
+/* =========================================================
+CONFIG
+========================================================= */
+
+include "config/config.php";
+
+/* =========================================================
+MESSAGE
+========================================================= */
+
+$message = "";
+
+/* =========================================================
+REGISTER SUCCESS
+========================================================= */
+
+if(isset($_GET['registered'])){
+
+    $message =
+    "Account created successfully.";
+
+}
+
+/* =========================================================
+LOGIN
+========================================================= */
+
+if(isset($_POST['login'])){
+
+    $email_or_phone =
+
+    mysqli_real_escape_string(
+    $conn,
+    $_POST['email_or_phone']
+    );
+
+    $password =
+    $_POST['password'];
+
+    /* =====================================================
+    CHECK USER
+    ====================================================== */
+
+    $query =
+
+    "SELECT * FROM users
+
+    WHERE email='$email_or_phone'
+
+    OR phone='$email_or_phone'
+
+    LIMIT 1";
+
+    $result =
+
+    mysqli_query(
+    $conn,
+    $query
+    );
+
+    if(mysqli_num_rows($result) > 0){
+
+        $user =
+
+        mysqli_fetch_assoc(
+        $result
+        );
+
+        /* =================================================
+        VERIFY PASSWORD
+        ================================================== */
+
+        if(password_verify(
+
+            $password,
+            $user['password']
+
+        )){
+
+            $_SESSION['user_id'] =
+            $user['id'];
+
+            $_SESSION['user_name'] =
+            $user['full_name'];
+
+            $_SESSION['user_email'] =
+            $user['email'];
+
+            $_SESSION['user_phone'] =
+            $user['phone'];
+
+            header(
+            "Location: home.php"
+            );
+
+            exit();
+
+        }
+
+        else{
+
+            $message =
+            "Wrong password.";
+
+        }
+
+    }
+
+    else{
+
+        $message =
+        "Account not found.";
+
+    }
+
+}
 
 ?>
 
@@ -21,344 +135,734 @@ content="width=device-width, initial-scale=1.0">
 
 <title>
 
-<?php echo $pageTitle; ?>
+Hungroo Login
 
 </title>
 
-<!-- GOOGLE FONT -->
+<!-- FONT -->
 
 <link
 rel="preconnect"
 href="https://fonts.googleapis.com">
 
 <link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- FONT AWESOME -->
+<!-- ICON -->
 
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<!-- CSS -->
+<style>
 
-<link
-rel="stylesheet"
-href="assets/css/auth.css">
+/* =========================================================
+ROOT
+========================================================= */
 
-<link
-rel="stylesheet"
-href="assets/css/responsive.css">
+:root{
+
+    --primary:#ff9a3d;
+    --gold:#ffd27a;
+    --dark:#050505;
+    --card:rgba(255,255,255,.05);
+    --border:rgba(255,255,255,.08);
+    --white:#ffffff;
+    --text:#aaaaaa;
+
+}
+
+/* =========================================================
+GLOBAL
+========================================================= */
+
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+}
+
+body{
+
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
+
+    padding:20px;
+
+    background:
+    radial-gradient(circle at top right,#ff9a3d22,transparent 30%),
+    radial-gradient(circle at bottom left,#ffd27a22,transparent 30%),
+    var(--dark);
+
+    font-family:'Poppins',sans-serif;
+
+    position:relative;
+
+}
+
+/* =========================================================
+BACKGROUND
+========================================================= */
+
+.blur-circle{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    filter:blur(120px);
+
+    opacity:.18;
+
+    z-index:1;
+
+}
+
+.blur-1{
+
+    width:350px;
+    height:350px;
+
+    background:#ff9a3d;
+
+    top:-100px;
+    right:-100px;
+
+}
+
+.blur-2{
+
+    width:320px;
+    height:320px;
+
+    background:#ffd27a;
+
+    bottom:-100px;
+    left:-100px;
+
+}
+
+/* =========================================================
+CARD
+========================================================= */
+
+.login-card{
+
+    position:relative;
+
+    width:100%;
+    max-width:520px;
+
+    padding:45px;
+
+    border-radius:36px;
+
+    background:var(--card);
+
+    border:
+    1px solid var(--border);
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+    0 20px 60px rgba(0,0,0,.45);
+
+    z-index:10;
+
+    animation:fadeUp .7s ease;
+
+}
+
+/* =========================================================
+ANIMATION
+========================================================= */
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(30px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0);
+
+    }
+
+}
+
+/* =========================================================
+LOGO
+========================================================= */
+
+.logo{
+
+    text-align:center;
+
+    margin-bottom:15px;
+
+}
+
+.logo h1{
+
+    font-size:52px;
+
+    font-weight:800;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--gold)
+    );
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:
+    transparent;
+
+}
+
+/* =========================================================
+TEXT
+========================================================= */
+
+.subtitle{
+
+    text-align:center;
+
+    color:var(--text);
+
+    line-height:1.8;
+
+    margin-bottom:35px;
+
+    font-size:15px;
+
+}
+
+/* =========================================================
+MESSAGE
+========================================================= */
+
+.message{
+
+    margin-bottom:24px;
+
+    padding:16px;
+
+    border-radius:18px;
+
+    text-align:center;
+
+    font-size:14px;
+
+    background:
+    rgba(76,175,80,.1);
+
+    border:
+    1px solid rgba(76,175,80,.2);
+
+    color:#4caf50;
+
+}
+
+/* =========================================================
+INPUT GROUP
+========================================================= */
+
+.input-group{
+
+    margin-bottom:24px;
+
+}
+
+.input-group label{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    font-size:14px;
+
+    color:#fff;
+
+    font-weight:500;
+
+}
+
+/* =========================================================
+INPUT BOX
+========================================================= */
+
+.input-box{
+
+    position:relative;
+
+}
+
+.input-box .left-icon{
+
+    position:absolute;
+
+    top:50%;
+    left:20px;
+
+    transform:
+    translateY(-50%);
+
+    color:#999;
+
+    font-size:15px;
+
+}
+
+.input-box input{
+
+    width:100%;
+    height:65px;
+
+    border:none;
+    outline:none;
+
+    border-radius:22px;
+
+    padding:
+    0 58px 0 58px;
+
+    background:
+    rgba(255,255,255,.04);
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    color:#fff;
+
+    font-size:14px;
+
+    transition:.35s;
+
+}
+
+.input-box input:focus{
+
+    border:
+    1px solid var(--primary);
+
+    box-shadow:
+    0 0 0 4px rgba(255,154,61,.12);
+
+    transform:
+    translateY(-2px);
+
+}
+
+.toggle-password{
+
+    position:absolute;
+
+    top:50%;
+    right:20px;
+
+    transform:
+    translateY(-50%);
+
+    cursor:pointer;
+
+    color:#999;
+
+    transition:.3s;
+
+    font-size:16px;
+
+}
+
+.toggle-password:hover{
+
+    color:var(--gold);
+
+}
+
+/* =========================================================
+BUTTON
+========================================================= */
+
+.login-btn{
+
+    width:100%;
+    height:65px;
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:22px;
+
+    margin-top:8px;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--gold)
+    );
+
+    color:#111;
+
+    font-size:16px;
+
+    font-weight:800;
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.login-btn::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-100%;
+
+    width:100%;
+    height:100%;
+
+    background:
+    rgba(255,255,255,.2);
+
+    transition:.5s;
+
+}
+
+.login-btn:hover::before{
+
+    left:100%;
+
+}
+
+.login-btn:hover{
+
+    transform:
+    translateY(-4px);
+
+    box-shadow:
+    0 12px 30px rgba(255,154,61,.35);
+
+}
+
+/* =========================================================
+BOTTOM LINKS
+========================================================= */
+
+.bottom-links{
+
+    margin-top:28px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+}
+
+.bottom-links a{
+
+    color:var(--gold);
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    transition:.3s;
+
+    position:relative;
+
+}
+
+.bottom-links a::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    bottom:-3px;
+
+    width:0%;
+    height:2px;
+
+    background:var(--gold);
+
+    transition:.3s;
+
+}
+
+.bottom-links a:hover::after{
+
+    width:100%;
+
+}
+
+.bottom-links a:hover{
+
+    color:#fff;
+
+}
+
+/* =========================================================
+RESPONSIVE
+========================================================= */
+
+@media(max-width:600px){
+
+    .login-card{
+
+        padding:35px 24px;
+
+        border-radius:28px;
+
+    }
+
+    .logo h1{
+
+        font-size:42px;
+
+    }
+
+}
+
+</style>
 
 </head>
 
-<body class="auth-body">
+<body>
 
-<!-- =====================================================
-WRAPPER
-===================================================== -->
+<!-- BACKGROUND -->
 
-<div class="auth-wrapper">
+<div class="blur-circle blur-1"></div>
+<div class="blur-circle blur-2"></div>
 
-    <!-- LEFT -->
+<!-- CARD -->
 
-    <div class="auth-left">
+<div class="login-card">
 
-        <div class="auth-badge">
+    <!-- LOGO -->
 
-            <i class="fa-solid fa-fire"></i>
-
-            Premium Café Experience
-
-        </div>
+    <div class="logo">
 
         <h1>
 
-            Welcome Back
+            Hungroo
 
         </h1>
 
-        <p>
+    </div>
 
-            Login to access premium meals,
-            fast checkout, loyalty rewards,
-            exclusive offers and your orders.
+    <!-- SUBTITLE -->
 
-        </p>
+    <p class="subtitle">
 
-        <!-- FEATURES -->
+        Welcome back 👋<br>
+        Login to continue your premium café experience.
 
-        <div class="auth-features">
+    </p>
 
-            <!-- FEATURE -->
+    <!-- MESSAGE -->
 
-            <div class="auth-feature">
+    <?php if(!empty($message)): ?>
 
-                <div class="auth-feature-icon">
+    <div class="message">
 
-                    <i class="fa-solid fa-burger"></i>
-
-                </div>
-
-                <div class="auth-feature-text">
-
-                    <h3>
-
-                        Premium Meals
-
-                    </h3>
-
-                    <p>
-
-                        Fresh handcrafted burgers,
-                        pizzas and desserts.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <!-- FEATURE -->
-
-            <div class="auth-feature">
-
-                <div class="auth-feature-icon">
-
-                    <i class="fa-solid fa-bolt"></i>
-
-                </div>
-
-                <div class="auth-feature-text">
-
-                    <h3>
-
-                        Fast Delivery
-
-                    </h3>
-
-                    <p>
-
-                        Super fast premium
-                        delivery experience.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <!-- FEATURE -->
-
-            <div class="auth-feature">
-
-                <div class="auth-feature-icon">
-
-                    <i class="fa-solid fa-gift"></i>
-
-                </div>
-
-                <div class="auth-feature-text">
-
-                    <h3>
-
-                        Rewards & Offers
-
-                    </h3>
-
-                    <p>
-
-                        Earn points and unlock
-                        exclusive premium deals.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
+        <?php echo $message; ?>
 
     </div>
 
-    <!-- RIGHT -->
+    <?php endif; ?>
 
-    <div class="auth-card">
+    <!-- FORM -->
 
-        <!-- TOP -->
+    <form method="POST">
 
-        <div class="auth-top">
+        <!-- EMAIL -->
 
-            <h2>
+        <div class="input-group">
 
-                Login
+            <label>
 
-            </h2>
+                Email or Phone
 
-            <p>
+            </label>
 
-                Enter your account details
-                to continue.
+            <div class="input-box">
 
-            </p>
+                <i class="fa-solid fa-user left-icon"></i>
 
-        </div>
+                <input
+                type="text"
 
-        <!-- FORM -->
+                name="email_or_phone"
 
-        <form
-        class="auth-form"
+                placeholder="Enter email or phone"
 
-        action="login-process.php"
-
-        method="POST">
-
-            <!-- EMAIL -->
-
-            <div class="auth-group">
-
-                <label class="auth-label">
-
-                    Email Address
-
-                </label>
-
-                <div class="auth-input-wrap">
-
-                    <i class="fa-solid fa-envelope"></i>
-
-                    <input
-                    type="email"
-
-                    name="email"
-
-                    class="auth-input"
-
-                    placeholder=
-                    "Enter your email"
-
-                    required>
-
-                </div>
+                required>
 
             </div>
 
-            <!-- PASSWORD -->
+        </div>
 
-            <div class="auth-group">
+        <!-- PASSWORD -->
 
-                <label class="auth-label">
+        <div class="input-group">
 
-                    Password
+            <label>
 
-                </label>
+                Password
 
-                <div class="auth-input-wrap">
+            </label>
 
-                    <i class="fa-solid fa-lock"></i>
+            <div class="input-box">
 
-                    <input
-                    type="password"
+                <i class="fa-solid fa-lock left-icon"></i>
 
-                    name="password"
+                <input
+                type="password"
 
-                    class="auth-input"
+                id="password"
 
-                    placeholder=
-                    "Enter your password"
+                name="password"
 
-                    required>
+                placeholder="Enter password"
 
-                </div>
+                required>
+
+                <span
+                class="toggle-password"
+
+                onclick="togglePassword()">
+
+                    <i
+                    id="eyeIcon"
+
+                    class="fa-solid fa-eye"></i>
+
+                </span>
 
             </div>
 
-            <!-- ROW -->
-
-            <div class="auth-row">
-
-                <label class="auth-check">
-
-                    <input
-                    type="checkbox">
-
-                    Remember Me
-
-                </label>
-
-                <a
-                href="forgot-password.php"
-
-                class="auth-link">
-
-                    Forgot Password?
-
-                </a>
-
-            </div>
-
-            <!-- BUTTON -->
-
-            <button
-            type="submit"
-
-            class="auth-btn">
-
-                Login Account
-
-            </button>
-
-        </form>
-
-        <!-- SOCIAL -->
-
-        <div class="auth-social">
-
-            <button class="auth-social-btn">
-
-                <i class="fa-brands fa-google"></i>
-
-                Google
-
-            </button>
-
-            <button class="auth-social-btn">
-
-                <i class="fa-brands fa-facebook-f"></i>
-
-                Facebook
-
-            </button>
-
         </div>
 
-        <!-- BOTTOM -->
+        <!-- BUTTON -->
 
-        <div class="auth-bottom">
+        <button
+        type="submit"
 
-            Don’t have an account?
+        name="login"
 
-            <a href="register.php">
+        class="login-btn">
 
-                Create Account
+            Login Account
 
-            </a>
+        </button>
 
-        </div>
+    </form>
+
+    <!-- LINKS -->
+
+    <div class="bottom-links">
+
+        <a href="send-otp.php">
+
+            Create Account
+
+        </a>
+
+        <a href="forgot-password.php">
+
+            Forgot Password?
+
+        </a>
 
     </div>
 
 </div>
 
-<script src="assets/js/theme.js"></script>
+<!-- SCRIPT -->
 
-<script src="assets/js/preloader.js"></script>
+<script>
+
+function togglePassword(){
+
+    const passwordInput =
+
+    document.getElementById(
+    "password"
+    );
+
+    const eyeIcon =
+
+    document.getElementById(
+    "eyeIcon"
+    );
+
+    if(passwordInput.type === "password"){
+
+        passwordInput.type =
+        "text";
+
+        eyeIcon.classList.remove(
+        "fa-eye"
+        );
+
+        eyeIcon.classList.add(
+        "fa-eye-slash"
+        );
+
+    }
+
+    else{
+
+        passwordInput.type =
+        "password";
+
+        eyeIcon.classList.remove(
+        "fa-eye-slash"
+        );
+
+        eyeIcon.classList.add(
+        "fa-eye"
+        );
+
+    }
+
+}
+
+</script>
 
 </body>
 </html>

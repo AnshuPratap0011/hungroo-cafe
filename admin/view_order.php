@@ -23,7 +23,7 @@ CONFIG
 include "../config/config.php";
 
 /* =========================================================
-ORDER ID
+GET ID
 ========================================================= */
 
 if(!isset($_GET['id'])){
@@ -82,8 +82,7 @@ GET ITEMS
 $itemQuery =
 
 "SELECT * FROM order_items
-WHERE order_id='$order_id'
-ORDER BY id DESC";
+WHERE order_id='$order_id'";
 
 $itemResult =
 
@@ -130,40 +129,23 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <style>
 
-/* =========================================================
-ROOT
-========================================================= */
-
 :root{
 
     --bg:#070707;
-
     --sidebar:#0f0f0f;
-
-    --card:#151515;
-
+    --card:#121212;
     --white:#ffffff;
-
     --text:#bdbdbd;
-
     --primary:#ff9a3d;
-
     --gold:#ffd27a;
-
-    --border:
-    rgba(255,255,255,.08);
+    --border:rgba(255,255,255,.08);
 
 }
-
-/* =========================================================
-RESET
-========================================================= */
 
 *{
 
     margin:0;
     padding:0;
-
     box-sizing:border-box;
 
 }
@@ -171,9 +153,7 @@ RESET
 body{
 
     background:var(--bg);
-
     color:var(--white);
-
     font-family:'Poppins',sans-serif;
 
 }
@@ -185,7 +165,6 @@ LAYOUT
 .admin-layout{
 
     display:flex;
-
     min-height:100vh;
 
 }
@@ -217,9 +196,7 @@ SIDEBAR
 .sidebar-logo{
 
     display:flex;
-
     align-items:center;
-
     gap:14px;
 
     margin-bottom:40px;
@@ -262,9 +239,7 @@ SIDEBAR
 .sidebar-menu{
 
     display:flex;
-
     flex-direction:column;
-
     gap:12px;
 
 }
@@ -274,13 +249,11 @@ SIDEBAR
     height:58px;
 
     display:flex;
-
     align-items:center;
 
     gap:14px;
 
-    padding:
-    0 18px;
+    padding:0 18px;
 
     border-radius:18px;
 
@@ -291,7 +264,6 @@ SIDEBAR
     transition:.35s;
 
     font-size:15px;
-
     font-weight:600;
 
 }
@@ -324,10 +296,6 @@ CONTENT
 
 }
 
-/* =========================================================
-TOP
-========================================================= */
-
 .page-top{
 
     display:flex;
@@ -357,11 +325,15 @@ TOP
 
 }
 
+/* =========================================================
+BUTTON
+========================================================= */
+
 .back-btn{
 
-    min-width:170px;
+    min-width:180px;
 
-    height:54px;
+    height:56px;
 
     border:none;
 
@@ -392,29 +364,79 @@ TOP
 }
 
 /* =========================================================
-GRID
-========================================================= */
-
-.order-grid{
-
-    display:grid;
-
-    grid-template-columns:
-    .9fr 1.1fr;
-
-    gap:28px;
-
-}
-
-/* =========================================================
-CARD
+ORDER CARD
 ========================================================= */
 
 .order-card{
 
-    padding:30px;
+    padding:34px;
 
-    border-radius:30px;
+    border-radius:34px;
+
+    background:
+    rgba(255,255,255,.04);
+
+    border:
+    1px solid var(--border);
+
+    margin-bottom:30px;
+
+}
+
+.order-info{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(240px,1fr));
+
+    gap:24px;
+
+}
+
+.info-box{
+
+    padding:22px;
+
+    border-radius:22px;
+
+    background:
+    rgba(255,255,255,.03);
+
+    border:
+    1px solid var(--border);
+
+}
+
+.info-box span{
+
+    display:block;
+
+    color:var(--text);
+
+    margin-bottom:10px;
+
+    font-size:13px;
+
+}
+
+.info-box h3{
+
+    font-size:20px;
+
+    word-break:break-word;
+
+}
+
+/* =========================================================
+ITEMS
+========================================================= */
+
+.items-box{
+
+    padding:34px;
+
+    border-radius:34px;
 
     background:
     rgba(255,255,255,.04);
@@ -424,70 +446,22 @@ CARD
 
 }
 
-.order-card h2{
+.items-box h2{
 
-    font-size:28px;
+    font-size:34px;
 
-    margin-bottom:24px;
-
-}
-
-/* =========================================================
-INFO
-========================================================= */
-
-.order-info{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:18px;
+    margin-bottom:30px;
 
 }
 
-.order-info-row{
+.item-card{
 
     display:flex;
 
+    align-items:center;
     justify-content:space-between;
 
     gap:20px;
-
-    padding-bottom:18px;
-
-    border-bottom:
-    1px solid var(--border);
-
-}
-
-.order-info-row span{
-
-    color:var(--text);
-
-}
-
-.order-info-row strong{
-
-    text-align:right;
-
-}
-
-/* =========================================================
-ITEMS
-========================================================= */
-
-.order-items{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:18px;
-
-}
-
-.order-item{
 
     padding:22px;
 
@@ -499,31 +473,59 @@ ITEMS
     border:
     1px solid var(--border);
 
-}
-
-.order-item-top{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    gap:16px;
-
-    margin-bottom:16px;
+    margin-bottom:20px;
 
 }
 
-.order-item h3{
+.item-card:last-child{
 
-    font-size:20px;
+    margin-bottom:0;
 
 }
 
-.order-item p{
+.item-left h3{
+
+    font-size:22px;
+
+    margin-bottom:8px;
+
+}
+
+.item-left p{
 
     color:var(--text);
 
-    line-height:1.8;
+}
+
+.item-price{
+
+    text-align:right;
+
+}
+
+.item-price h2{
+
+    font-size:26px;
+
+    margin-bottom:8px;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--gold)
+    );
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:
+    transparent;
+
+}
+
+.item-price span{
+
+    color:var(--text);
 
 }
 
@@ -531,25 +533,14 @@ ITEMS
 RESPONSIVE
 ========================================================= */
 
-@media(max-width:1100px){
-
-    .order-grid{
-
-        grid-template-columns:1fr;
-
-    }
-
-}
-
 @media(max-width:992px){
 
     .sidebar{
 
-        position:relative;
-
         width:100%;
-
         height:auto;
+
+        position:relative;
 
     }
 
@@ -575,23 +566,32 @@ RESPONSIVE
 
     }
 
-    .order-card{
-
-        padding:22px;
-
-        border-radius:24px;
-
-    }
-
     .page-top h1{
 
         font-size:32px;
 
     }
 
-    .order-info-row{
+    .order-card,
+    .items-box{
+
+        padding:24px;
+
+        border-radius:24px;
+
+    }
+
+    .item-card{
 
         flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+    .item-price{
+
+        text-align:left;
 
     }
 
@@ -674,14 +674,6 @@ RESPONSIVE
 
             </a>
 
-            <a href="settings.php">
-
-                <i class="fa-solid fa-gear"></i>
-
-                Settings
-
-            </a>
-
             <a href="logout.php">
 
                 <i class="fa-solid fa-right-from-bracket"></i>
@@ -704,13 +696,13 @@ RESPONSIVE
 
                 <h1>
 
-                    Order #<?php echo $order['id']; ?>
+                    Order Details
 
                 </h1>
 
                 <p>
 
-                    Full order details and items
+                    Full customer order information
 
                 </p>
 
@@ -723,213 +715,169 @@ RESPONSIVE
 
                 <i class="fa-solid fa-arrow-left"></i>
 
-                Back To Orders
+                Back
 
             </a>
 
         </div>
 
-        <!-- GRID -->
+        <!-- ORDER INFO -->
 
-        <div class="order-grid">
+        <div class="order-card">
 
-            <!-- ORDER INFO -->
+            <div class="order-info">
 
-            <div class="order-card">
+                <div class="info-box">
 
-                <h2>
+                    <span>
 
-                    Customer Details
+                        Customer Name
 
-                </h2>
+                    </span>
 
-                <div class="order-info">
+                    <h3>
 
-                    <div class="order-info-row">
+                        <?php echo $order['customer_name']; ?>
 
-                        <span>
+                    </h3>
 
-                            Customer Name
+                </div>
 
-                        </span>
+                <div class="info-box">
 
-                        <strong>
+                    <span>
 
-                            <?php echo $order['customer_name']; ?>
+                        Phone Number
 
-                        </strong>
+                    </span>
 
-                    </div>
+                    <h3>
 
-                    <div class="order-info-row">
+                        <?php echo $order['customer_phone']; ?>
 
-                        <span>
+                    </h3>
 
-                            Phone Number
+                </div>
 
-                        </span>
+                <div class="info-box">
 
-                        <strong>
+                    <span>
 
-                            <?php echo $order['customer_phone']; ?>
+                        Payment Method
 
-                        </strong>
+                    </span>
 
-                    </div>
+                    <h3>
 
-                    <div class="order-info-row">
+                        <?php echo $order['payment_method']; ?>
 
-                        <span>
+                    </h3>
 
-                            Email Address
+                </div>
 
-                        </span>
+                <div class="info-box">
 
-                        <strong>
+                    <span>
 
-                            <?php echo $order['customer_email']; ?>
+                        Order Status
 
-                        </strong>
+                    </span>
 
-                    </div>
+                    <h3>
 
-                    <div class="order-info-row">
+                        <?php echo ucfirst($order['order_status']); ?>
 
-                        <span>
+                    </h3>
 
-                            City
+                </div>
 
-                        </span>
+                <div class="info-box">
 
-                        <strong>
+                    <span>
 
-                            <?php echo $order['city']; ?>
+                        Total Amount
 
-                        </strong>
+                    </span>
 
-                    </div>
+                    <h3>
 
-                    <div class="order-info-row">
+                        ₹<?php echo number_format($order['total_amount']); ?>
 
-                        <span>
+                    </h3>
 
-                            Address
+                </div>
 
-                        </span>
+                <div class="info-box">
 
-                        <strong>
+                    <span>
 
-                            <?php echo $order['address']; ?>
+                        Delivery Address
 
-                        </strong>
+                    </span>
 
-                    </div>
+                    <h3>
 
-                    <div class="order-info-row">
+                        <?php echo $order['customer_address']; ?>
 
-                        <span>
-
-                            Payment Method
-
-                        </span>
-
-                        <strong>
-
-                            <?php echo $order['payment_method']; ?>
-
-                        </strong>
-
-                    </div>
-
-                    <div class="order-info-row">
-
-                        <span>
-
-                            Order Status
-
-                        </span>
-
-                        <strong>
-
-                            <?php echo ucfirst(str_replace('_',' ',$order['order_status'])); ?>
-
-                        </strong>
-
-                    </div>
-
-                    <div class="order-info-row">
-
-                        <span>
-
-                            Total Amount
-
-                        </span>
-
-                        <strong>
-
-                            ₹<?php echo number_format($order['total_amount']); ?>
-
-                        </strong>
-
-                    </div>
+                    </h3>
 
                 </div>
 
             </div>
 
-            <!-- ORDER ITEMS -->
+        </div>
 
-            <div class="order-card">
+        <!-- ORDER ITEMS -->
 
-                <h2>
+        <div class="items-box">
 
-                    Ordered Items
+            <h2>
 
-                </h2>
+                Ordered Items
 
-                <div class="order-items">
+            </h2>
 
-                    <?php while($item = mysqli_fetch_assoc($itemResult)): ?>
+            <?php while($item = mysqli_fetch_assoc($itemResult)): ?>
 
-                    <div class="order-item">
+            <div class="item-card">
 
-                        <div class="order-item-top">
+                <div class="item-left">
 
-                            <h3>
+                    <h3>
 
-                                <?php echo $item['product_name']; ?>
+                        <?php echo $item['product_name']; ?>
 
-                            </h3>
+                    </h3>
 
-                            <strong>
+                    <p>
 
-                                ₹<?php echo number_format($item['total_price']); ?>
+                        Quantity:
+                        <?php echo $item['quantity']; ?>
 
-                            </strong>
+                    </p>
 
-                        </div>
+                </div>
 
-                        <p>
+                <div class="item-price">
 
-                            Quantity :
-                            <?php echo $item['quantity']; ?>
+                    <h2>
 
-                        </p>
+                        ₹<?php echo number_format($item['subtotal']); ?>
 
-                        <p>
+                    </h2>
 
-                            Price :
-                            ₹<?php echo number_format($item['product_price']); ?>
+                    <span>
 
-                        </p>
+                        ₹<?php echo $item['product_price']; ?>
+                        each
 
-                    </div>
-
-                    <?php endwhile; ?>
+                    </span>
 
                 </div>
 
             </div>
+
+            <?php endwhile; ?>
 
         </div>
 

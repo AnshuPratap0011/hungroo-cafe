@@ -1,13 +1,106 @@
 <?php
 
-require_once "db.php";
+session_start();
 
 /* =========================================================
-PAGE TITLE
+CONFIG
 ========================================================= */
 
-$pageTitle =
-"Hungroo Café | Verify OTP";
+include "config/config.php";
+
+/* =========================================================
+CHECK EMAIL SESSION
+========================================================= */
+
+if(!isset($_SESSION['otp_email'])){
+
+    header(
+    "Location: send-otp.php"
+    );
+
+    exit();
+
+}
+
+$email =
+
+$_SESSION['otp_email'];
+
+$message = "";
+
+/* =========================================================
+VERIFY OTP
+========================================================= */
+
+if(isset($_POST['verify_otp'])){
+
+    $user_otp =
+
+    mysqli_real_escape_string(
+    $conn,
+    $_POST['otp']
+    );
+
+    /* =====================================================
+    CHECK OTP
+    ====================================================== */
+
+    $query =
+
+    "SELECT * FROM otp_verifications
+
+    WHERE email='$email'
+
+    AND otp='$user_otp'
+
+    AND expires_at >= NOW()
+
+    LIMIT 1";
+
+    $result =
+
+    mysqli_query(
+    $conn,
+    $query
+    );
+
+    /* =====================================================
+    SUCCESS
+    ====================================================== */
+
+    if(mysqli_num_rows($result) > 0){
+
+        mysqli_query(
+
+            $conn,
+
+            "UPDATE otp_verifications
+
+            SET is_verified='1'
+
+            WHERE email='$email'"
+
+        );
+
+        $_SESSION['verified_email'] =
+        $email;
+
+        header(
+        "Location: register.php"
+        );
+
+        exit();
+
+    }
+
+    else{
+
+        $message =
+        "Invalid or expired OTP.";
+
+    }
+
+}
 
 ?>
 
@@ -25,445 +118,202 @@ content="width=device-width, initial-scale=1.0">
 
 <title>
 
-<?php echo $pageTitle; ?>
+Verify OTP
 
 </title>
-
-<!-- =====================================================
-GOOGLE FONT
-===================================================== -->
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
 
 <link
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- =====================================================
-FONT AWESOME
-===================================================== -->
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<!-- =====================================================
-CSS
-===================================================== -->
-
-<link
-rel="stylesheet"
-href="assets/css/navbar.css">
-
-<link
-rel="stylesheet"
-href="assets/css/footer.css">
-
-<link
-rel="stylesheet"
-href="assets/css/animations.css">
-
-<link
-rel="stylesheet"
-href="assets/css/effects.css">
-
 <style>
-
-/* =====================================================
-ROOT
-===================================================== */
-
-:root{
-
-    --bg:#070707;
-
-    --white:#ffffff;
-
-    --text:#bdbdbd;
-
-    --primary:#ff9a3d;
-
-    --gold:#ffd27a;
-
-    --border:
-    rgba(255,255,255,.08);
-
-}
-
-body.light-mode{
-
-    --bg:#f5f5f7;
-
-    --white:#111111;
-
-    --text:#666666;
-
-    --border:
-    rgba(0,0,0,.08);
-
-}
-
-/* =====================================================
-RESET
-===================================================== */
-
-*{
-
-    margin:0;
-    padding:0;
-
-    box-sizing:border-box;
-
-}
-
-/* =====================================================
-BODY
-===================================================== */
 
 body{
 
-    overflow-x:hidden;
-
-    background:
-    radial-gradient(
-    circle at top right,
-    rgba(255,154,61,.12),
-    transparent 30%
-    ),
-    var(--bg);
-
-    color:var(--white);
+    margin:0;
+    background:#070707;
+    color:#fff;
 
     font-family:'Poppins',sans-serif;
 
-}
-
-/* =====================================================
-PAGE
-===================================================== */
-
-.otp-page{
-
-    min-height:100vh;
-
-    width:100%;
-
     display:flex;
+
     align-items:center;
     justify-content:center;
 
-    padding:
-    130px 16px 80px;
+    min-height:100vh;
+
+    padding:20px;
 
 }
 
-/* =====================================================
-BOX
-===================================================== */
-
-.otp-box{
-
-    position:relative;
+.box{
 
     width:100%;
+    max-width:500px;
 
-    max-width:560px;
+    padding:40px;
 
-    padding:42px;
-
-    overflow:hidden;
-
-    border-radius:34px;
+    border-radius:30px;
 
     background:
     rgba(255,255,255,.04);
 
     border:
-    1px solid var(--border);
+    1px solid rgba(255,255,255,.08);
 
-    backdrop-filter:
-    blur(18px);
+    backdrop-filter:blur(12px);
 
 }
 
-/* =====================================================
-TOP
-===================================================== */
-
-.otp-top{
+.logo{
 
     text-align:center;
 
-    margin-bottom:34px;
+    margin-bottom:20px;
 
 }
 
-.otp-icon{
+.logo h1{
 
-    width:90px;
-    height:90px;
+    margin:0;
 
-    margin:auto auto 24px;
-
-    border-radius:28px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    font-size:38px;
 
     background:
     linear-gradient(
     135deg,
-    var(--primary),
-    var(--gold)
+    #ff9a3d,
+    #ffd27a
     );
 
-    color:#000;
+    -webkit-background-clip:text;
 
-    font-size:34px;
-
-}
-
-.otp-top h1{
-
-    font-size:
-    clamp(34px,7vw,52px);
-
-    line-height:1.1;
-
-    margin-bottom:14px;
+    -webkit-text-fill-color:
+    transparent;
 
 }
 
-.otp-top p{
+h2{
 
-    color:var(--text);
+    font-size:32px;
 
-    line-height:1.9;
+    margin-bottom:10px;
 
-    font-size:15px;
-
-}
-
-/* =====================================================
-FORM
-===================================================== */
-
-.otp-form{
-
-    width:100%;
+    text-align:center;
 
 }
 
-/* =====================================================
-OTP INPUTS
-===================================================== */
+p{
 
-.otp-inputs{
-
-    width:100%;
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(6,1fr);
-
-    gap:14px;
+    color:#aaa;
 
     margin-bottom:30px;
 
-}
-
-.otp-inputs input{
-
-    width:100%;
-    height:74px;
-
-    border:none;
-
-    outline:none;
-
     text-align:center;
 
-    border-radius:20px;
-
-    background:
-    rgba(255,255,255,.05);
-
-    border:
-    1px solid var(--border);
-
-    color:var(--white);
-
-    font-size:26px;
-
-    font-weight:700;
-
-    font-family:'Poppins',sans-serif;
-
-    transition:.3s;
+    line-height:1.8;
 
 }
 
-.otp-inputs input:focus{
+.email{
 
-    border-color:
-    rgba(255,154,61,.4);
-
-    box-shadow:
-    0 0 0 4px
-    rgba(255,154,61,.08);
-
-}
-
-/* =====================================================
-BUTTON
-===================================================== */
-
-.otp-btn{
-
-    width:100%;
-
-    height:66px;
-
-    border:none;
-
-    outline:none;
-
-    cursor:pointer;
-
-    border-radius:22px;
-
-    font-size:15px;
-
-    font-weight:700;
-
-    transition:.35s;
-
-    background:
-    linear-gradient(
-    135deg,
-    var(--primary),
-    var(--gold)
-    );
-
-    color:#000;
-
-}
-
-.otp-btn:hover{
-
-    transform:
-    translateY(-4px);
-
-}
-
-/* =====================================================
-BOTTOM
-===================================================== */
-
-.otp-bottom{
-
-    margin-top:26px;
-
-    text-align:center;
-
-    color:var(--text);
-
-    font-size:14px;
-
-}
-
-.otp-bottom a{
-
-    color:var(--primary);
-
-    text-decoration:none;
+    color:#ffd27a;
 
     font-weight:600;
 
 }
 
-/* =====================================================
-TIMER
-===================================================== */
+input{
 
-.otp-timer{
+    width:100%;
+    height:65px;
 
-    margin-top:18px;
+    border:none;
+    outline:none;
+
+    border-radius:20px;
+
+    padding:0 20px;
+
+    background:
+    rgba(255,255,255,.05);
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    color:#fff;
+
+    font-size:24px;
+
+    letter-spacing:10px;
 
     text-align:center;
 
-    color:var(--text);
+    margin-bottom:24px;
+
+}
+
+button{
+
+    width:100%;
+    height:62px;
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:20px;
+
+    background:
+    linear-gradient(
+    135deg,
+    #ff9a3d,
+    #ffd27a
+    );
+
+    color:#111;
+
+    font-size:16px;
+
+    font-weight:800;
+
+    transition:.3s;
+
+}
+
+button:hover{
+
+    transform:
+    translateY(-2px);
+
+}
+
+.message{
+
+    margin-bottom:20px;
+
+    color:#ff4d4d;
+
+    text-align:center;
+
+}
+
+.resend{
+
+    margin-top:24px;
+
+    text-align:center;
+
+}
+
+.resend a{
+
+    color:#ffd27a;
+
+    text-decoration:none;
 
     font-size:14px;
-
-}
-
-/* =====================================================
-RESPONSIVE
-===================================================== */
-
-@media(max-width:768px){
-
-    .otp-box{
-
-        padding:30px 18px;
-
-        border-radius:28px;
-
-    }
-
-    .otp-inputs{
-
-        gap:10px;
-
-    }
-
-    .otp-inputs input{
-
-        height:62px;
-
-        font-size:22px;
-
-        border-radius:16px;
-
-    }
-
-}
-
-@media(max-width:520px){
-
-    .otp-inputs{
-
-        gap:8px;
-
-    }
-
-    .otp-inputs input{
-
-        height:54px;
-
-        font-size:18px;
-
-        border-radius:14px;
-
-    }
-
-    .otp-btn{
-
-        height:60px;
-
-        border-radius:18px;
-
-    }
 
 }
 
@@ -473,232 +323,81 @@ RESPONSIVE
 
 <body>
 
-<?php include "Navbar.php"; ?>
+<div class="box">
 
-<!-- =====================================================
-MAIN
-===================================================== -->
+    <div class="logo">
 
-<main class="otp-page">
+        <h1>
 
-    <section class="otp-box premium-border">
+            Hungroo
 
-        <!-- TOP -->
+        </h1>
 
-        <div class="otp-top">
+    </div>
 
-            <div class="otp-icon">
+    <h2>
 
-                <i class="fa-solid fa-shield-halved"></i>
+        Verify OTP
 
-            </div>
+    </h2>
 
-            <h1>
+    <p>
 
-                Verify OTP
+        OTP sent to:
 
-            </h1>
+        <span class="email">
 
-            <p>
+            <?php echo $email; ?>
 
-                Enter the 6-digit verification code
-                sent to your registered email or phone.
+        </span>
 
-            </p>
+    </p>
 
-        </div>
+    <?php if(!empty($message)): ?>
 
-        <!-- FORM -->
+    <div class="message">
 
-        <form
-        class="otp-form"
+        <?php echo $message; ?>
 
-        action="#"
-        method="POST">
+    </div>
 
-            <!-- OTP -->
+    <?php endif; ?>
 
-            <div class="otp-inputs">
+    <form method="POST">
 
-                <input
-                type="text"
-                maxlength="1">
+        <input
+        type="text"
 
-                <input
-                type="text"
-                maxlength="1">
+        name="otp"
 
-                <input
-                type="text"
-                maxlength="1">
+        maxlength="6"
 
-                <input
-                type="text"
-                maxlength="1">
+        placeholder="000000"
 
-                <input
-                type="text"
-                maxlength="1">
+        required>
 
-                <input
-                type="text"
-                maxlength="1">
+        <button
+        type="submit"
 
-            </div>
+        name="verify_otp">
 
-            <!-- BUTTON -->
+            Verify OTP
 
-            <button
-            type="submit"
+        </button>
 
-            class="otp-btn">
+    </form>
 
-                Verify Account
+    <div class="resend">
 
-            </button>
+        <a href="send-otp.php">
 
-        </form>
+            Resend OTP
 
-        <!-- TIMER -->
+        </a>
 
-        <div class="otp-timer">
+    </div>
 
-            Resend code in
-            <span id="otpTimer">
-
-                30
-
-            </span>
-            sec
-
-        </div>
-
-        <!-- BOTTOM -->
-
-        <div class="otp-bottom">
-
-            Didn’t receive code?
-
-            <a href="#">
-
-                Resend OTP
-
-            </a>
-
-        </div>
-
-    </section>
-
-</main>
-
-<?php include "footer.php"; ?>
-
-<!-- =====================================================
-SCRIPT
-===================================================== -->
-
-<script>
-
-/* =====================================================
-OTP INPUT AUTO NEXT
-===================================================== */
-
-const otpInputs =
-document.querySelectorAll(
-".otp-inputs input"
-);
-
-otpInputs.forEach((input,index)=>{
-
-    input.addEventListener(
-    "input",
-    ()=>{
-
-        input.value =
-        input.value.replace(
-        /[^0-9]/g,
-        ""
-        );
-
-        if(
-
-            input.value &&
-            otpInputs[index + 1]
-
-        ){
-
-            otpInputs[index + 1]
-            .focus();
-
-        }
-
-    });
-
-    /* BACKSPACE */
-
-    input.addEventListener(
-    "keydown",
-    (event)=>{
-
-        if(
-
-            event.key ===
-            "Backspace"
-
-            &&
-
-            !input.value
-
-            &&
-
-            otpInputs[index - 1]
-
-        ){
-
-            otpInputs[index - 1]
-            .focus();
-
-        }
-
-    });
-
-});
-
-/* =====================================================
-TIMER
-===================================================== */
-
-let timer = 30;
-
-const timerEl =
-document.getElementById(
-"otpTimer"
-);
-
-const otpInterval =
-setInterval(()=>{
-
-    timer--;
-
-    timerEl.textContent =
-    timer;
-
-    if(timer <= 0){
-
-        clearInterval(
-        otpInterval
-        );
-
-        timerEl.textContent =
-        "0";
-
-    }
-
-},1000);
-
-</script>
-
-<script src="assets/js/theme.js"></script>
+</div>
 
 </body>
 </html>

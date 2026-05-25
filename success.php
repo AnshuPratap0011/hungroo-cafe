@@ -3,10 +3,16 @@
 session_start();
 
 /* =========================================================
-ORDER CHECK
+CONFIG
 ========================================================= */
 
-if(!isset($_SESSION['success_order'])){
+include "config/config.php";
+
+/* =========================================================
+GET ORDER
+========================================================= */
+
+if(!isset($_GET['id'])){
 
     header(
     "Location: home.php"
@@ -18,14 +24,41 @@ if(!isset($_SESSION['success_order'])){
 
 $order_id =
 
-$_SESSION['success_order'];
+intval(
+$_GET['id']
+);
 
 /* =========================================================
-REMOVE SESSION
+FETCH ORDER
 ========================================================= */
 
-unset(
-$_SESSION['success_order']
+$query =
+
+"SELECT * FROM orders
+WHERE id='$order_id'
+LIMIT 1";
+
+$result =
+
+mysqli_query(
+$conn,
+$query
+);
+
+if(mysqli_num_rows($result) < 1){
+
+    header(
+    "Location: home.php"
+    );
+
+    exit();
+
+}
+
+$order =
+
+mysqli_fetch_assoc(
+$result
 );
 
 ?>
@@ -48,7 +81,13 @@ Order Success
 
 </title>
 
-<!-- FONT -->
+<link
+rel="stylesheet"
+href="assets/css/navbar.css">
+
+<link
+rel="stylesheet"
+href="assets/css/footer.css">
 
 <link
 rel="preconnect"
@@ -58,13 +97,34 @@ href="https://fonts.googleapis.com">
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- ICON -->
-
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
+
+/* =========================================================
+ROOT
+========================================================= */
+
+:root{
+
+    --bg:#070707;
+
+    --card:#121212;
+
+    --white:#ffffff;
+
+    --text:#bdbdbd;
+
+    --primary:#ff9a3d;
+
+    --gold:#ffd27a;
+
+    --border:
+    rgba(255,255,255,.08);
+
+}
 
 /* =========================================================
 RESET
@@ -81,6 +141,20 @@ RESET
 
 body{
 
+    background:var(--bg);
+
+    color:var(--white);
+
+    font-family:'Poppins',sans-serif;
+
+}
+
+/* =========================================================
+PAGE
+========================================================= */
+
+.success-page{
+
     min-height:100vh;
 
     display:flex;
@@ -88,87 +162,54 @@ body{
     align-items:center;
     justify-content:center;
 
-    padding:20px;
-
-    overflow:hidden;
-
-    background:#070707;
-
-    color:#fff;
-
-    font-family:'Poppins',sans-serif;
+    padding:
+    140px 5% 80px;
 
 }
 
 /* =========================================================
-BLUR
+CARD
 ========================================================= */
 
-.blur{
-
-    position:absolute;
-
-    border-radius:50%;
-
-    filter:blur(120px);
-
-    opacity:.18;
-
-    z-index:-1;
-
-}
-
-.blur-1{
-
-    width:320px;
-    height:320px;
-
-    background:#ff9a3d;
-
-    top:-100px;
-    left:-100px;
-
-}
-
-.blur-2{
-
-    width:320px;
-    height:320px;
-
-    background:#ffd27a;
-
-    bottom:-100px;
-    right:-100px;
-
-}
-
-/* =========================================================
-BOX
-========================================================= */
-
-.success-box{
+.success-card{
 
     width:100%;
-
-    max-width:620px;
-
-    padding:50px 36px;
-
-    border-radius:34px;
+    max-width:720px;
 
     text-align:center;
+
+    padding:50px 40px;
+
+    border-radius:36px;
 
     background:
     rgba(255,255,255,.04);
 
     border:
-    1px solid rgba(255,255,255,.08);
+    1px solid var(--border);
 
-    backdrop-filter:
-    blur(16px);
+    position:relative;
 
-    box-shadow:
-    0 20px 60px rgba(0,0,0,.45);
+    overflow:hidden;
+
+}
+
+.success-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:-120px;
+    right:-120px;
+
+    width:260px;
+    height:260px;
+
+    border-radius:50%;
+
+    background:
+    rgba(255,154,61,.08);
 
 }
 
@@ -181,7 +222,8 @@ ICON
     width:120px;
     height:120px;
 
-    margin:auto auto 30px;
+    margin:
+    0 auto 30px;
 
     border-radius:50%;
 
@@ -193,73 +235,87 @@ ICON
     background:
     linear-gradient(
     135deg,
-    #ff9a3d,
-    #ffd27a
+    var(--primary),
+    var(--gold)
     );
 
-    animation:
-    pop .8s ease;
-
-}
-
-.success-icon i{
-
-    font-size:56px;
-
     color:#000;
+
+    font-size:50px;
 
 }
 
 /* =========================================================
-TITLE
+TEXT
 ========================================================= */
 
-.success-box h1{
+.success-card h1{
 
-    font-size:52px;
+    font-size:48px;
+
+    margin-bottom:14px;
+
+}
+
+.success-card p{
+
+    color:var(--text);
+
+    line-height:1.9;
+
+    margin-bottom:36px;
+
+}
+
+/* =========================================================
+ORDER BOX
+========================================================= */
+
+.order-box{
+
+    padding:28px;
+
+    border-radius:26px;
+
+    background:
+    rgba(255,255,255,.03);
+
+    border:
+    1px solid var(--border);
+
+    text-align:left;
+
+    margin-bottom:34px;
+
+}
+
+.order-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
 
     margin-bottom:18px;
 
 }
 
-.success-box p{
+.order-row:last-child{
 
-    color:#cfcfcf;
-
-    line-height:1.9;
-
-    font-size:15px;
-
-    margin-bottom:30px;
+    margin-bottom:0;
 
 }
 
-/* =========================================================
-ORDER ID
-========================================================= */
+.order-row span{
 
-.order-id{
+    color:var(--text);
 
-    width:max-content;
+}
 
-    margin:auto auto 34px;
+.order-row strong{
 
-    padding:
-    16px 24px;
-
-    border-radius:18px;
-
-    background:
-    rgba(255,154,61,.10);
-
-    border:
-    1px solid rgba(255,154,61,.14);
-
-    color:#ffb15e;
-
-    font-size:15px;
-
-    font-weight:700;
+    color:#fff;
 
 }
 
@@ -267,108 +323,63 @@ ORDER ID
 BUTTONS
 ========================================================= */
 
-.success-buttons{
+.button-group{
 
     display:flex;
 
-    align-items:center;
     justify-content:center;
 
-    gap:16px;
+    gap:18px;
 
     flex-wrap:wrap;
 
 }
 
-.success-btn{
+.action-btn{
 
-    min-width:210px;
+    min-width:220px;
 
-    height:58px;
-
-    padding:
-    0 24px;
+    height:60px;
 
     border:none;
 
-    outline:none;
-
-    cursor:pointer;
-
     border-radius:18px;
+
+    text-decoration:none;
 
     display:flex;
 
     align-items:center;
     justify-content:center;
 
-    gap:10px;
+    font-size:15px;
 
-    text-decoration:none;
-
-    transition:.35s;
-
-    font-size:14px;
-
-    font-weight:700;
+    font-weight:800;
 
 }
 
-.primary-btn{
+.home-btn{
 
     background:
     linear-gradient(
     135deg,
-    #ff9a3d,
-    #ffd27a
+    var(--primary),
+    var(--gold)
     );
 
     color:#000;
 
 }
 
-.secondary-btn{
+.menu-btn{
 
     background:
-    rgba(255,255,255,.05);
+    rgba(255,255,255,.06);
 
     border:
-    1px solid rgba(255,255,255,.08);
+    1px solid var(--border);
 
     color:#fff;
-
-}
-
-.success-btn:hover{
-
-    transform:
-    translateY(-4px);
-
-}
-
-/* =========================================================
-ANIMATION
-========================================================= */
-
-@keyframes pop{
-
-    0%{
-
-        transform:
-        scale(.5);
-
-        opacity:0;
-
-    }
-
-    100%{
-
-        transform:
-        scale(1);
-
-        opacity:1;
-
-    }
 
 }
 
@@ -378,17 +389,17 @@ RESPONSIVE
 
 @media(max-width:768px){
 
-    .success-box{
+    .success-card{
 
-        padding:42px 22px;
+        padding:36px 24px;
 
-        border-radius:26px;
+        border-radius:28px;
 
     }
 
-    .success-box h1{
+    .success-card h1{
 
-        font-size:38px;
+        font-size:36px;
 
     }
 
@@ -397,25 +408,17 @@ RESPONSIVE
         width:100px;
         height:100px;
 
-    }
-
-    .success-icon i{
-
-        font-size:46px;
+        font-size:42px;
 
     }
 
-}
-
-@media(max-width:480px){
-
-    .success-buttons{
+    .order-row{
 
         flex-direction:column;
 
     }
 
-    .success-btn{
+    .action-btn{
 
         width:100%;
 
@@ -429,97 +432,150 @@ RESPONSIVE
 
 <body>
 
-<!-- =========================================================
-BLUR
-========================================================= -->
+<?php include "Navbar.php"; ?>
 
-<div class="blur blur-1"></div>
-<div class="blur blur-2"></div>
+<section class="success-page">
 
-<!-- =========================================================
-SUCCESS BOX
-========================================================= -->
+    <div class="success-card">
 
-<div class="success-box">
+        <!-- ICON -->
 
-    <!-- ICON -->
+        <div class="success-icon">
 
-    <div class="success-icon">
+            <i class="fa-solid fa-check"></i>
 
-        <i class="fa-solid fa-check"></i>
+        </div>
+
+        <!-- TEXT -->
+
+        <h1>
+
+            Order Successful
+
+        </h1>
+
+        <p>
+
+            Your delicious order has been placed successfully.
+            Our team will prepare your food soon.
+
+        </p>
+
+        <!-- ORDER DETAILS -->
+
+        <div class="order-box">
+
+            <div class="order-row">
+
+                <span>
+
+                    Order ID
+
+                </span>
+
+                <strong>
+
+                    #<?php echo $order['id']; ?>
+
+                </strong>
+
+            </div>
+
+            <div class="order-row">
+
+                <span>
+
+                    Customer Name
+
+                </span>
+
+                <strong>
+
+                    <?php echo $order['customer_name']; ?>
+
+                </strong>
+
+            </div>
+
+            <div class="order-row">
+
+                <span>
+
+                    Payment Method
+
+                </span>
+
+                <strong>
+
+                    <?php echo $order['payment_method']; ?>
+
+                </strong>
+
+            </div>
+
+            <div class="order-row">
+
+                <span>
+
+                    Order Status
+
+                </span>
+
+                <strong>
+
+                    <?php echo ucfirst($order['order_status']); ?>
+
+                </strong>
+
+            </div>
+
+            <div class="order-row">
+
+                <span>
+
+                    Total Amount
+
+                </span>
+
+                <strong>
+
+                    ₹<?php echo number_format($order['total_amount']); ?>
+
+                </strong>
+
+            </div>
+
+        </div>
+
+        <!-- BUTTONS -->
+
+        <div class="button-group">
+
+            <a
+            href="home.php"
+
+            class="action-btn home-btn">
+
+                Back To Home
+
+            </a>
+
+            <a
+            href="menu.php"
+
+            class="action-btn menu-btn">
+
+                Order More
+
+            </a>
+
+        </div>
 
     </div>
 
-    <!-- TITLE -->
+</section>
 
-    <h1>
-
-        Order Placed!
-
-    </h1>
-
-    <!-- TEXT -->
-
-    <p>
-
-        Thank you for ordering from
-        Hungroo Café.
-
-        Your delicious food is being
-        prepared and will arrive soon.
-
-    </p>
-
-    <!-- ORDER ID -->
-
-    <div class="order-id">
-
-        Order ID :
-        #<?php echo $order_id; ?>
-
-    </div>
-
-    <!-- BUTTONS -->
-
-    <div class="success-buttons">
-
-        <a
-        href="home.php"
-
-        class="success-btn primary-btn">
-
-            <i class="fa-solid fa-house"></i>
-
-            Back To Home
-
-        </a>
-
-        <a
-        href="menu.php"
-
-        class="success-btn secondary-btn">
-
-            <i class="fa-solid fa-utensils"></i>
-
-            Order More
-
-        </a>
-
-    </div>
-
-</div>
-
-<!-- =========================================================
-CLEAR CART
-========================================================= -->
-
-<script>
-
-localStorage.removeItem(
-"cart"
-);
-
-</script>
+<?php include "footer.php"; ?>
 
 </body>
 </html>

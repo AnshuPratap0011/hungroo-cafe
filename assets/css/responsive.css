@@ -1,426 +1,50 @@
 /* =========================================================
-GLOBAL RESPONSIVE FIXES
-HUNGROO CAFÉ
+ROOT COLORS
 ========================================================= */
 
+:root{
+
+    --primary:#ff4d4d;
+    --secondary:#ff7b7b;
+    --light-red:#ffe5e5;
+
+    --dark:#050505;
+    --card:rgba(255,255,255,.06);
+    --border:rgba(255,255,255,.08);
+
+    --white:#ffffff;
+    --text:#b5b5b5;
+
+}
+
 /* =========================================================
-RESET OVERFLOW
+GLOBAL
 ========================================================= */
 
 *{
 
-    max-width:100%;
+    margin:0;
+    padding:0;
 
     box-sizing:border-box;
 
 }
 
-html,
-body{
-
-    overflow-x:hidden;
+html{
 
     scroll-behavior:smooth;
 
 }
 
-/* =========================================================
-IMAGES
-========================================================= */
+body{
 
-img{
+    font-family:'Poppins',sans-serif;
 
-    max-width:100%;
+    background:#050505;
 
-    height:auto;
+    color:#fff;
 
-    display:block;
-
-    user-select:none;
-
-}
-
-/* =========================================================
-CONTAINER
-========================================================= */
-
-.container{
-
-    width:100%;
-
-    max-width:1400px;
-
-    margin:auto;
-
-    padding:
-    0 16px;
-
-}
-
-/* =========================================================
-BUTTON FIX
-========================================================= */
-
-button{
-
-    outline:none;
-
-    border:none;
-
-    cursor:pointer;
-
-    font-family:inherit;
-
-}
-
-/* =========================================================
-INPUT FIX
-========================================================= */
-
-input,
-textarea,
-select{
-
-    width:100%;
-
-    font-family:inherit;
-
-}
-
-/* =========================================================
-TEXT BREAK
-========================================================= */
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-span,
-a{
-
-    word-wrap:break-word;
-
-}
-
-/* =========================================================
-GRID FIX
-========================================================= */
-
-.grid{
-
-    display:grid;
-
-    gap:24px;
-
-}
-
-/* =========================================================
-CARD FIX
-========================================================= */
-
-.card{
-
-    overflow:hidden;
-
-    border-radius:24px;
-
-}
-
-/* =========================================================
-TABLET
-========================================================= */
-
-@media(max-width:992px){
-
-    .desktop-only{
-
-        display:none !important;
-
-    }
-
-    .tablet-full{
-
-        width:100% !important;
-
-    }
-
-    .tablet-center{
-
-        text-align:center !important;
-
-    }
-
-    .tablet-column{
-
-        flex-direction:column !important;
-
-    }
-
-}
-
-/* =========================================================
-MOBILE
-========================================================= */
-
-@media(max-width:768px){
-
-    /* =============================================
-    BODY
-    ============================================= */
-
-    body{
-
-        overflow-x:hidden;
-
-    }
-
-    /* =============================================
-    HEADINGS
-    ============================================= */
-
-    h1{
-
-        font-size:
-        clamp(34px,8vw,48px) !important;
-
-        line-height:1.2;
-
-    }
-
-    h2{
-
-        font-size:
-        clamp(24px,6vw,34px) !important;
-
-        line-height:1.3;
-
-    }
-
-    p{
-
-        font-size:14px;
-
-        line-height:1.8;
-
-    }
-
-    /* =============================================
-    SECTIONS
-    ============================================= */
-
-    section{
-
-        padding-left:14px !important;
-
-        padding-right:14px !important;
-
-    }
-
-    /* =============================================
-    FLEX FIX
-    ============================================= */
-
-    .mobile-column{
-
-        flex-direction:column !important;
-
-    }
-
-    .mobile-center{
-
-        text-align:center !important;
-
-        align-items:center !important;
-
-        justify-content:center !important;
-
-    }
-
-    .mobile-full{
-
-        width:100% !important;
-
-    }
-
-    /* =============================================
-    BUTTONS
-    ============================================= */
-
-    .btn,
-    button{
-
-        min-height:50px;
-
-    }
-
-    /* =============================================
-    NAVBAR
-    ============================================= */
-
-    .navbar{
-
-        padding:
-        14px 16px !important;
-
-    }
-
-    .navbar-links{
-
-        display:none !important;
-
-    }
-
-    /* =============================================
-    GRID
-    ============================================= */
-
-    .grid-2,
-    .grid-3,
-    .grid-4{
-
-        grid-template-columns:
-        1fr !important;
-
-    }
-
-    /* =============================================
-    CARDS
-    ============================================= */
-
-    .card{
-
-        border-radius:22px !important;
-
-    }
-
-    /* =============================================
-    IMAGES
-    ============================================= */
-
-    .hero-image img,
-    .card img{
-
-        object-fit:cover;
-
-    }
-
-}
-
-/* =========================================================
-SMALL MOBILE
-========================================================= */
-
-@media(max-width:480px){
-
-    /* =============================================
-    CONTAINER
-    ============================================= */
-
-    .container{
-
-        padding:
-        0 12px;
-
-    }
-
-    /* =============================================
-    TEXT
-    ============================================= */
-
-    h1{
-
-        font-size:
-        clamp(30px,9vw,40px) !important;
-
-    }
-
-    h2{
-
-        font-size:
-        clamp(22px,7vw,30px) !important;
-
-    }
-
-    p{
-
-        font-size:13px;
-
-    }
-
-    /* =============================================
-    BUTTONS
-    ============================================= */
-
-    button,
-    .btn{
-
-        width:100%;
-
-    }
-
-    /* =============================================
-    CARD SPACING
-    ============================================= */
-
-    .card{
-
-        padding:18px !important;
-
-    }
-
-    /* =============================================
-    GAP FIX
-    ============================================= */
-
-    .gap{
-
-        gap:16px !important;
-
-    }
-
-}
-
-/* =========================================================
-LARGE DESKTOP
-========================================================= */
-
-@media(min-width:1600px){
-
-    .container{
-
-        max-width:1550px;
-
-    }
-
-}
-
-/* =========================================================
-NO SCREEN OUT FIX
-========================================================= */
-
-.row,
-.flex,
-.grid,
-.wrapper,
-.section{
-
-    max-width:100%;
-
-}
-
-/* =========================================================
-VIDEO FIX
-========================================================= */
-
-video,
-iframe{
-
-    max-width:100%;
-
-    border:none;
+    overflow-x:hidden;
 
 }
 
@@ -430,13 +54,13 @@ SCROLLBAR
 
 ::-webkit-scrollbar{
 
-    width:8px;
+    width:7px;
 
 }
 
 ::-webkit-scrollbar-track{
 
-    background:#111;
+    background:#0b0b0b;
 
 }
 
@@ -444,23 +68,783 @@ SCROLLBAR
 
     background:
     linear-gradient(
-    135deg,
-    #ff9a3d,
-    #ffd27a
+    180deg,
+    #ff4d4d,
+    #ff8a8a
     );
 
-    border-radius:999px;
+    border-radius:20px;
 
 }
 
 /* =========================================================
-SELECTION
+NAVBAR
 ========================================================= */
 
-::selection{
+.navbar{
 
-    background:#ff9a3d;
+    position:fixed;
 
-    color:#000;
+    top:0;
+    left:0;
+
+    width:100%;
+
+    z-index:9999;
+
+    padding:14px 28px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    background:
+    rgba(5,5,5,.82);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:
+    1px solid rgba(255,255,255,.05);
+
+}
+
+/* =========================================================
+LEFT
+========================================================= */
+
+.navbar-left{
+
+    display:flex;
+
+    align-items:center;
+
+    min-width:190px;
+
+}
+
+/* =========================================================
+LOGO
+========================================================= */
+
+.navbar-logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    text-decoration:none;
+
+}
+
+.navbar-logo img{
+
+    width:40px;
+    height:40px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:
+    2px solid rgba(255,255,255,.08);
+
+    transition:.35s;
+
+    flex-shrink:0;
+
+}
+
+.navbar-logo:hover img{
+
+    transform:
+    scale(1.05);
+
+    border:
+    2px solid rgba(255,77,77,.45);
+
+}
+
+.logo-text{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    line-height:1;
+
+}
+
+.logo-text span{
+
+    font-size:22px;
+
+    font-weight:800;
+
+    background:
+    linear-gradient(
+    135deg,
+    #ff4d4d,
+    #ff9c9c
+    );
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:
+    transparent;
+
+}
+
+.logo-text{
+
+    color:#fff;
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    text-transform:uppercase;
+
+}
+
+/* =========================================================
+CENTER NAV LINKS
+========================================================= */
+
+.navbar-center{
+
+    flex:1;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:28px;
+
+}
+
+.navbar-center a{
+
+    text-decoration:none;
+
+    color:#fff;
+
+    font-size:14px;
+
+    font-weight:500;
+
+    transition:.3s;
+
+    position:relative;
+
+    white-space:nowrap;
+
+}
+
+.navbar-center a::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    bottom:-6px;
+
+    width:0%;
+    height:2px;
+
+    border-radius:20px;
+
+    background:
+    linear-gradient(
+    135deg,
+    #ff4d4d,
+    #ff9c9c
+    );
+
+    transition:.35s;
+
+}
+
+.navbar-center a:hover::after{
+
+    width:100%;
+
+}
+
+.navbar-center a:hover{
+
+    color:#ff8a8a;
+
+}
+
+/* =========================================================
+RIGHT
+========================================================= */
+
+.navbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+    min-width:190px;
+
+}
+
+/* =========================================================
+CART
+========================================================= */
+
+.cart-btn{
+
+    width:44px;
+    height:44px;
+
+    border-radius:13px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    position:relative;
+
+    text-decoration:none;
+
+    background:
+    rgba(255,255,255,.05);
+
+    border:
+    1px solid rgba(255,255,255,.06);
+
+    color:#fff;
+
+    font-size:15px;
+
+    transition:.35s;
+
+    flex-shrink:0;
+
+}
+
+.cart-btn:hover{
+
+    transform:
+    translateY(-3px);
+
+    border:
+    1px solid rgba(255,77,77,.4);
+
+    box-shadow:
+    0 12px 24px rgba(255,77,77,.16);
+
+}
+
+.cart-count{
+
+    position:absolute;
+
+    top:-5px;
+    right:-4px;
+
+    min-width:18px;
+    height:18px;
+
+    padding:0 5px;
+
+    border-radius:50px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+    linear-gradient(
+    135deg,
+    #ff4d4d,
+    #ff9c9c
+    );
+
+    color:#fff;
+
+    font-size:9px;
+
+    font-weight:700;
+
+}
+
+/* =========================================================
+LOGIN BUTTON
+========================================================= */
+
+.login-btn-nav{
+
+    height:44px;
+
+    padding:0 16px;
+
+    border-radius:13px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    text-decoration:none;
+
+    background:
+    linear-gradient(
+    135deg,
+    #ff4d4d,
+    #ff8a8a
+    );
+
+    color:#fff;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    flex-shrink:0;
+
+}
+
+.login-btn-nav::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-100%;
+
+    width:100%;
+    height:100%;
+
+    background:
+    rgba(255,255,255,.18);
+
+    transition:.45s;
+
+}
+
+.login-btn-nav:hover::before{
+
+    left:100%;
+
+}
+
+.login-btn-nav:hover{
+
+    transform:
+    translateY(-3px);
+
+    box-shadow:
+    0 14px 28px rgba(255,77,77,.24);
+
+}
+
+/* =========================================================
+PROFILE
+========================================================= */
+
+.nav-profile{
+
+    width:44px;
+    height:44px;
+
+    border-radius:13px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    text-decoration:none;
+
+    background:
+    rgba(255,255,255,.05);
+
+    border:
+    1px solid rgba(255,255,255,.06);
+
+    color:#fff;
+
+    font-size:15px;
+
+    transition:.35s;
+
+    flex-shrink:0;
+
+}
+
+.nav-profile:hover{
+
+    transform:
+    translateY(-3px);
+
+    border:
+    1px solid rgba(255,77,77,.4);
+
+}
+
+/* =========================================================
+MENU TOGGLE
+========================================================= */
+
+.menu-toggle{
+
+    display:none;
+
+    width:44px;
+    height:44px;
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:13px;
+
+    background:
+    rgba(255,255,255,.05);
+
+    border:
+    1px solid rgba(255,255,255,.06);
+
+    color:#fff;
+
+    font-size:16px;
+
+    flex-shrink:0;
+
+}
+
+/* =========================================================
+MOBILE MENU
+========================================================= */
+
+.mobile-menu{
+
+    position:fixed;
+
+    top:0;
+    right:-100%;
+
+    width:270px;
+    height:100vh;
+
+    background:
+    rgba(5,5,5,.98);
+
+    backdrop-filter:blur(20px);
+
+    border-left:
+    1px solid rgba(255,255,255,.06);
+
+    z-index:99999;
+
+    padding:85px 20px;
+
+    transition:.4s;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+}
+
+.mobile-menu.active{
+
+    right:0;
+
+}
+
+.mobile-menu a{
+
+    text-decoration:none;
+
+    color:#fff;
+
+    font-size:14px;
+
+    padding:14px 16px;
+
+    border-radius:14px;
+
+    background:
+    rgba(255,255,255,.04);
+
+    border:
+    1px solid rgba(255,255,255,.05);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    transition:.35s;
+
+}
+
+.mobile-menu a:hover{
+
+    background:
+    rgba(255,77,77,.12);
+
+    color:#ff9c9c;
+
+    transform:
+    translateX(4px);
+
+}
+
+/* =========================================================
+OVERLAY
+========================================================= */
+
+.menu-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+    rgba(0,0,0,.55);
+
+    backdrop-filter:blur(4px);
+
+    z-index:9990;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:.3s;
+
+}
+
+.menu-overlay.active{
+
+    opacity:1;
+    visibility:visible;
+
+}
+
+/* =========================================================
+SECTION
+========================================================= */
+
+section{
+
+    padding:
+    110px 7% 70px;
+
+}
+
+/* =========================================================
+RESPONSIVE
+========================================================= */
+
+@media(max-width:1000px){
+
+    .navbar{
+
+        padding:12px 16px;
+
+    }
+
+    .navbar-center{
+
+        display:none;
+
+    }
+
+    .menu-toggle{
+
+        display:flex;
+
+        align-items:center;
+        justify-content:center;
+
+    }
+
+    .navbar-left{
+
+        min-width:auto;
+
+    }
+
+    .navbar-right{
+
+        min-width:auto;
+
+    }
+
+}
+
+/* =========================================================
+PHONE
+========================================================= */
+
+@media(max-width:600px){
+
+    .navbar{
+
+        height:66px;
+
+        padding:10px 12px;
+
+    }
+
+    .navbar-logo{
+
+        gap:7px;
+
+    }
+
+    .navbar-logo img{
+
+        width:34px;
+        height:34px;
+
+        min-width:34px;
+
+    }
+
+    .logo-text{
+
+        line-height:1;
+
+    }
+
+    .logo-text span{
+
+        font-size:18px;
+
+    }
+
+    .logo-text{
+
+        font-size:7px;
+
+        letter-spacing:1px;
+
+    }
+
+    .navbar-right{
+
+        gap:6px;
+
+    }
+
+    .cart-btn,
+    .nav-profile,
+    .menu-toggle{
+
+        width:38px;
+        height:38px;
+
+        min-width:38px;
+
+        border-radius:11px;
+
+        font-size:13px;
+
+    }
+
+    .cart-count{
+
+        min-width:16px;
+        height:16px;
+
+        font-size:8px;
+
+    }
+
+    .login-btn-nav{
+
+        height:38px;
+
+        padding:0 10px;
+
+        border-radius:11px;
+
+        font-size:11px;
+
+    }
+
+}
+
+/* =========================================================
+EXTRA SMALL PHONE
+========================================================= */
+
+@media(max-width:390px){
+
+    .navbar{
+
+        padding:8px 10px;
+
+    }
+
+    .logo-text span{
+
+        font-size:16px;
+
+    }
+
+    .logo-text{
+
+        font-size:6px;
+
+    }
+
+    .navbar-right{
+
+        gap:4px;
+
+    }
+
+    .cart-btn,
+    .menu-toggle,
+    .nav-profile{
+
+        width:36px;
+        height:36px;
+
+        min-width:36px;
+
+    }
+
+    .login-btn-nav{
+
+        height:36px;
+
+        padding:0 8px;
+
+        font-size:10px;
+
+    }
 
 }

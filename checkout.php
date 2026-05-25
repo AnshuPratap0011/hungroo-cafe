@@ -2,8 +2,183 @@
 
 session_start();
 
-$pageTitle =
-"Hungroo Café | Checkout";
+/* =========================================================
+CONFIG
+========================================================= */
+
+include "config/config.php";
+
+/* =========================================================
+CART
+========================================================= */
+
+if(!isset($_SESSION['cart']) || empty($_SESSION['cart'])){
+
+    header(
+    "Location: cart.php"
+    );
+
+    exit();
+
+}
+
+$cart = $_SESSION['cart'];
+
+/* =========================================================
+TOTAL
+========================================================= */
+
+$total = 0;
+
+foreach($cart as $item){
+
+    $total +=
+    $item['price'] *
+    $item['quantity'];
+
+}
+
+$grand_total =
+$total + 49;
+
+/* =========================================================
+PLACE ORDER
+========================================================= */
+
+if(isset($_POST['place_order'])){
+
+    $customer_name =
+
+    mysqli_real_escape_string(
+    $conn,
+    $_POST['customer_name']
+    );
+
+    $customer_phone =
+
+    mysqli_real_escape_string(
+    $conn,
+    $_POST['customer_phone']
+    );
+
+    $customer_address =
+
+    mysqli_real_escape_string(
+    $conn,
+    $_POST['customer_address']
+    );
+
+    $payment_method =
+
+    mysqli_real_escape_string(
+    $conn,
+    $_POST['payment_method']
+    );
+
+    /* =====================================================
+    INSERT ORDER
+    ====================================================== */
+
+    $insertOrder =
+
+    "INSERT INTO orders (
+
+        customer_name,
+        customer_phone,
+        customer_address,
+        payment_method,
+        total_amount,
+        order_status
+
+    )
+
+    VALUES (
+
+        '$customer_name',
+        '$customer_phone',
+        '$customer_address',
+        '$payment_method',
+        '$grand_total',
+        'pending'
+
+    )";
+
+    mysqli_query(
+    $conn,
+    $insertOrder
+    );
+
+    $order_id =
+
+    mysqli_insert_id(
+    $conn
+    );
+
+    /* =====================================================
+    ORDER ITEMS
+    ====================================================== */
+
+    foreach($cart as $item){
+
+        $product_name =
+        $item['name'];
+
+        $product_price =
+        $item['price'];
+
+        $quantity =
+        $item['quantity'];
+
+        $subtotal =
+        $product_price *
+        $quantity;
+
+        $insertItems =
+
+        "INSERT INTO order_items (
+
+            order_id,
+            product_name,
+            product_price,
+            quantity,
+            subtotal
+
+        )
+
+        VALUES (
+
+            '$order_id',
+            '$product_name',
+            '$product_price',
+            '$quantity',
+            '$subtotal'
+
+        )";
+
+        mysqli_query(
+        $conn,
+        $insertItems
+        );
+
+    }
+
+    /* =====================================================
+    CLEAR CART
+    ====================================================== */
+
+    unset($_SESSION['cart']);
+
+    /* =====================================================
+    REDIRECT
+    ====================================================== */
+
+    header(
+    "Location: success.php?id=$order_id"
+    );
+
+    exit();
+
+}
 
 ?>
 
@@ -21,32 +196,9 @@ content="width=device-width, initial-scale=1.0">
 
 <title>
 
-<?php echo $pageTitle; ?>
+Checkout
 
 </title>
-
-<!-- GOOGLE FONT -->
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<!-- FONT AWESOME -->
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<!-- CSS -->
 
 <link
 rel="stylesheet"
@@ -56,55 +208,36 @@ href="assets/css/navbar.css">
 rel="stylesheet"
 href="assets/css/footer.css">
 
-<style>
+<link
+rel="preconnect"
+href="https://fonts.googleapis.com">
 
-/* =========================================================
-ROOT
-========================================================= */
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
 
 :root{
 
     --bg:#070707;
-
-    --card:#111111;
-
+    --card:#121212;
     --white:#ffffff;
-
     --text:#bdbdbd;
-
     --primary:#ff9a3d;
-
     --gold:#ffd27a;
-
-    --border:
-    rgba(255,255,255,.08);
+    --border:rgba(255,255,255,.08);
 
 }
-
-body.light-mode{
-
-    --bg:#f5f5f7;
-
-    --card:#ffffff;
-
-    --white:#111111;
-
-    --text:#666666;
-
-    --border:
-    rgba(0,0,0,.08);
-
-}
-
-/* =========================================================
-RESET
-========================================================= */
 
 *{
 
     margin:0;
     padding:0;
-
     box-sizing:border-box;
 
 }
@@ -112,149 +245,72 @@ RESET
 body{
 
     background:var(--bg);
-
     color:var(--white);
-
     font-family:'Poppins',sans-serif;
 
-    overflow-x:hidden;
-
 }
-
-/* =========================================================
-PAGE
-========================================================= */
 
 .checkout-page{
 
-    width:100%;
-
-    max-width:1450px;
-
-    margin:auto;
-
     padding:
-    130px 16px 90px;
+    140px 5% 80px;
 
 }
-
-/* =========================================================
-TOP
-========================================================= */
 
 .checkout-top{
 
-    text-align:center;
-
-    margin-bottom:50px;
-
-}
-
-.checkout-top span{
-
-    color:var(--primary);
-
-    font-size:13px;
-
-    font-weight:600;
+    margin-bottom:40px;
 
 }
 
 .checkout-top h1{
 
-    font-size:
-    clamp(42px,6vw,82px);
+    font-size:52px;
 
-    margin:
-    12px 0 16px;
+    margin-bottom:10px;
 
 }
 
 .checkout-top p{
 
-    max-width:760px;
-
-    margin:auto;
-
     color:var(--text);
-
-    line-height:2;
 
 }
 
-/* =========================================================
-WRAPPER
-========================================================= */
-
-.checkout-wrapper{
+.checkout-grid{
 
     display:grid;
 
     grid-template-columns:
-    1fr .8fr;
+    1fr 400px;
 
-    gap:30px;
+    gap:28px;
 
 }
-
-/* =========================================================
-FORM
-========================================================= */
 
 .checkout-form{
 
-    padding:30px;
+    padding:34px;
 
     border-radius:30px;
 
-    background:
-    rgba(255,255,255,.04);
+    background:var(--card);
 
-    border:
-    1px solid var(--border);
-
-}
-
-.checkout-form h2{
-
-    font-size:34px;
-
-    margin-bottom:26px;
-
-}
-
-/* =========================================================
-GRID
-========================================================= */
-
-.form-grid{
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(2,1fr);
-
-    gap:20px;
+    border:1px solid var(--border);
 
 }
 
 .form-group{
 
-    display:flex;
-
-    flex-direction:column;
-
-    gap:10px;
-
-}
-
-.form-group.full{
-
-    grid-column:1/-1;
+    margin-bottom:22px;
 
 }
 
 .form-group label{
+
+    display:block;
+
+    margin-bottom:10px;
 
     font-size:14px;
 
@@ -268,55 +324,67 @@ GRID
 
     width:100%;
 
-    height:60px;
-
     border:none;
-
     outline:none;
 
-    padding:
-    0 18px;
+    padding:18px;
 
     border-radius:18px;
 
     background:
     rgba(255,255,255,.04);
 
-    border:
-    1px solid var(--border);
+    border:1px solid var(--border);
 
-    color:var(--white);
+    color:#fff;
 
     font-size:14px;
 
-}
-
-body.light-mode
-.form-group input,
-body.light-mode
-.form-group textarea,
-body.light-mode
-.form-group select{
-
-    color:#111;
+    font-family:'Poppins',sans-serif;
 
 }
 
 .form-group textarea{
 
-    height:130px;
-
-    padding-top:18px;
+    height:140px;
 
     resize:none;
 
 }
 
-/* =========================================================
-SUMMARY
-========================================================= */
+.form-group select option{
 
-.checkout-summary{
+    background:#111;
+
+}
+
+.place-btn{
+
+    width:100%;
+    height:62px;
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:18px;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--gold)
+    );
+
+    color:#000;
+
+    font-size:15px;
+
+    font-weight:800;
+
+}
+
+.summary-box{
 
     position:sticky;
 
@@ -328,101 +396,24 @@ SUMMARY
 
     border-radius:30px;
 
-    background:
-    rgba(255,255,255,.04);
+    background:var(--card);
 
-    border:
-    1px solid var(--border);
+    border:1px solid var(--border);
 
 }
 
-.checkout-summary h2{
+.summary-box h2{
 
-    font-size:34px;
+    font-size:30px;
 
-    margin-bottom:26px;
+    margin-bottom:28px;
 
 }
-
-/* =========================================================
-ITEM
-========================================================= */
 
 .summary-item{
 
     display:flex;
 
-    align-items:center;
-    justify-content:space-between;
-
-    gap:16px;
-
-    margin-bottom:20px;
-
-    padding-bottom:20px;
-
-    border-bottom:
-    1px solid var(--border);
-
-}
-
-.summary-item-left{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-}
-
-.summary-item-left img{
-
-    width:72px;
-    height:72px;
-
-    border-radius:18px;
-
-    object-fit:cover;
-
-}
-
-.summary-item-left h4{
-
-    font-size:16px;
-
-    margin-bottom:6px;
-
-}
-
-.summary-item-left p{
-
-    color:var(--text);
-
-    font-size:13px;
-
-}
-
-/* =========================================================
-TOTAL
-========================================================= */
-
-.checkout-total{
-
-    margin-top:24px;
-
-    padding-top:24px;
-
-    border-top:
-    1px solid var(--border);
-
-}
-
-.total-row{
-
-    display:flex;
-
-    align-items:center;
     justify-content:space-between;
 
     margin-bottom:16px;
@@ -431,158 +422,28 @@ TOTAL
 
 }
 
-.grand-total{
+.summary-total{
 
     display:flex;
 
-    align-items:center;
     justify-content:space-between;
 
-    margin-top:20px;
+    margin-top:24px;
 
-}
+    padding-top:22px;
 
-.grand-total h3{
+    border-top:
+    1px solid var(--border);
 
-    font-size:34px;
-
-}
-
-/* =========================================================
-BUTTON
-========================================================= */
-
-.place-order-btn{
-
-    width:100%;
-
-    height:62px;
-
-    margin-top:28px;
-
-    border:none;
-
-    cursor:pointer;
-
-    border-radius:20px;
-
-    font-size:15px;
+    font-size:22px;
 
     font-weight:700;
 
-    background:
-    linear-gradient(
-    135deg,
-    var(--primary),
-    var(--gold)
-    );
-
-    color:#000;
-
 }
-
-/* =========================================================
-SUCCESS
-========================================================= */
-
-.order-success{
-
-    position:fixed;
-
-    inset:0;
-
-    background:
-    rgba(0,0,0,.6);
-
-    backdrop-filter:
-    blur(8px);
-
-    display:none;
-
-    align-items:center;
-    justify-content:center;
-
-    z-index:99999;
-
-}
-
-.order-success.active{
-
-    display:flex;
-
-}
-
-.success-box{
-
-    width:95%;
-
-    max-width:500px;
-
-    padding:40px 30px;
-
-    border-radius:30px;
-
-    text-align:center;
-
-    background:var(--card);
-
-    border:
-    1px solid var(--border);
-
-}
-
-.success-box i{
-
-    width:90px;
-    height:90px;
-
-    margin:auto auto 24px;
-
-    border-radius:50%;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    background:
-    linear-gradient(
-    135deg,
-    #3ad66e,
-    #1fb954
-    );
-
-    color:#fff;
-
-    font-size:38px;
-
-}
-
-.success-box h2{
-
-    font-size:38px;
-
-    margin-bottom:14px;
-
-}
-
-.success-box p{
-
-    color:var(--text);
-
-    line-height:1.9;
-
-    margin-bottom:28px;
-
-}
-
-/* =========================================================
-RESPONSIVE
-========================================================= */
 
 @media(max-width:992px){
 
-    .checkout-wrapper{
+    .checkout-grid{
 
         grid-template-columns:1fr;
 
@@ -592,16 +453,18 @@ RESPONSIVE
 
 @media(max-width:768px){
 
-    .checkout-page{
+    .checkout-top h1{
 
-        padding:
-        120px 14px 70px;
+        font-size:38px;
 
     }
 
-    .form-grid{
+    .checkout-form,
+    .summary-box{
 
-        grid-template-columns:1fr;
+        padding:24px;
+
+        border-radius:24px;
 
     }
 
@@ -615,151 +478,133 @@ RESPONSIVE
 
 <?php include "Navbar.php"; ?>
 
-<!-- =========================================================
-PAGE
-========================================================= -->
-
 <section class="checkout-page">
-
-    <!-- TOP -->
 
     <div class="checkout-top">
 
-        <span>
-
-            Secure Checkout
-
-        </span>
-
         <h1>
 
-            Complete Your Order
+            Checkout
 
         </h1>
 
         <p>
 
-            Enter your delivery details
-            and confirm your order.
+            Complete your delicious order
 
         </p>
 
     </div>
 
-    <!-- WRAPPER -->
-
-    <div class="checkout-wrapper">
+    <div class="checkout-grid">
 
         <!-- FORM -->
 
-        <div class="checkout-form">
+        <form
+        method="POST"
 
-            <h2>
+        class="checkout-form">
 
-                Delivery Details
+            <div class="form-group">
 
-            </h2>
+                <label>
 
-            <form id="checkoutForm">
+                    Full Name
 
-                <div class="form-grid">
+                </label>
 
-                    <div class="form-group">
+                <input
+                type="text"
 
-                        <label>
+                name="customer_name"
 
-                            Full Name
+                required>
 
-                        </label>
+            </div>
 
-                        <input
-                        type="text"
-                        required>
+            <div class="form-group">
 
-                    </div>
+                <label>
 
-                    <div class="form-group">
+                    Phone Number
 
-                        <label>
+                </label>
 
-                            Phone Number
+                <input
+                type="text"
 
-                        </label>
+                name="customer_phone"
 
-                        <input
-                        type="tel"
-                        required>
+                required>
 
-                    </div>
+            </div>
 
-                    <div class="form-group full">
+            <div class="form-group">
 
-                        <label>
+                <label>
 
-                            Address
+                    Delivery Address
 
-                        </label>
+                </label>
 
-                        <textarea
-                        required></textarea>
+                <textarea
+                name="customer_address"
 
-                    </div>
+                required></textarea>
 
-                    <div class="form-group">
+            </div>
 
-                        <label>
+            <div class="form-group">
 
-                            Payment Method
+                <label>
 
-                        </label>
+                    Payment Method
 
-                        <select required>
+                </label>
 
-                            <option>
+                <select
+                name="payment_method"
 
-                                Cash On Delivery
+                required>
 
-                            </option>
+                    <option value="Cash On Delivery">
 
-                            <option>
+                        Cash On Delivery
 
-                                UPI
+                    </option>
 
-                            </option>
+                    <option value="UPI">
 
-                            <option>
+                        UPI
 
-                                Card Payment
+                    </option>
 
-                            </option>
+                    <option value="Card">
 
-                        </select>
+                        Debit / Credit Card
 
-                    </div>
+                    </option>
 
-                    <div class="form-group">
+                </select>
 
-                        <label>
+            </div>
 
-                            City
+            <button
+            type="submit"
 
-                        </label>
+            name="place_order"
 
-                        <input
-                        type="text"
-                        required>
+            class="place-btn">
 
-                    </div>
+                Place Order
 
-                </div>
+            </button>
 
-            </form>
-
-        </div>
+        </form>
 
         <!-- SUMMARY -->
 
-        <div class="checkout-summary">
+        <div class="summary-box">
 
             <h2>
 
@@ -767,68 +612,69 @@ PAGE
 
             </h2>
 
-            <div id="summaryItems"></div>
+            <?php foreach($cart as $item): ?>
 
-            <div class="checkout-total">
+            <div class="summary-item">
 
-                <div class="total-row">
+                <span>
 
-                    <span>
+                    <?php echo $item['name']; ?>
 
-                        Subtotal
+                    ×
+                    <?php echo $item['quantity']; ?>
 
-                    </span>
+                </span>
 
-                    <span id="subtotal">
+                <span>
 
-                        ₹0
+                    ₹<?php
 
-                    </span>
+                    echo number_format(
 
-                </div>
+                    $item['price'] *
+                    $item['quantity']
 
-                <div class="total-row">
+                    );
 
-                    <span>
+                    ?>
 
-                        Delivery
-
-                    </span>
-
-                    <span>
-
-                        ₹49
-
-                    </span>
-
-                </div>
-
-                <div class="grand-total">
-
-                    <span>
-
-                        Total
-
-                    </span>
-
-                    <h3 id="grandTotal">
-
-                        ₹0
-
-                    </h3>
-
-                </div>
+                </span>
 
             </div>
 
-            <button
-            class="place-order-btn"
+            <?php endforeach; ?>
 
-            onclick="placeOrder()">
+            <div class="summary-item">
 
-                Place Order
+                <span>
 
-            </button>
+                    Delivery
+
+                </span>
+
+                <span>
+
+                    ₹49
+
+                </span>
+
+            </div>
+
+            <div class="summary-total">
+
+                <span>
+
+                    Total
+
+                </span>
+
+                <span>
+
+                    ₹<?php echo number_format($grand_total); ?>
+
+                </span>
+
+            </div>
 
         </div>
 
@@ -836,184 +682,7 @@ PAGE
 
 </section>
 
-<!-- =========================================================
-SUCCESS
-========================================================= -->
-
-<div
-class="order-success"
-
-id="orderSuccess">
-
-    <div class="success-box">
-
-        <i class="fa-solid fa-check"></i>
-
-        <h2>
-
-            Order Confirmed
-
-        </h2>
-
-        <p>
-
-            Your delicious order has been
-            placed successfully.
-
-        </p>
-
-        <button
-        class="place-order-btn"
-
-        onclick=
-        "window.location.href='home.php'">
-
-            Back To Home
-
-        </button>
-
-    </div>
-
-</div>
-
-<script src="assets/js/theme.js"></script>
-
-<script>
-
-/* =========================================================
-CART
-========================================================= */
-
-let cart =
-
-JSON.parse(
-localStorage.getItem(
-"hungrooCart"
-)) || [];
-
-/* =========================================================
-RENDER SUMMARY
-========================================================= */
-
-function renderSummary(){
-
-    const summaryItems =
-
-    document.getElementById(
-    "summaryItems"
-    );
-
-    const subtotalText =
-
-    document.getElementById(
-    "subtotal"
-    );
-
-    const grandTotalText =
-
-    document.getElementById(
-    "grandTotal"
-    );
-
-    let subtotal = 0;
-
-    summaryItems.innerHTML = "";
-
-    cart.forEach(item=>{
-
-        subtotal +=
-        item.price * item.qty;
-
-        summaryItems.innerHTML += `
-
-        <div class="summary-item">
-
-            <div class="summary-item-left">
-
-                <img
-                src="${item.image}"
-                alt="${item.name}">
-
-                <div>
-
-                    <h4>
-
-                        ${item.name}
-
-                    </h4>
-
-                    <p>
-
-                        Qty : ${item.qty}
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <strong>
-
-                ₹${item.price * item.qty}
-
-            </strong>
-
-        </div>
-
-        `;
-
-    });
-
-    const total =
-    subtotal + 49;
-
-    subtotalText.innerText =
-    `₹${subtotal}`;
-
-    grandTotalText.innerText =
-    `₹${total}`;
-
-}
-
-/* =========================================================
-PLACE ORDER
-========================================================= */
-
-function placeOrder(){
-
-    const form =
-
-    document.getElementById(
-    "checkoutForm"
-    );
-
-    if(!form.checkValidity()){
-
-        form.reportValidity();
-
-        return;
-
-    }
-
-    localStorage.removeItem(
-    "hungrooCart"
-    );
-
-    document.getElementById(
-    "orderSuccess"
-    ).classList.add(
-    "active"
-    );
-
-}
-
-/* =========================================================
-LOAD
-========================================================= */
-
-renderSummary();
-
-</script>
+<?php include "footer.php"; ?>
 
 </body>
 </html>

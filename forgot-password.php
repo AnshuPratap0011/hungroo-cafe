@@ -2,8 +2,293 @@
 
 session_start();
 
-$pageTitle =
-"Hungroo Café | Forgot Password";
+/* =========================================================
+CONFIG
+========================================================= */
+
+include "config/config.php";
+
+/* =========================================================
+PHPMailer
+========================================================= */
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+
+/* =========================================================
+MESSAGE
+========================================================= */
+
+$message = "";
+
+/* =========================================================
+SEND RESET OTP
+========================================================= */
+
+if(isset($_POST['send_otp'])){
+
+    $email =
+
+    mysqli_real_escape_string(
+    $conn,
+    $_POST['email']
+    );
+
+    /* =====================================================
+    CHECK USER
+    ====================================================== */
+
+    $checkUser =
+
+    mysqli_query(
+
+        $conn,
+
+        "SELECT * FROM users
+        WHERE email='$email'
+        LIMIT 1"
+
+    );
+
+    if(mysqli_num_rows($checkUser) < 1){
+
+        $message =
+        "Email not registered.";
+
+    }
+
+    else{
+
+        /* =================================================
+        GENERATE OTP
+        ================================================== */
+
+        $otp =
+        rand(100000,999999);
+
+        $expires_at =
+
+        date(
+        "Y-m-d H:i:s",
+        strtotime("+10 minutes")
+        );
+
+        /* =============================================
+        DELETE OLD OTP
+        ============================================== */
+
+        mysqli_query(
+
+            $conn,
+
+            "DELETE FROM otp_verifications
+            WHERE email='$email'"
+
+        );
+
+        /* =============================================
+        INSERT OTP
+        ============================================== */
+
+        mysqli_query(
+
+            $conn,
+
+            "INSERT INTO otp_verifications (
+
+                email,
+                otp,
+                expires_at
+
+            )
+
+            VALUES (
+
+                '$email',
+                '$otp',
+                '$expires_at'
+
+            )"
+
+        );
+
+        /* =============================================
+        MAILER
+        ============================================== */
+
+        $mail = new PHPMailer(true);
+
+        try{
+
+            $mail->isSMTP();
+
+            $mail->Host =
+            'smtp.gmail.com';
+
+            $mail->SMTPAuth =
+            true;
+
+            $mail->Username =
+            'hungroocafe@gmail.com';
+
+            $mail->Password =
+            'yzlf rgcm skcw zkjg';
+
+            $mail->SMTPSecure =
+            PHPMailer::ENCRYPTION_STARTTLS;
+
+            $mail->Port =
+            587;
+
+            /* =========================================
+            EMAIL
+            ========================================== */
+
+            $mail->setFrom(
+
+                'hungroocafe@gmail.com',
+                'Hungroo Cafe'
+
+            );
+
+            $mail->addAddress(
+            $email
+            );
+
+            $mail->isHTML(true);
+
+            $mail->Subject =
+            'Hungroo Password Reset Code';
+
+            $mail->AltBody =
+            "Your password reset OTP is: $otp";
+
+            $mail->Body = "
+
+            <div style='
+            background:#f5f5f5;
+            padding:40px 20px;
+            font-family:Arial,sans-serif;
+            '>
+
+                <div style='
+                max-width:520px;
+                margin:auto;
+                background:#ffffff;
+                border-radius:20px;
+                overflow:hidden;
+                box-shadow:0 10px 30px rgba(0,0,0,.08);
+                '>
+
+                    <div style='
+                    background:linear-gradient(135deg,#ff9a3d,#ffd27a);
+                    padding:30px;
+                    text-align:center;
+                    '>
+
+                        <h1 style='
+                        margin:0;
+                        color:#111;
+                        font-size:34px;
+                        '>
+
+                        Hungroo Cafe
+
+                        </h1>
+
+                    </div>
+
+                    <div style='padding:40px;'>
+
+                        <h2 style='
+                        margin-top:0;
+                        color:#111;
+                        '>
+
+                        Reset Password
+
+                        </h2>
+
+                        <p style='
+                        color:#666;
+                        line-height:1.8;
+                        font-size:15px;
+                        '>
+
+                        Use the OTP below to reset
+                        your Hungroo account password.
+
+                        </p>
+
+                        <div style='
+                        margin:35px 0;
+                        text-align:center;
+                        '>
+
+                            <span style='
+                            display:inline-block;
+                            background:#111;
+                            color:#ffd27a;
+                            padding:18px 34px;
+                            border-radius:16px;
+                            font-size:38px;
+                            letter-spacing:8px;
+                            font-weight:bold;
+                            '>
+
+                            $otp
+
+                            </span>
+
+                        </div>
+
+                        <p style='
+                        color:#999;
+                        font-size:14px;
+                        line-height:1.7;
+                        '>
+
+                        This OTP will expire in
+                        10 minutes.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            ";
+
+            $mail->send();
+
+            $_SESSION['reset_email'] =
+            $email;
+
+            header(
+            "Location: reset-password.php"
+            );
+
+            exit();
+
+        }
+
+        catch(Exception $e){
+
+            $message =
+            "Mailer Error: " .
+            $mail->ErrorInfo;
+
+        }
+
+    }
+
+}
 
 ?>
 
@@ -21,268 +306,184 @@ content="width=device-width, initial-scale=1.0">
 
 <title>
 
-<?php echo $pageTitle; ?>
+Forgot Password
 
 </title>
-
-<!-- GOOGLE FONT -->
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
 
 <link
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- FONT AWESOME -->
+<style>
 
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+body{
 
-<!-- CSS -->
+    margin:0;
+    background:#070707;
+    color:#fff;
 
-<link
-rel="stylesheet"
-href="assets/css/auth.css">
+    font-family:'Poppins',sans-serif;
 
-<link
-rel="stylesheet"
-href="assets/css/responsive.css">
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    min-height:100vh;
+
+    padding:20px;
+
+}
+
+.box{
+
+    width:100%;
+    max-width:450px;
+
+    padding:40px;
+
+    border-radius:30px;
+
+    background:
+    rgba(255,255,255,.04);
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+}
+
+h1{
+
+    font-size:42px;
+
+    margin-bottom:10px;
+
+}
+
+p{
+
+    color:#aaa;
+
+    margin-bottom:30px;
+
+}
+
+input{
+
+    width:100%;
+    height:60px;
+
+    border:none;
+    outline:none;
+
+    border-radius:18px;
+
+    padding:0 18px;
+
+    background:
+    rgba(255,255,255,.04);
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    color:#fff;
+
+    font-size:14px;
+
+    margin-bottom:20px;
+
+}
+
+button{
+
+    width:100%;
+    height:60px;
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:18px;
+
+    background:
+    linear-gradient(
+    135deg,
+    #ff9a3d,
+    #ffd27a
+    );
+
+    color:#000;
+
+    font-size:15px;
+
+    font-weight:800;
+
+}
+
+.message{
+
+    margin-bottom:20px;
+
+    color:#ff4d4d;
+
+    word-break:break-word;
+
+}
+
+</style>
 
 </head>
 
-<body class="auth-body">
+<body>
 
-<!-- =====================================================
-WRAPPER
-===================================================== -->
+<div class="box">
 
-<div class="auth-wrapper">
+    <h1>
 
-    <!-- LEFT -->
+        Forgot Password
 
-    <div class="auth-left">
+    </h1>
 
-        <div class="auth-badge">
+    <p>
 
-            <i class="fa-solid fa-lock"></i>
+        Enter your registered email
+        to receive reset OTP.
 
-            Secure Account Recovery
+    </p>
 
-        </div>
+    <?php if(!empty($message)): ?>
 
-        <h1>
+    <div class="message">
 
-            Reset Password
-
-        </h1>
-
-        <p>
-
-            Forgot your password?
-            Recover your Hungroo Café account
-            securely in just a few steps.
-
-        </p>
-
-        <!-- FEATURES -->
-
-        <div class="auth-features">
-
-            <!-- FEATURE -->
-
-            <div class="auth-feature">
-
-                <div class="auth-feature-icon">
-
-                    <i class="fa-solid fa-shield"></i>
-
-                </div>
-
-                <div class="auth-feature-text">
-
-                    <h3>
-
-                        Secure Recovery
-
-                    </h3>
-
-                    <p>
-
-                        Protected password reset
-                        with secure verification.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <!-- FEATURE -->
-
-            <div class="auth-feature">
-
-                <div class="auth-feature-icon">
-
-                    <i class="fa-solid fa-envelope"></i>
-
-                </div>
-
-                <div class="auth-feature-text">
-
-                    <h3>
-
-                        Email Support
-
-                    </h3>
-
-                    <p>
-
-                        Receive recovery link
-                        directly on your email.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <!-- FEATURE -->
-
-            <div class="auth-feature">
-
-                <div class="auth-feature-icon">
-
-                    <i class="fa-solid fa-bolt"></i>
-
-                </div>
-
-                <div class="auth-feature-text">
-
-                    <h3>
-
-                        Fast Access
-
-                    </h3>
-
-                    <p>
-
-                        Quickly regain access
-                        to your premium account.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
+        <?php echo $message; ?>
 
     </div>
 
-    <!-- RIGHT -->
+    <?php endif; ?>
 
-    <div class="auth-card">
+    <form method="POST">
 
-        <!-- TOP -->
+        <input
+        type="email"
 
-        <div class="auth-top">
+        name="email"
 
-            <h2>
+        placeholder="Enter Registered Email"
 
-                Forgot Password
+        required>
 
-            </h2>
+        <button
+        type="submit"
 
-            <p>
+        name="send_otp">
 
-                Enter your email address
-                to receive a password reset link.
+            Send Reset OTP
 
-            </p>
+        </button>
 
-        </div>
-
-        <!-- FORM -->
-
-        <form
-        class="auth-form"
-
-        action="forgot-password-process.php"
-
-        method="POST">
-
-            <!-- EMAIL -->
-
-            <div class="auth-group">
-
-                <label class="auth-label">
-
-                    Email Address
-
-                </label>
-
-                <div class="auth-input-wrap">
-
-                    <i class="fa-solid fa-envelope"></i>
-
-                    <input
-                    type="email"
-
-                    name="email"
-
-                    class="auth-input"
-
-                    placeholder=
-                    "Enter your email address"
-
-                    required>
-
-                </div>
-
-            </div>
-
-            <!-- BUTTON -->
-
-            <button
-            type="submit"
-
-            class="auth-btn">
-
-                Send Reset Link
-
-            </button>
-
-        </form>
-
-        <!-- BOTTOM -->
-
-        <div class="auth-bottom">
-
-            Remember your password?
-
-            <a href="login.php">
-
-                Back To Login
-
-            </a>
-
-        </div>
-
-    </div>
+    </form>
 
 </div>
-
-<script src="assets/js/theme.js"></script>
-
-<script src="assets/js/preloader.js"></script>
 
 </body>
 </html>

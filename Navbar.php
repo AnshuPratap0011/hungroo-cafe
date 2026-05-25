@@ -9,403 +9,287 @@ if(session_status() === PHP_SESSION_NONE){
 ?>
 
 <!-- =========================================================
-FONT AWESOME
+PREMIUM IOS NAVBAR
+HUNGROO CAFÉ
 ========================================================= -->
 
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<div class="navbar-wrapper">
 
-<!-- =========================================================
-NAVBAR CSS
-========================================================= -->
+    <nav class="navbar">
 
-<link
-rel="stylesheet"
-href="assets/css/navbar.css">
+        <!-- =========================================================
+        LOGO
+        ========================================================= -->
 
-<!-- =========================================================
-NAVBAR
-========================================================= -->
+        <a href="home.php" class="navbar-logo">
 
-<nav class="navbar">
-
-    <!-- =====================================================
-    LEFT
-    ====================================================== -->
-
-    <div class="navbar-left">
-
-        <!-- LOGO -->
-
-        <a
-        href="home.php"
-
-        class="navbar-logo">
-
-            <div class="logo-circle">
-
-                <img
-                src="assets/images/logo.png"
-                alt="Hungroo Café">
-
-            </div>
+            <img
+            src="https://i.imgur.com/8Km9tLL.png"
+            alt="Hungroo Café">
 
             <div class="logo-text">
 
-                <span>
-
-                    Hungroo
-
-                </span>
-
-                Café
-
-            </div>
-
-        </a>
-
-    </div>
-
-    <!-- =====================================================
-    CENTER LINKS
-    ====================================================== -->
-
-    <div
-    class="navbar-links"
-
-    id="navbarLinks">
-
-        <a
-        href="home.php"
-
-        class="nav-link">
-
-            Home
-
-        </a>
-
-        <a
-        href="menu.php"
-
-        class="nav-link">
-
-            Menu
-
-        </a>
-
-        <a
-        href="offers.php"
-
-        class="nav-link">
-
-            Offers
-
-        </a>
-
-        <a
-        href="gallery.php"
-
-        class="nav-link">
-
-            Gallery
-
-        </a>
-
-        <a
-        href="about.php"
-
-        class="nav-link">
-
-            About
-
-        </a>
-
-        <a
-        href="contact.php"
-
-        class="nav-link">
-
-            Contact
-
-        </a>
-
-    </div>
-
-    <!-- =====================================================
-    RIGHT
-    ====================================================== -->
-
-    <div class="navbar-right">
-
-        <!-- SEARCH -->
-
-        <button
-        type="button"
-
-        class="nav-icon-btn search-btn">
-
-            <i class="fa-solid fa-magnifying-glass"></i>
-
-        </button>
-
-        <!-- THEME -->
-
-        <button
-        type="button"
-
-        class="theme-toggle"
-
-        id="themeToggle">
-
-            <i class="fa-solid fa-moon"></i>
-
-        </button>
-
-        <!-- CART -->
-
-        <button
-        type="button"
-
-        class="nav-cart"
-
-        id="cartButton">
-
-            <i class="fa-solid fa-cart-shopping"></i>
-
-            <span
-            class="cart-count">
-
-                0
-
-            </span>
-
-        </button>
-
-        <!-- PROFILE -->
-
-        <a
-        href="profile.php"
-
-        class="nav-profile">
-
-            <i class="fa-solid fa-user"></i>
-
-        </a>
-
-        <!-- MOBILE TOGGLE -->
-
-        <button
-        type="button"
-
-        class="menu-toggle"
-
-        id="menuToggle">
-
-            <span></span>
-            <span></span>
-            <span></span>
-
-        </button>
-
-    </div>
-
-</nav>
-
-<!-- =========================================================
-MOBILE MENU
-========================================================= -->
-
-<div
-class="mobile-menu"
-
-id="mobileMenu">
-
-    <a
-    href="home.php">
-
-        <i class="fa-solid fa-house"></i>
-
-        Home
-
-    </a>
-
-    <a
-    href="menu.php">
-
-        <i class="fa-solid fa-utensils"></i>
-
-        Menu
-
-    </a>
-
-    <a
-    href="offers.php">
-
-        <i class="fa-solid fa-tags"></i>
-
-        Offers
-
-    </a>
-
-    <a
-    href="gallery.php">
-
-        <i class="fa-solid fa-image"></i>
-
-        Gallery
-
-    </a>
-
-    <a
-    href="about.php">
-
-        <i class="fa-solid fa-circle-info"></i>
-
-        About
-
-    </a>
-
-    <a
-    href="contact.php">
-
-        <i class="fa-solid fa-envelope"></i>
-
-        Contact
-
-    </a>
-
-</div>
-
-<!-- =========================================================
-MINI CART OVERLAY
-========================================================= -->
-
-<div
-class="mini-cart-overlay"
-
-id="miniCartOverlay">
-
-</div>
-
-<!-- =========================================================
-MINI CART
-========================================================= -->
-
-<div
-class="mini-cart"
-
-id="miniCart">
-
-    <!-- =====================================================
-    TOP
-    ====================================================== -->
-
-    <div class="mini-cart-top">
-
-        <!-- IMAGE -->
-
-        <div class="mini-cart-image">
-
-            <img
-            src="https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1600&auto=format&fit=crop"
-            alt="Hungroo Café">
-
-            <!-- LAYER -->
-
-            <div class="mini-cart-layer">
-
                 <h2>
 
-                    Hungroo Café
+                    HUNGROO
 
                 </h2>
 
-                <p>
+                <span>
 
-                    Premium Food Experience
+                    CAFÉ
 
-                </p>
+                </span>
+
+            </div>
+
+        </a>
+
+        <!-- =========================================================
+        NAV LINKS
+        ========================================================= -->
+
+        <div class="navbar-links" id="mobileMenu">
+
+            <a
+            href="home.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'home.php' ? 'active' : ''; ?>">
+
+                <i class="fa-solid fa-house"></i>
+
+                Home
+
+            </a>
+
+            <a
+            href="menu.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'menu.php' ? 'active' : ''; ?>">
+
+                <i class="fa-solid fa-utensils"></i>
+
+                Menu
+
+            </a>
+
+            <a
+            href="offers.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'offers.php' ? 'active' : ''; ?>">
+
+                <i class="fa-solid fa-tags"></i>
+
+                Offers
+
+            </a>
+
+            <a
+            href="gallery.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'gallery.php' ? 'active' : ''; ?>">
+
+                <i class="fa-solid fa-images"></i>
+
+                Gallery
+
+            </a>
+
+            <a
+            href="about.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'about.php' ? 'active' : ''; ?>">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                About
+
+            </a>
+
+            <a
+            href="contact.php"
+            class="<?php echo basename($_SERVER['PHP_SELF']) == 'contact.php' ? 'active' : ''; ?>">
+
+                <i class="fa-solid fa-envelope"></i>
+
+                Contact
+
+            </a>
+
+            <!-- =========================================================
+            MOBILE EXTRA ACTIONS
+            ========================================================= -->
+
+            <div class="mobile-extra-actions">
+
+                <!-- MOBILE CART -->
+
+                <a
+                href="Cart.php"
+                class="mobile-cart-btn">
+
+                    <div class="mobile-cart-left">
+
+                        <i class="fa-solid fa-cart-shopping"></i>
+
+                        My Cart
+
+                    </div>
+
+                    <span
+                    class="mobile-cart-count cart-count">
+
+                        0
+
+                    </span>
+
+                </a>
+
+                <!-- MOBILE PROFILE -->
+
+                <?php if(isset($_SESSION['user_id'])): ?>
+
+                    <a
+                    href="profile.php"
+                    class="mobile-profile-btn">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        My Profile
+
+                    </a>
+
+                <?php else: ?>
+
+                    <a
+                    href="login.php"
+                    class="mobile-profile-btn">
+
+                        <i class="fa-solid fa-right-to-bracket"></i>
+
+                        Login Account
+
+                    </a>
+
+                <?php endif; ?>
 
             </div>
 
         </div>
 
-        <!-- CLOSE -->
+        <!-- =========================================================
+        RIGHT ACTIONS
+        ========================================================= -->
 
-        <button
-        type="button"
+        <div class="navbar-actions">
 
-        class="mini-cart-close"
+            <!-- THEME BUTTON -->
 
-        id="closeMiniCart">
+            <button
+            class="theme-btn"
+            id="themeToggle">
 
-            <i class="fa-solid fa-xmark"></i>
+                <i class="fa-solid fa-moon"></i>
 
-        </button>
+            </button>
 
-    </div>
-
-    <!-- =====================================================
-    ITEMS
-    ====================================================== -->
-
-    <div
-    class="mini-cart-items"
-
-    id="miniCartItems">
-
-    </div>
-
-    <!-- =====================================================
-    BOTTOM
-    ====================================================== -->
-
-    <div class="mini-cart-bottom">
-
-        <!-- TOTAL -->
-
-        <div class="mini-cart-total">
-
-            <span>
-
-                Total
-
-            </span>
-
-            <h3 id="miniCartTotal">
-
-                ₹0
-
-            </h3>
-
-        </div>
-
-        <!-- BUTTONS -->
-
-        <div class="mini-cart-buttons">
+            <!-- DESKTOP CART -->
 
             <a
-            href="cart.php"
+            href="Cart.php"
+            class="cart-btn">
 
-            class="mini-cart-btn secondary">
+                <i class="fa-solid fa-cart-shopping"></i>
 
-                View Cart
+                <span
+                class="cart-count">
+
+                    0
+
+                </span>
 
             </a>
 
-            <a
-            href="checkout.php"
+            <!-- DESKTOP USER -->
 
-            class="mini-cart-btn">
+            <?php if(isset($_SESSION['user_id'])): ?>
 
-                Checkout
+                <div class="user-dropdown">
 
-            </a>
+                    <button class="user-btn">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        <span>
+
+                            Account
+
+                        </span>
+
+                    </button>
+
+                    <div class="dropdown-menu">
+
+                        <a href="profile.php">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            Profile
+
+                        </a>
+
+                        <a href="track-order.php">
+
+                            <i class="fa-solid fa-bag-shopping"></i>
+
+                            My Orders
+
+                        </a>
+
+                        <a href="logout.php">
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                            Logout
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            <?php else: ?>
+
+                <a
+                href="login.php"
+                class="login-btn">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    Login
+
+                </a>
+
+            <?php endif; ?>
+
+            <!-- MOBILE MENU BUTTON -->
+
+            <button
+            class="mobile-menu-btn"
+            id="mobileMenuBtn">
+
+                <i class="fa-solid fa-bars"></i>
+
+            </button>
 
         </div>
 
-    </div>
+    </nav>
+
+</div>
+
+<!-- =========================================================
+MOBILE OVERLAY
+========================================================= -->
+
+<div
+class="mobile-overlay"
+id="mobileOverlay">
 
 </div>
 
@@ -419,154 +303,137 @@ NAVBAR SCRIPT
 MOBILE MENU
 ========================================================= */
 
-const menuToggle =
-
+const mobileMenuBtn =
 document.getElementById(
-"menuToggle"
+'mobileMenuBtn'
 );
 
 const mobileMenu =
-
 document.getElementById(
-"mobileMenu"
+'mobileMenu'
 );
 
-if(menuToggle){
+const mobileOverlay =
+document.getElementById(
+'mobileOverlay'
+);
 
-    menuToggle.addEventListener(
+mobileMenuBtn.addEventListener(
+'click',
+() => {
 
-        "click",
-
-        ()=>{
-
-            menuToggle.classList.toggle(
-            "active"
-            );
-
-            mobileMenu.classList.toggle(
-            "active"
-            );
-
-        }
-
+    mobileMenu.classList.toggle(
+    'active'
     );
+
+    mobileOverlay.classList.toggle(
+    'active'
+    );
+
+});
+
+mobileOverlay.addEventListener(
+'click',
+() => {
+
+    mobileMenu.classList.remove(
+    'active'
+    );
+
+    mobileOverlay.classList.remove(
+    'active'
+    );
+
+});
+
+/* =========================================================
+THEME SYSTEM
+========================================================= */
+
+const themeToggle =
+document.getElementById(
+'themeToggle'
+);
+
+const body =
+document.body;
+
+const savedTheme =
+localStorage.getItem(
+'theme'
+);
+
+if(savedTheme === 'light'){
+
+    body.classList.add(
+    'light-mode'
+    );
+
+    themeToggle.innerHTML =
+    '<i class="fa-solid fa-sun"></i>';
 
 }
 
-/* =========================================================
-ACTIVE LINK
-========================================================= */
+themeToggle.addEventListener(
+'click',
+() => {
 
-const currentPage =
-
-window.location.pathname
-.split("/")
-.pop();
-
-const allLinks =
-
-document.querySelectorAll(
-".navbar-links a, .mobile-menu a"
-);
-
-allLinks.forEach(link=>{
-
-    const href =
-
-    link.getAttribute(
-    "href"
+    body.classList.toggle(
+    'light-mode'
     );
 
-    if(href === currentPage){
+    if(
+    body.classList.contains(
+    'light-mode'
+    )
+    ){
 
-        link.classList.add(
-        "active"
+        localStorage.setItem(
+        'theme',
+        'light'
         );
+
+        themeToggle.innerHTML =
+        '<i class="fa-solid fa-sun"></i>';
+
+    }
+
+    else{
+
+        localStorage.setItem(
+        'theme',
+        'dark'
+        );
+
+        themeToggle.innerHTML =
+        '<i class="fa-solid fa-moon"></i>';
 
     }
 
 });
 
 /* =========================================================
-SCROLL EFFECT
+LIVE CART COUNT
 ========================================================= */
 
-window.addEventListener(
+function updateCartCount(){
 
-    "scroll",
+    let cart =
+    JSON.parse(
+    localStorage.getItem('cart')
+    ) || [];
 
-    ()=>{
+    document
+    .querySelectorAll('.cart-count')
+    .forEach(count => {
 
-        const navbar =
+        count.innerHTML =
+        cart.length;
 
-        document.querySelector(
-        ".navbar"
-        );
+    });
 
-        if(window.scrollY > 10){
+}
 
-            navbar.classList.add(
-            "navbar-scrolled"
-            );
-
-        }
-
-        else{
-
-            navbar.classList.remove(
-            "navbar-scrolled"
-            );
-
-        }
-
-    }
-
-);
-
-/* =========================================================
-ESC CLOSE
-========================================================= */
-
-document.addEventListener(
-
-    "keydown",
-
-    (e)=>{
-
-        if(e.key === "Escape"){
-
-            const miniCart =
-
-            document.getElementById(
-            "miniCart"
-            );
-
-            const overlay =
-
-            document.getElementById(
-            "miniCartOverlay"
-            );
-
-            if(miniCart){
-
-                miniCart.classList.remove(
-                "active"
-                );
-
-            }
-
-            if(overlay){
-
-                overlay.classList.remove(
-                "active"
-                );
-
-            }
-
-        }
-
-    }
-
-);
+updateCartCount();
 
 </script>
