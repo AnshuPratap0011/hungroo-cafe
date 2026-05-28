@@ -1,81 +1,68 @@
 <?php
 
-session_start();
-
 /* =========================================================
-LOGIN CHECK
-========================================================= */
-
-if(!isset($_SESSION['admin_id'])){
-
-    header(
-    "Location: login.php"
-    );
-
-    exit();
-
-}
-
-/* =========================================================
-CONFIG
+   CONFIG & SESSION
 ========================================================= */
 
 include "../config/config.php";
 
-/* =========================================================
-UPDATE STATUS
-========================================================= */
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-if(isset($_GET['status']) && isset($_GET['id'])){
+if (!isset($_SESSION['admin_id'])) {
 
-    $status =
-
-    mysqli_real_escape_string(
-    $conn,
-    $_GET['status']
-    );
-
-    $id =
-
-    intval(
-    $_GET['id']
-    );
-
-    $updateQuery =
-
-    "UPDATE orders SET
-
-    order_status='$status'
-
-    WHERE id='$id'";
-
-    mysqli_query(
-    $conn,
-    $updateQuery
-    );
-
-    header(
-    "Location: orders.php"
-    );
-
+    header("Location: login.php");
     exit();
-
 }
 
 /* =========================================================
-GET ORDERS
+   UPDATE STATUS
 ========================================================= */
 
-$query =
+if (isset($_GET['status']) && isset($_GET['id'])) {
 
-"SELECT * FROM orders
-ORDER BY id DESC";
+    $status = mysqli_real_escape_string(
+        $conn,
+        $_GET['status']
+    );
 
-$result =
+    $id = intval($_GET['id']);
 
-mysqli_query(
-$conn,
-$query
+    $updateQuery = "
+
+    UPDATE orders SET
+
+    status='$status'
+
+    WHERE id='$id'
+
+    ";
+
+    mysqli_query(
+        $conn,
+        $updateQuery
+    );
+
+    header("Location: orders.php");
+    exit();
+}
+
+/* =========================================================
+   GET ORDERS
+========================================================= */
+
+$query = "
+
+SELECT *
+FROM orders
+ORDER BY id DESC
+
+";
+
+$result = mysqli_query(
+    $conn,
+    $query
 );
 
 ?>
@@ -94,11 +81,11 @@ content="width=device-width, initial-scale=1.0">
 
 <title>
 
-Orders
+Hungroo Orders
 
 </title>
 
-<!-- FONT -->
+<!-- GOOGLE FONT -->
 
 <link
 rel="preconnect"
@@ -117,31 +104,37 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 <style>
 
 /* =========================================================
-ROOT
+   ROOT
 ========================================================= */
 
 :root{
 
-    --bg:#070707;
+    --bg:#0b0b12;
 
-    --sidebar:#0f0f0f;
+    --card:#171726;
+
+    --sidebar:#131320;
 
     --white:#ffffff;
 
-    --text:#bdbdbd;
+    --text:#9ca3af;
 
-    --primary:#ff9a3d;
+    --primary:#9b5cff;
 
-    --gold:#ffd27a;
+    --primary2:#b983ff;
+
+    --green:#10b981;
+
+    --red:#ef4444;
+
+    --blue:#3b82f6;
+
+    --yellow:#facc15;
 
     --border:
-    rgba(255,255,255,.08);
+    rgba(255,255,255,.06);
 
 }
-
-/* =========================================================
-RESET
-========================================================= */
 
 *{
 
@@ -149,6 +142,8 @@ RESET
     padding:0;
 
     box-sizing:border-box;
+
+    font-family:'Poppins',sans-serif;
 
 }
 
@@ -158,13 +153,17 @@ body{
 
     color:var(--white);
 
-    font-family:'Poppins',sans-serif;
+    overflow-x:hidden;
 
 }
 
-/* =========================================================
-LAYOUT
-========================================================= */
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
 
 .admin-layout{
 
@@ -175,12 +174,12 @@ LAYOUT
 }
 
 /* =========================================================
-SIDEBAR
+   SIDEBAR
 ========================================================= */
 
 .sidebar{
 
-    width:280px;
+    width:260px;
 
     background:var(--sidebar);
 
@@ -198,62 +197,25 @@ SIDEBAR
 
 }
 
-.sidebar-logo{
+.logo{
 
-    display:flex;
+    font-size:24px;
 
-    align-items:center;
-
-    gap:14px;
+    font-weight:700;
 
     margin-bottom:40px;
 
-}
-
-.sidebar-logo img{
-
-    width:58px;
-    height:58px;
-
-    border-radius:18px;
-
-    object-fit:cover;
+    padding-left:10px;
 
 }
 
-.sidebar-logo h2{
+.logo span{
 
-    font-size:28px;
-
-}
-
-.sidebar-logo span{
-
-    background:
-    linear-gradient(
-    135deg,
-    var(--primary),
-    var(--gold)
-    );
-
-    -webkit-background-clip:text;
-
-    -webkit-text-fill-color:
-    transparent;
+    color:var(--primary);
 
 }
 
-.sidebar-menu{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:12px;
-
-}
-
-.sidebar-menu a{
+.menu-item{
 
     height:58px;
 
@@ -263,12 +225,9 @@ SIDEBAR
 
     gap:14px;
 
-    padding:
-    0 18px;
+    padding:0 18px;
 
     border-radius:18px;
-
-    text-decoration:none;
 
     color:#fff;
 
@@ -278,39 +237,43 @@ SIDEBAR
 
     font-weight:600;
 
+    margin-bottom:10px;
+
 }
 
-.sidebar-menu a.active,
-.sidebar-menu a:hover{
+.menu-item.active,
+.menu-item:hover{
 
     background:
-    rgba(255,154,61,.12);
+    linear-gradient(
+    90deg,
+    rgba(155,92,255,.18),
+    transparent
+    );
+
+    color:var(--primary2);
 
 }
 
-.sidebar-menu a i{
+.menu-item i{
 
-    color:var(--primary);
+    color:var(--primary2);
 
 }
 
 /* =========================================================
-CONTENT
+   MAIN
 ========================================================= */
 
 .main-content{
 
     flex:1;
 
-    margin-left:280px;
+    margin-left:260px;
 
     padding:30px;
 
 }
-
-/* =========================================================
-TOP
-========================================================= */
 
 .page-top{
 
@@ -333,7 +296,7 @@ TOP
 }
 
 /* =========================================================
-TABLE
+   TABLE
 ========================================================= */
 
 .table-box{
@@ -342,11 +305,12 @@ TABLE
 
     border-radius:30px;
 
-    background:
-    rgba(255,255,255,.04);
+    background:var(--card);
 
     border:
     1px solid var(--border);
+
+    backdrop-filter:blur(12px);
 
 }
 
@@ -382,10 +346,19 @@ table td{
 
     font-size:14px;
 
+    vertical-align:top;
+
+}
+
+table tr:hover{
+
+    background:
+    rgba(255,255,255,.02);
+
 }
 
 /* =========================================================
-STATUS
+   STATUS
 ========================================================= */
 
 .status{
@@ -406,41 +379,41 @@ STATUS
 .pending{
 
     background:
-    rgba(255,193,7,.12);
+    rgba(250,204,21,.12);
 
-    color:#ffc107;
+    color:var(--yellow);
 
 }
 
-.processing{
+.confirmed{
 
     background:
-    rgba(0,123,255,.12);
+    rgba(59,130,246,.12);
 
-    color:#4da3ff;
+    color:var(--blue);
 
 }
 
 .completed{
 
     background:
-    rgba(76,175,80,.12);
+    rgba(16,185,129,.12);
 
-    color:#4caf50;
+    color:var(--green);
 
 }
 
 .cancelled{
 
     background:
-    rgba(255,77,77,.12);
+    rgba(239,68,68,.12);
 
-    color:#ff4d4d;
+    color:var(--red);
 
 }
 
 /* =========================================================
-BUTTONS
+   BUTTONS
 ========================================================= */
 
 .actions{
@@ -474,37 +447,75 @@ BUTTONS
 
     font-weight:700;
 
+    transition:.3s;
+
 }
 
 .view-btn{
 
     background:
-    rgba(255,154,61,.12);
+    rgba(155,92,255,.12);
 
-    color:#ffb15e;
+    color:var(--primary2);
 
 }
 
 .complete-btn{
 
     background:
-    rgba(76,175,80,.12);
+    rgba(16,185,129,.12);
 
-    color:#4caf50;
+    color:var(--green);
 
 }
 
 .cancel-btn{
 
     background:
-    rgba(255,77,77,.12);
+    rgba(239,68,68,.12);
 
-    color:#ff4d4d;
+    color:var(--red);
+
+}
+
+.action-btn:hover{
+
+    transform:translateY(-2px);
 
 }
 
 /* =========================================================
-RESPONSIVE
+   CUSTOMER
+========================================================= */
+
+.customer-box{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+}
+
+.customer-name{
+
+    font-weight:700;
+
+}
+
+.customer-address{
+
+    color:var(--text);
+
+    font-size:12px;
+
+    line-height:1.5;
+
+}
+
+/* =========================================================
+   RESPONSIVE
 ========================================================= */
 
 @media(max-width:992px){
@@ -559,100 +570,54 @@ RESPONSIVE
 
     <!-- SIDEBAR -->
 
-    <aside class="sidebar">
+    <div class="sidebar">
 
-        <div class="sidebar-logo">
-
-            <img
-            src="../assets/images/logo.png"
-            alt="Logo">
-
-            <h2>
-
-                <span>
-
-                    Hungroo
-
-                </span>
-
-                Admin
-
-            </h2>
-
+        <div class="logo">
+            Hungroo <span>Admin</span>
         </div>
 
-        <div class="sidebar-menu">
+        <a href="dashboard.php"
+            class="menu-item">
 
-            <a href="dashboard.php">
+            <i class="fa-solid fa-chart-pie"></i>
+            Dashboard
 
-                <i class="fa-solid fa-chart-line"></i>
+        </a>
 
-                Dashboard
+        <a href="products.php"
+            class="menu-item">
 
-            </a>
+            <i class="fa-solid fa-burger"></i>
+            Products
 
-            <a href="products.php">
+        </a>
 
-                <i class="fa-solid fa-burger"></i>
+        <a href="orders.php"
+            class="menu-item active">
 
-                Products
+            <i class="fa-solid fa-cart-shopping"></i>
+            Orders
 
-            </a>
+        </a>
 
-            <a
-            href="orders.php"
+        <a href="users.php"
+            class="menu-item">
 
-            class="active">
+            <i class="fa-solid fa-users"></i>
+            Users
 
-                <i class="fa-solid fa-cart-shopping"></i>
+        </a>
 
-                Orders
+        <a href="logout.php"
+            class="menu-item"
+            style="color:#ef4444;">
 
-            </a>
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
 
-            <a href="reservations.php">
+        </a>
 
-                <i class="fa-solid fa-calendar-check"></i>
-
-                Reservations
-
-            </a>
-
-            <a href="messages.php">
-
-                <i class="fa-solid fa-envelope"></i>
-
-                Messages
-
-            </a>
-
-            <a href="settings.php">
-
-                <i class="fa-solid fa-gear"></i>
-
-                Settings
-
-            </a>
-
-            <a href="profile.php">
-
-                <i class="fa-solid fa-user"></i>
-
-                Profile
-
-            </a>
-
-            <a href="logout.php">
-
-                <i class="fa-solid fa-right-from-bracket"></i>
-
-                Logout
-
-            </a>
-
-        </div>
-
-    </aside>
+    </div>
 
     <!-- CONTENT -->
 
@@ -684,9 +649,8 @@ RESPONSIVE
 
                     <tr>
 
-                        <th>ID</th>
+                        <th>Order</th>
                         <th>Customer</th>
-                        <th>Phone</th>
                         <th>Total</th>
                         <th>Payment</th>
                         <th>Status</th>
@@ -700,48 +664,140 @@ RESPONSIVE
 
                     <?php while($row = mysqli_fetch_assoc($result)): ?>
 
+                    <?php
+
+                    $statusClass = strtolower(
+                        $row['status']
+                    );
+
+                    ?>
+
                     <tr>
 
+                        <!-- ORDER -->
+
                         <td>
 
-                            #<?php echo $row['id']; ?>
+                            <strong>
+
+                                #<?php echo $row['order_number']; ?>
+
+                            </strong>
+
+                            <br><br>
+
+                            <span
+                            style="color:var(--text);font-size:12px;">
+
+                                <?php echo $row['created_at']; ?>
+
+                            </span>
 
                         </td>
 
-                        <td>
-
-                            <?php echo $row['customer_name']; ?>
-
-                        </td>
+                        <!-- CUSTOMER -->
 
                         <td>
 
-                            <?php echo $row['customer_phone']; ?>
+                            <div class="customer-box">
 
-                        </td>
+                                <div class="customer-name">
 
-                        <td>
+                                    <?php
 
-                            ₹<?php echo number_format($row['total_amount']); ?>
+                                    echo !empty(
+                                        $row['customer_name']
+                                    )
 
-                        </td>
+                                    ? $row['customer_name']
 
-                        <td>
+                                    : "Guest";
 
-                            <?php echo $row['payment_method']; ?>
+                                    ?>
 
-                        </td>
+                                </div>
 
-                        <td>
+                                <div class="customer-address">
 
-                            <div
-                            class="status <?php echo $row['order_status']; ?>">
+                                    <?php
 
-                                <?php echo ucfirst($row['order_status']); ?>
+                                    echo $row['delivery_address'];
+
+                                    ?>
+
+                                </div>
 
                             </div>
 
                         </td>
+
+                        <!-- TOTAL -->
+
+                        <td>
+
+                            <strong>
+
+                                ₹<?php
+
+                                echo number_format(
+                                    $row['total']
+                                );
+
+                                ?>
+
+                            </strong>
+
+                        </td>
+
+                        <!-- PAYMENT -->
+
+                        <td>
+
+                            <?php
+
+                            echo strtoupper(
+                                $row['payment_method']
+                            );
+
+                            ?>
+
+                            <br><br>
+
+                            <span
+                            style="color:var(--green);font-size:12px;">
+
+                                <?php
+
+                                echo ucfirst(
+                                    $row['payment_status']
+                                );
+
+                                ?>
+
+                            </span>
+
+                        </td>
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            <div
+                            class="status <?php echo $statusClass; ?>">
+
+                                <?php
+
+                                echo ucfirst(
+                                    $row['status']
+                                );
+
+                                ?>
+
+                            </div>
+
+                        </td>
+
+                        <!-- ACTION -->
 
                         <td>
 
@@ -793,4 +849,5 @@ RESPONSIVE
 </div>
 
 </body>
+
 </html>

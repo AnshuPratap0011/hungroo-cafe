@@ -1,12 +1,12 @@
 <?php
 
-$pageTitle =
-"Hungroo Café | About";
+include "config/config.php";
+
+$pageTitle = "Hungroo Café | About Us";
 
 ?>
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -23,23 +23,22 @@ content="width=device-width, initial-scale=1.0">
 
 </title>
 
-<!-- FONT -->
-
 <link
 rel="preconnect"
 href="https://fonts.googleapis.com">
 
 <link
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-rel="stylesheet">
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
 
-<!-- ICON -->
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+rel="stylesheet">
 
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<!-- CSS -->
 
 <link
 rel="stylesheet"
@@ -52,45 +51,79 @@ href="assets/css/footer.css">
 <style>
 
 /* =========================================================
-ROOT
+PREMIUM THEME VARIABLES
 ========================================================= */
 
-:root{
+:root,
+[data-theme="dark"]{
 
-    --bg:#070707;
+    --bg-body:#09090b;
 
-    --card:#111111;
+    --bg-card:#1e1e22;
 
-    --white:#ffffff;
+    --bg-card-hover:#26262b;
 
-    --text:#bdbdbd;
+    --text-main:#ffffff;
 
-    --primary:#ff9a3d;
+    --text-sec:#a1a1aa;
+
+    --accent:#6C5CE7;
+
+    --accent-l:#a29bfe;
+
+    --accent-dark:#4834d4;
 
     --gold:#ffd27a;
 
     --border:
-    rgba(255,255,255,.08);
+    rgba(255,255,255,0.08);
+
+    --border-h:
+    rgba(255,255,255,0.12);
+
+    --shadow-card:
+    0 10px 30px rgba(0,0,0,0.3);
+
+    --shadow-hover:
+    0 20px 40px -10px rgba(108,92,231,0.2);
+
+    --gradient-text:
+    linear-gradient(
+    135deg,
+    #6C5CE7,
+    #a29bfe
+    );
 
 }
 
-body.light-mode{
+[data-theme="light"]{
 
-    --bg:#f5f5f7;
+    --bg-body:#f5f5f7;
 
-    --card:#ffffff;
+    --bg-card:#ffffff;
 
-    --white:#111111;
+    --bg-card-hover:#fafafa;
 
-    --text:#666666;
+    --text-main:#111111;
+
+    --text-sec:#666666;
 
     --border:
-    rgba(0,0,0,.08);
+    rgba(0,0,0,0.08);
+
+    --border-h:
+    rgba(0,0,0,0.12);
+
+    --shadow-card:
+    0 10px 30px rgba(0,0,0,0.05);
+
+    --shadow-hover:
+    0 20px 40px -10px rgba(108,92,231,0.15);
 
 }
 
 /* =========================================================
-RESET
+GLOBAL
 ========================================================= */
 
 *{
@@ -104,13 +137,89 @@ RESET
 
 body{
 
-    background:var(--bg);
-
-    color:var(--white);
-
     font-family:'Poppins',sans-serif;
 
+    background:var(--bg-body);
+
+    color:var(--text-main);
+
     overflow-x:hidden;
+
+    -webkit-font-smoothing:antialiased;
+
+    transition:
+    background .35s ease,
+    color .35s ease;
+
+}
+
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
+
+img{
+
+    display:block;
+
+    max-width:100%;
+
+}
+
+/* =========================================================
+BACKGROUND BLOBS
+========================================================= */
+
+.co-blobs{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:0;
+
+    pointer-events:none;
+
+    overflow:hidden;
+
+}
+
+.co-blob{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    filter:blur(130px);
+
+}
+
+.co-blob-1{
+
+    width:600px;
+    height:600px;
+
+    background:
+    rgba(108,92,231,.08);
+
+    top:-200px;
+    left:-100px;
+
+}
+
+.co-blob-2{
+
+    width:500px;
+    height:500px;
+
+    background:
+    rgba(0,184,148,.08);
+
+    bottom:-100px;
+    right:-150px;
 
 }
 
@@ -118,183 +227,259 @@ body{
 HERO
 ========================================================= */
 
-.about-hero{
+.hero-about{
 
-    width:100%;
+    position:relative;
 
-    min-height:70vh;
+    max-width:1400px;
 
-    display:flex;
+    margin:auto;
 
-    align-items:center;
-    justify-content:center;
+    padding:
+    140px 24px 80px;
 
     text-align:center;
 
-    padding:
-    140px 16px 90px;
+    z-index:1;
 
 }
 
-.about-hero-content{
-
-    width:100%;
-
-    max-width:950px;
-
-}
-
-.about-hero-content span{
+.hero-badge{
 
     display:inline-flex;
 
     align-items:center;
-    justify-content:center;
 
-    padding:
-    10px 20px;
+    gap:8px;
 
-    border-radius:999px;
+    padding:8px 20px;
 
     background:
-    rgba(255,154,61,.10);
+    rgba(108,92,231,0.15);
 
     border:
-    1px solid rgba(255,154,61,.14);
+    1px solid rgba(108,92,231,0.3);
 
-    color:#ffb15e;
+    border-radius:50px;
+
+    color:var(--accent-l);
 
     font-size:13px;
 
-    font-weight:700;
+    font-weight:600;
 
     margin-bottom:24px;
 
+    box-shadow:
+    0 0 15px rgba(108,92,231,0.2);
+
+    backdrop-filter:blur(5px);
+
 }
 
-.about-hero-content h1{
+.hero-title{
 
     font-size:
-    clamp(52px,8vw,110px);
+    clamp(42px,6vw,72px);
 
-    line-height:1.05;
+    font-weight:800;
 
-    margin-bottom:24px;
+    line-height:1.1;
 
-}
-
-.about-hero-content h1 span{
-
-    padding:0;
-
-    border:none;
+    margin-bottom:20px;
 
     background:
     linear-gradient(
-    135deg,
-    var(--primary),
-    var(--gold)
+    to right,
+    #fff,
+    #a1a1aa
     );
 
     -webkit-background-clip:text;
 
-    -webkit-text-fill-color:
-    transparent;
+    -webkit-text-fill-color:transparent;
 
 }
 
-.about-hero-content p{
+[data-theme="light"] .hero-title{
 
-    max-width:760px;
+    background:
+    linear-gradient(
+    to right,
+    #111,
+    #666
+    );
 
-    margin:auto;
+    -webkit-background-clip:text;
 
-    line-height:2;
+    -webkit-text-fill-color:transparent;
 
-    color:var(--text);
+}
 
-    font-size:15px;
+.hero-desc{
+
+    font-size:18px;
+
+    color:var(--text-sec);
+
+    max-width:700px;
+
+    margin:
+    0 auto 40px;
+
+    line-height:1.6;
+
+}
+
+.hero-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:16px 32px;
+
+    background:var(--gradient-text);
+
+    color:#fff;
+
+    border-radius:50px;
+
+    font-weight:600;
+
+    font-size:16px;
+
+    box-shadow:
+    0 10px 30px rgba(108,92,231,0.4);
+
+    transition:.3s;
+
+}
+
+.hero-btn:hover{
+
+    transform:
+    translateY(-3px);
 
 }
 
 /* =========================================================
-SECTION
+CONTAINER
 ========================================================= */
 
-.about-section{
+.container{
 
-    width:100%;
+    max-width:1200px;
 
-    max-width:1450px;
-
-    margin:auto;
+    margin:0 auto;
 
     padding:
-    0 16px 90px;
+    0 24px 80px;
+
+    position:relative;
+
+    z-index:1;
 
 }
 
 /* =========================================================
-GRID
+STORY GRID
 ========================================================= */
 
-.about-grid{
+.story-grid{
 
     display:grid;
 
     grid-template-columns:
-    repeat(2,1fr);
+    1fr 1fr;
 
-    gap:50px;
+    gap:40px;
 
     align-items:center;
 
+    margin-bottom:80px;
+
 }
 
-/* =========================================================
-IMAGE
-========================================================= */
-
-.about-image{
+.story-img-wrap{
 
     position:relative;
 
+    border-radius:30px;
+
+    overflow:hidden;
+
+    box-shadow:var(--shadow-card);
+
+    border:
+    1px solid var(--border);
+
 }
 
-.about-image img{
+.story-img-wrap img{
 
     width:100%;
-
-    height:650px;
+    height:500px;
 
     object-fit:cover;
 
-    border-radius:40px;
+    transition:.5s;
 
 }
 
-/* =========================================================
-CONTENT
-========================================================= */
+.story-img-wrap:hover img{
 
-.about-content h2{
-
-    font-size:
-    clamp(38px,5vw,70px);
-
-    line-height:1.1;
-
-    margin-bottom:24px;
+    transform:scale(1.03);
 
 }
 
-.about-content p{
+.story-content h2{
 
-    color:var(--text);
+    font-size:36px;
 
-    line-height:2;
+    font-weight:700;
 
-    margin-bottom:22px;
+    margin-bottom:20px;
+
+}
+
+.story-content p{
+
+    font-size:16px;
+
+    color:var(--text-sec);
+
+    line-height:1.8;
+
+    margin-bottom:30px;
+
+}
+
+.story-features-list{
+
+    list-style:none;
+
+}
+
+.story-features-list li{
+
+    margin-bottom:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-size:16px;
+
+}
+
+.story-features-list li i{
+
+    color:var(--accent-l);
 
 }
 
@@ -302,80 +487,96 @@ CONTENT
 FEATURES
 ========================================================= */
 
-.about-features{
+.features-section h2{
+
+    text-align:center;
+
+    font-size:32px;
+
+    font-weight:700;
+
+    margin-bottom:40px;
+
+}
+
+.features-grid{
 
     display:grid;
 
     grid-template-columns:
-    repeat(2,1fr);
+    repeat(auto-fit,minmax(260px,1fr));
 
-    gap:20px;
-
-    margin-top:40px;
+    gap:24px;
 
 }
 
-.about-feature{
+.feature-card{
 
-    padding:24px;
-
-    border-radius:26px;
-
-    background:
-    rgba(255,255,255,.04);
+    background:var(--bg-card);
 
     border:
     1px solid var(--border);
 
+    border-radius:20px;
+
+    padding:30px;
+
+    text-align:center;
+
+    transition:.3s;
+
 }
 
-body.light-mode
-.about-feature{
+.feature-card:hover{
 
-    background:#fff;
+    transform:
+    translateY(-5px);
+
+    border-color:var(--accent);
+
+    box-shadow:var(--shadow-hover);
 
 }
 
-.about-feature i{
+.feature-icon{
 
-    width:60px;
-    height:60px;
+    width:70px;
+    height:70px;
 
-    margin-bottom:18px;
+    border-radius:50%;
 
-    border-radius:18px;
+    background:
+    rgba(108,92,231,0.1);
 
     display:flex;
 
     align-items:center;
     justify-content:center;
 
-    background:
-    linear-gradient(
-    135deg,
-    var(--primary),
-    var(--gold)
-    );
+    margin:
+    0 auto 20px;
 
-    color:#000;
+    color:var(--accent-l);
 
-    font-size:24px;
+    font-size:28px;
 
 }
 
-.about-feature h3{
-
-    margin-bottom:12px;
+.feature-card h3{
 
     font-size:20px;
 
+    margin-bottom:10px;
+
 }
 
-.about-feature p{
+.feature-card p{
 
-    margin:0;
+    font-size:14px;
 
-    line-height:1.8;
+    color:var(--text-sec);
+
+    line-height:1.6;
 
 }
 
@@ -383,65 +584,130 @@ body.light-mode
 STATS
 ========================================================= */
 
-.about-stats{
+.stats-section{
+
+    margin:
+    80px 0;
+
+}
+
+.stats-grid{
 
     display:grid;
 
     grid-template-columns:
     repeat(4,1fr);
 
-    gap:24px;
-
-    margin-top:80px;
+    gap:20px;
 
 }
 
-.about-stat{
-
-    padding:34px;
-
-    border-radius:30px;
-
-    text-align:center;
+.stat-card{
 
     background:
-    rgba(255,255,255,.04);
+    linear-gradient(
+    145deg,
+    var(--bg-card),
+    rgba(255,255,255,0.03)
+    );
 
     border:
     1px solid var(--border);
 
+    border-radius:24px;
+
+    padding:30px;
+
+    text-align:center;
+
 }
 
-body.light-mode
-.about-stat{
+.stat-number{
 
-    background:#fff;
+    font-size:42px;
 
-}
+    font-weight:800;
 
-.about-stat h2{
+    margin-bottom:5px;
 
-    font-size:54px;
-
-    margin-bottom:10px;
-
-    background:
-    linear-gradient(
-    135deg,
-    var(--primary),
-    var(--gold)
-    );
+    background:var(--gradient-text);
 
     -webkit-background-clip:text;
 
-    -webkit-text-fill-color:
-    transparent;
+    -webkit-text-fill-color:transparent;
 
 }
 
-.about-stat p{
+.stat-label{
 
-    color:var(--text);
+    color:var(--text-sec);
+
+    font-size:15px;
+
+}
+
+/* =========================================================
+CTA
+========================================================= */
+
+.cta-section{
+
+    background:var(--bg-card);
+
+    border-radius:40px;
+
+    padding:60px;
+
+    text-align:center;
+
+    border:
+    1px solid var(--border);
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.cta-title{
+
+    font-size:36px;
+
+    font-weight:800;
+
+    margin-bottom:15px;
+
+}
+
+.cta-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    background:var(--accent);
+
+    color:#fff;
+
+    padding:16px 32px;
+
+    border-radius:50px;
+
+    font-weight:700;
+
+    margin-top:30px;
+
+    transition:.3s;
+
+}
+
+.cta-btn:hover{
+
+    transform:scale(1.05);
+
+    background:var(--accent-dark);
 
 }
 
@@ -449,62 +715,38 @@ body.light-mode
 RESPONSIVE
 ========================================================= */
 
-@media(max-width:992px){
+@media(max-width:768px){
 
-    .about-grid{
+    .story-grid{
 
         grid-template-columns:1fr;
 
     }
 
-    .about-stats{
+    .story-img-wrap img{
+
+        height:320px;
+
+    }
+
+    .stats-grid{
 
         grid-template-columns:
         repeat(2,1fr);
 
     }
 
-}
+    .hero-title{
 
-@media(max-width:768px){
-
-    .about-hero{
-
-        min-height:auto;
-
-        padding:
-        120px 14px 70px;
+        font-size:36px;
 
     }
 
-    .about-section{
+    .cta-section{
 
-        padding:
-        0 12px 70px;
+        border-radius:24px;
 
-    }
-
-    .about-image img{
-
-        height:420px;
-
-        border-radius:28px;
-
-    }
-
-    .about-features{
-
-        grid-template-columns:1fr;
-
-    }
-
-}
-
-@media(max-width:480px){
-
-    .about-stats{
-
-        grid-template-columns:1fr;
+        padding:40px 20px;
 
     }
 
@@ -516,170 +758,287 @@ RESPONSIVE
 
 <body>
 
+<div class="co-blobs">
+
+    <div class="co-blob co-blob-1"></div>
+
+    <div class="co-blob co-blob-2"></div>
+
+</div>
+
 <?php include "Navbar.php"; ?>
 
-<!-- =========================================================
-HERO
-========================================================= -->
+<!-- HERO -->
 
-<section class="about-hero">
+<section class="hero-about">
 
-    <div class="about-hero-content">
+    <div class="hero-badge">
 
-        <span>
+        <i class="fa-solid fa-heart"></i>
 
-            About Hungroo Café
-
-        </span>
-
-        <h1>
-
-            More Than Just
-
-            <span>
-
-                Delicious Food
-
-            </span>
-
-        </h1>
-
-        <p>
-
-            Hungroo Café is a premium modern café
-            built for food lovers who enjoy delicious
-            flavours, luxury ambience and unforgettable
-            experiences.
-
-        </p>
+        Who We Are
 
     </div>
 
+    <h1 class="hero-title">
+
+        Hungroo Café
+
+    </h1>
+
+    <p class="hero-desc">
+
+        Premium food, luxury ambience, and a taste that stays with you forever.
+
+    </p>
+
+    <a
+    href="menu.php"
+    class="hero-btn">
+
+        <i class="fa-solid fa-utensils"></i>
+
+        Order Now
+
+    </a>
+
 </section>
 
-<!-- =========================================================
-ABOUT
-========================================================= -->
+<div class="container">
 
-<section class="about-section">
+    <!-- STORY -->
 
-    <div class="about-grid">
+    <section class="story-grid">
 
-        <!-- IMAGE -->
-
-        <div class="about-image">
+        <div class="story-img-wrap">
 
             <img
-            src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1600&auto=format&fit=crop"
-            alt="Cafe">
+            src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1200&auto=format&fit=crop"
+            alt="Hungroo Interior">
 
         </div>
 
-        <!-- CONTENT -->
-
-        <div class="about-content">
+        <div class="story-content">
 
             <h2>
 
-                Crafted With Passion & Taste
+                Crafted With Passion
 
             </h2>
 
             <p>
 
-                We combine premium ingredients,
-                luxury presentation and modern café
-                vibes to create a memorable food
-                experience for everyone.
+                We believe food is not just about eating, it's an experience.
 
             </p>
 
             <p>
 
-                From handcrafted burgers and cheesy
-                pizzas to refreshing drinks and
-                desserts — every item is carefully
-                prepared with love.
+                Every dish at Hungroo Café is crafted with premium ingredients and modern taste.
 
             </p>
 
-            <!-- FEATURES -->
+            <ul class="story-features-list">
 
-            <div class="about-features">
+                <li>
 
-                <div class="about-feature">
+                    <i class="fa-solid fa-check-circle"></i>
+
+                    Handcrafted Recipes
+
+                </li>
+
+                <li>
+
+                    <i class="fa-solid fa-leaf"></i>
+
+                    Fresh Ingredients
+
+                </li>
+
+                <li>
+
+                    <i class="fa-solid fa-wine-glass"></i>
+
+                    Premium Ambience
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </section>
+
+    <!-- FEATURES -->
+
+    <section class="features-section">
+
+        <h2>
+
+            Why Choose Us?
+
+        </h2>
+
+        <div class="features-grid">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
 
                     <i class="fa-solid fa-burger"></i>
 
-                    <h3>
+                </div>
 
-                        Premium Food
+                <h3>
 
-                    </h3>
+                    Premium Quality
 
-                    <p>
+                </h3>
 
-                        Fresh ingredients and
-                        handcrafted recipes.
+                <p>
 
-                    </p>
+                    Finest ingredients with unforgettable taste.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-clock"></i>
 
                 </div>
 
-                <div class="about-feature">
+                <h3>
 
-                    <i class="fa-solid fa-mug-hot"></i>
+                    Fast Delivery
 
-                    <h3>
+                </h3>
 
-                        Café Vibes
+                <p>
 
-                    </h3>
+                    Hot & fresh delivery at lightning speed.
 
-                    <p>
+                </p>
 
-                        Modern ambience with
-                        luxury comfort.
+            </div>
 
-                    </p>
+            <div class="feature-card">
 
-                </div>
+                <div class="feature-icon">
 
-                <div class="about-feature">
-
-                    <i class="fa-solid fa-truck-fast"></i>
-
-                    <h3>
-
-                        Fast Delivery
-
-                    </h3>
-
-                    <p>
-
-                        Quick and secure
-                        delivery service.
-
-                    </p>
+                    <i class="fa-solid fa-headset"></i>
 
                 </div>
 
-                <div class="about-feature">
+                <h3>
 
-                    <i class="fa-solid fa-star"></i>
+                    24/7 Support
 
-                    <h3>
+                </h3>
 
-                        Best Experience
+                <p>
 
-                    </h3>
+                    Always ready to assist you anytime.
 
-                    <p>
+                </p>
 
-                        Trusted by thousands
-                        of happy customers.
+            </div>
 
-                    </p>
+            <div class="feature-card">
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-truck"></i>
+
+                </div>
+
+                <h3>
+
+                    Secure Packaging
+
+                </h3>
+
+                <p>
+
+                    Hygienic packaging for safe delivery.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- STATS -->
+
+    <section class="stats-section">
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+
+                    15K+
+
+                </div>
+
+                <div class="stat-label">
+
+                    Happy Customers
+
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+
+                    50+
+
+                </div>
+
+                <div class="stat-label">
+
+                    Menu Items
+
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+
+                    4.9
+
+                </div>
+
+                <div class="stat-label">
+
+                    Star Rating
+
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+
+                    10+
+
+                </div>
+
+                <div class="stat-label">
+
+                    Cities Active
 
                 </div>
 
@@ -687,87 +1046,39 @@ ABOUT
 
         </div>
 
-    </div>
+    </section>
 
-    <!-- =====================================================
-    STATS
-    ====================================================== -->
+    <!-- CTA -->
 
-    <div class="about-stats">
+    <section class="cta-section">
 
-        <div class="about-stat">
+        <h2 class="cta-title">
 
-            <h2>
+            Ready to Taste the Difference?
 
-                10K+
+        </h2>
 
-            </h2>
+        <p style="color:var(--text-sec)">
 
-            <p>
+            Join thousands of satisfied customers today.
 
-                Happy Customers
+        </p>
 
-            </p>
+        <a
+        href="menu.php"
+        class="cta-btn">
 
-        </div>
+            View Full Menu
 
-        <div class="about-stat">
+            <i class="fa-solid fa-arrow-right"></i>
 
-            <h2>
+        </a>
 
-                120+
+    </section>
 
-            </h2>
-
-            <p>
-
-                Premium Dishes
-
-            </p>
-
-        </div>
-
-        <div class="about-stat">
-
-            <h2>
-
-                4.9★
-
-            </h2>
-
-            <p>
-
-                Customer Rating
-
-            </p>
-
-        </div>
-
-        <div class="about-stat">
-
-            <h2>
-
-                24/7
-
-            </h2>
-
-            <p>
-
-                Fast Support
-
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
+</div>
 
 <?php include "footer.php"; ?>
-
-<script src="assets/js/theme.js"></script>
-<script src="assets/js/cart.js"></script>
-<script src="assets/js/preloader.js"></script>
 
 </body>
 </html>

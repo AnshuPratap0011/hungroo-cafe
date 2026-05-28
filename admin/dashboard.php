@@ -1,208 +1,197 @@
 <?php
-
-session_start();
-
 /* =========================================================
-LOGIN CHECK
-========================================================= */
-
-if(!isset($_SESSION['admin_id'])){
-
-    header(
-    "Location: login.php"
-    );
-
-    exit();
-
-}
-
-/* =========================================================
-CONFIG
+   CONFIG & SESSION
 ========================================================= */
 
 include "../config/config.php";
 
-/* =========================================================
-TOTAL PRODUCTS
-========================================================= */
-
-$productQuery =
-
-"SELECT COUNT(*) AS total_products
-FROM products";
-
-$productResult =
-
-mysqli_query(
-$conn,
-$productQuery
-);
-
-$totalProducts =
-
-mysqli_fetch_assoc(
-$productResult
-)['total_products'];
-
-/* =========================================================
-TOTAL ORDERS
-========================================================= */
-
-$orderQuery =
-
-"SELECT COUNT(*) AS total_orders
-FROM orders";
-
-$orderResult =
-
-mysqli_query(
-$conn,
-$orderQuery
-);
-
-$totalOrders =
-
-mysqli_fetch_assoc(
-$orderResult
-)['total_orders'];
-
-/* =========================================================
-TOTAL USERS
-========================================================= */
-
-$userQuery =
-
-"SELECT COUNT(*) AS total_users
-FROM users";
-
-$userResult =
-
-mysqli_query(
-$conn,
-$userQuery
-);
-
-$totalUsers =
-
-mysqli_fetch_assoc(
-$userResult
-)['total_users'];
-
-/* =========================================================
-TOTAL REVENUE
-========================================================= */
-
-$revenueQuery =
-
-"SELECT SUM(total_amount)
-AS total_revenue
-
-FROM orders
-
-WHERE order_status != 'cancelled'";
-
-$revenueResult =
-
-mysqli_query(
-$conn,
-$revenueQuery
-);
-
-$totalRevenue =
-
-mysqli_fetch_assoc(
-$revenueResult
-)['total_revenue'];
-
-if(!$totalRevenue){
-
-    $totalRevenue = 0;
-
+// LOGIN CHECK
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: login.php");
+    exit();
 }
 
 /* =========================================================
-RECENT ORDERS
+   HELPERS
 ========================================================= */
 
-$recentOrdersQuery =
+function formatCurrency($amount)
+{
+    return '₹' . number_format((float)$amount, 2);
+}
 
-"SELECT * FROM orders
-ORDER BY id DESC
-LIMIT 6";
+$currentPage = basename($_SERVER['PHP_SELF']);
 
-$recentOrders =
+/* =========================================================
+   DATABASE COLUMN DETECTION
+========================================================= */
 
-mysqli_query(
-$conn,
-$recentOrdersQuery
-);
+$possible_price_columns = [
+    'total_amount',
+    'total',
+    'subtotal',
+    'sub_total',
+    'amount',
+    'price',
+    'grand_total'
+];
+
+$working_price_column = null;
+
+foreach ($possible_price_columns as $col) {
+
+    $test = $conn->query("SHOW COLUMNS FROM orders LIKE '$col'");
+
+    if ($test && $test->num_rows > 0) {
+
+        $working_price_column = $col;
+        break;
+    }
+}
+
+// FALLBACK
+if (!$working_price_column) {
+    $working_price_column = 'total_amount';
+}
+
+/* =========================================================
+   FETCH DATA
+========================================================= */
+
+// TOTAL PRODUCTS
+$totalProducts = 0;
+
+$productResult = $conn->query("
+    SELECT COUNT(*) AS total 
+    FROM products
+");
+
+if ($productResult) {
+
+    $totalProducts =
+        $productResult->fetch_assoc()['total'];
+}
+
+// TOTAL ORDERS
+$totalOrders = 0;
+
+$orderResult = $conn->query("
+    SELECT COUNT(*) AS total 
+    FROM orders
+");
+
+if ($orderResult) {
+
+    $totalOrders =
+        $orderResult->fetch_assoc()['total'];
+}
+
+// TOTAL USERS
+$totalUsers = 0;
+
+$userResult = $conn->query("
+    SELECT COUNT(*) AS total 
+    FROM users
+");
+
+if ($userResult) {
+
+    $totalUsers =
+        $userResult->fetch_assoc()['total'];
+}
+
+// TOTAL REVENUE
+$totalRevenue = 0;
+
+$revenueResult = $conn->query("
+    SELECT SUM($working_price_column) AS total 
+    FROM orders 
+    WHERE status != 'cancelled'
+");
+
+if ($revenueResult) {
+
+    $row = $revenueResult->fetch_assoc();
+
+    $totalRevenue = $row['total'] ?? 0;
+}
+
+// RECENT ORDERS
+$recentOrders = $conn->query("
+    SELECT *,
+    $working_price_column AS display_amount
+    FROM orders
+    ORDER BY id DESC
+    LIMIT 5
+");
 
 ?>
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<title>
+    <title>Hungroo Admin Dashboard</title>
 
-Hungroo Admin Dashboard
+    <!-- GOOGLE FONT -->
+    <link rel="preconnect"
+        href="https://fonts.googleapis.com">
 
-</title>
+    <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
 
-<!-- FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<link
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-rel="stylesheet">
+    <!-- CHART JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- ICON -->
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<style>
-
-/* =========================================================
-ROOT
-========================================================= */
+  <style>
 
 :root{
 
-    --bg:#070707;
+    --bg:#0b0b12;
 
-    --sidebar:#0f0f0f;
+    --card:#171726;
 
-    --card:#151515;
+    --card2:#1d1d31;
+
+    --sidebar:#131320;
 
     --white:#ffffff;
 
-    --text:#bdbdbd;
+    --text:#9ca3af;
 
-    --primary:#ff9a3d;
+    --primary:#9b5cff;
 
-    --gold:#ffd27a;
+    --primary2:#c084fc;
+
+    --green:#10b981;
+
+    --red:#ef4444;
+
+    --blue:#3b82f6;
+
+    --yellow:#facc15;
 
     --border:
-    rgba(255,255,255,.08);
+    rgba(255,255,255,.06);
+
+    --glass:
+    rgba(255,255,255,.03);
 
 }
-
-/* =========================================================
-RESET
-========================================================= */
 
 *{
 
@@ -211,23 +200,28 @@ RESET
 
     box-sizing:border-box;
 
+    font-family:'Poppins',sans-serif;
+
 }
 
 body{
 
-    background:var(--bg);
+    background:
+    radial-gradient(circle at top right,#231942,#0b0b12 40%);
 
     color:var(--white);
-
-    font-family:'Poppins',sans-serif;
 
     overflow-x:hidden;
 
 }
 
-/* =========================================================
-LAYOUT
-========================================================= */
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
 
 .admin-layout{
 
@@ -243,12 +237,15 @@ SIDEBAR
 
 .sidebar{
 
-    width:280px;
+    width:270px;
 
-    background:var(--sidebar);
+    background:
+    rgba(19,19,32,.88);
+
+    backdrop-filter:blur(18px);
 
     border-right:
-    1px solid var(--border);
+    1px solid rgba(255,255,255,.08);
 
     padding:26px 18px;
 
@@ -259,48 +256,30 @@ SIDEBAR
 
     height:100vh;
 
-}
-
-/* =========================================================
-LOGO
-========================================================= */
-
-.sidebar-logo{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    margin-bottom:40px;
+    box-shadow:
+    0 0 40px rgba(0,0,0,.2);
 
 }
 
-.sidebar-logo img{
+.logo{
 
-    width:58px;
-    height:58px;
+    font-size:26px;
 
-    border-radius:18px;
+    font-weight:800;
 
-    object-fit:cover;
+    margin-bottom:42px;
 
-}
-
-.sidebar-logo h2{
-
-    font-size:28px;
+    padding-left:10px;
 
 }
 
-.sidebar-logo span{
+.logo span{
 
     background:
     linear-gradient(
     135deg,
     var(--primary),
-    var(--gold)
+    var(--primary2)
     );
 
     -webkit-background-clip:text;
@@ -310,21 +289,7 @@ LOGO
 
 }
 
-/* =========================================================
-MENU
-========================================================= */
-
-.sidebar-menu{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:12px;
-
-}
-
-.sidebar-menu a{
+.menu-item{
 
     height:58px;
 
@@ -334,14 +299,11 @@ MENU
 
     gap:14px;
 
-    padding:
-    0 18px;
+    padding:0 18px;
 
     border-radius:18px;
 
-    text-decoration:none;
-
-    color:var(--white);
+    color:#d1d5db;
 
     transition:.35s;
 
@@ -349,41 +311,83 @@ MENU
 
     font-weight:600;
 
-}
+    margin-bottom:10px;
 
-.sidebar-menu a i{
+    position:relative;
 
-    width:22px;
-
-    text-align:center;
-
-    color:var(--primary);
+    overflow:hidden;
 
 }
 
-.sidebar-menu a:hover,
-.sidebar-menu a.active{
+.menu-item::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    top:0;
+
+    width:0;
+
+    height:100%;
 
     background:
     linear-gradient(
-    135deg,
-    rgba(255,154,61,.14),
-    rgba(255,210,122,.08)
+    90deg,
+    rgba(155,92,255,.18),
+    transparent
     );
+
+    transition:.35s;
+
+}
+
+.menu-item:hover::before,
+.menu-item.active::before{
+
+    width:100%;
+
+}
+
+.menu-item:hover,
+.menu-item.active{
+
+    color:#fff;
+
+    transform:translateX(4px);
+
+}
+
+.menu-item i{
+
+    color:var(--primary2);
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+.menu-item span{
+
+    position:relative;
+
+    z-index:2;
 
 }
 
 /* =========================================================
-CONTENT
+MAIN
 ========================================================= */
 
-.main-content{
+.main{
 
     flex:1;
 
-    margin-left:280px;
+    margin-left:270px;
 
-    padding:30px;
+    padding:34px;
 
 }
 
@@ -395,18 +399,23 @@ TOPBAR
 
     display:flex;
 
-    align-items:center;
     justify-content:space-between;
 
-    gap:20px;
+    align-items:center;
 
-    margin-bottom:34px;
+    margin-bottom:35px;
+
+    flex-wrap:wrap;
+
+    gap:20px;
 
 }
 
 .topbar h1{
 
-    font-size:42px;
+    font-size:36px;
+
+    margin-bottom:6px;
 
 }
 
@@ -414,15 +423,11 @@ TOPBAR
 
     color:var(--text);
 
-    margin-top:8px;
+    font-size:14px;
 
 }
 
-/* =========================================================
-PROFILE
-========================================================= */
-
-.admin-profile{
+.profile{
 
     display:flex;
 
@@ -430,27 +435,29 @@ PROFILE
 
     gap:14px;
 
-    padding:
-    12px 18px;
-
-    border-radius:18px;
-
     background:
     rgba(255,255,255,.04);
 
     border:
     1px solid var(--border);
 
+    padding:10px 18px;
+
+    border-radius:60px;
+
+    backdrop-filter:blur(14px);
+
 }
 
-.admin-profile img{
+.profile img{
 
-    width:52px;
-    height:52px;
+    width:48px;
+    height:48px;
 
     border-radius:50%;
 
-    object-fit:cover;
+    border:
+    2px solid var(--primary2);
 
 }
 
@@ -458,7 +465,7 @@ PROFILE
 CARDS
 ========================================================= */
 
-.dashboard-cards{
+.cards{
 
     display:grid;
 
@@ -467,36 +474,40 @@ CARDS
 
     gap:22px;
 
-    margin-bottom:34px;
+    margin-bottom:32px;
 
 }
 
-.dashboard-card{
-
-    position:relative;
-
-    overflow:hidden;
-
-    padding:26px;
-
-    border-radius:28px;
+.card{
 
     background:
     rgba(255,255,255,.04);
 
     border:
-    1px solid var(--border);
+    1px solid rgba(255,255,255,.07);
+
+    backdrop-filter:blur(18px);
+
+    padding:28px;
+
+    border-radius:26px;
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
 
 }
 
-.dashboard-card::before{
+.card::before{
 
     content:"";
 
     position:absolute;
 
-    top:-40px;
-    right:-40px;
+    top:-50px;
+    right:-50px;
 
     width:120px;
     height:120px;
@@ -504,16 +515,24 @@ CARDS
     border-radius:50%;
 
     background:
-    rgba(255,154,61,.08);
+    rgba(155,92,255,.08);
 
 }
 
-.dashboard-card i{
+.card:hover{
 
-    width:64px;
-    height:64px;
+    transform:
+    translateY(-6px);
 
-    margin-bottom:22px;
+    border-color:
+    rgba(155,92,255,.25);
+
+}
+
+.icon{
+
+    width:65px;
+    height:65px;
 
     border-radius:20px;
 
@@ -522,69 +541,92 @@ CARDS
     align-items:center;
     justify-content:center;
 
-    background:
-    linear-gradient(
-    135deg,
-    var(--primary),
-    var(--gold)
-    );
-
-    color:#000;
+    margin-bottom:18px;
 
     font-size:24px;
 
 }
 
-.dashboard-card h2{
+.orange{
 
-    font-size:40px;
+    background:
+    rgba(251,146,60,.15);
 
-    margin-bottom:10px;
+    color:#fb923c;
 
 }
 
-.dashboard-card p{
+.blue{
+
+    background:
+    rgba(59,130,246,.15);
+
+    color:#3b82f6;
+
+}
+
+.green{
+
+    background:
+    rgba(16,185,129,.15);
+
+    color:#10b981;
+
+}
+
+.purple{
+
+    background:
+    rgba(155,92,255,.15);
+
+    color:#c084fc;
+
+}
+
+.card h2{
+
+    font-size:32px;
+
+    margin-bottom:6px;
+
+}
+
+.card p{
 
     color:var(--text);
+
+    font-size:14px;
 
 }
 
 /* =========================================================
-TABLE
+CHART + TABLE
 ========================================================= */
 
+.chart-box,
 .table-box{
-
-    padding:26px;
-
-    border-radius:28px;
 
     background:
     rgba(255,255,255,.04);
 
     border:
-    1px solid var(--border);
+    1px solid rgba(255,255,255,.07);
 
-    overflow-x:auto;
+    backdrop-filter:blur(18px);
+
+    border-radius:28px;
+
+    padding:28px;
+
+    margin-bottom:30px;
 
 }
 
-.table-top{
+.section-title{
 
-    display:flex;
-
-    align-items:center;
-    justify-content:space-between;
-
-    gap:20px;
+    font-size:22px;
 
     margin-bottom:24px;
-
-}
-
-.table-top h2{
-
-    font-size:32px;
 
 }
 
@@ -600,111 +642,91 @@ table{
 
 }
 
-table th{
+th,
+td{
+
+    padding:18px;
 
     text-align:left;
 
-    padding:16px;
+    border-bottom:
+    1px solid rgba(255,255,255,.06);
+
+}
+
+th{
 
     color:var(--text);
 
-    font-size:14px;
+    font-size:12px;
 
-    font-weight:600;
+    text-transform:uppercase;
 
-    border-bottom:
-    1px solid var(--border);
+    letter-spacing:1px;
 
 }
 
-table td{
-
-    padding:18px 16px;
-
-    border-bottom:
-    1px solid var(--border);
+td{
 
     font-size:14px;
+
+}
+
+tr{
+
+    transition:.25s;
+
+}
+
+tr:hover{
+
+    background:
+    rgba(255,255,255,.02);
 
 }
 
 /* =========================================================
-STATUS
+BADGE
 ========================================================= */
 
-.status{
+.badge{
 
-    width:max-content;
-
-    padding:
-    8px 14px;
+    padding:8px 14px;
 
     border-radius:999px;
 
-    font-size:12px;
+    font-size:11px;
 
     font-weight:700;
 
-}
-
-.status.pending{
-
-    background:
-    rgba(255,193,7,.12);
-
-    color:#ffc107;
+    text-transform:uppercase;
 
 }
 
-.status.delivered{
+.completed{
 
     background:
-    rgba(40,167,69,.12);
+    rgba(16,185,129,.15);
 
-    color:#28a745;
+    color:var(--green);
 
 }
 
-.status.cancelled{
+.pending{
 
     background:
-    rgba(255,77,77,.12);
+    rgba(250,204,21,.15);
 
-    color:#ff4d4d;
+    color:var(--yellow);
 
 }
 
-/* =========================================================
-BUTTON
-========================================================= */
-
-.action-btn{
-
-    min-width:100px;
-
-    height:42px;
-
-    border:none;
-
-    cursor:pointer;
-
-    padding:
-    0 18px;
-
-    border-radius:14px;
+.cancelled{
 
     background:
-    linear-gradient(
-    135deg,
-    var(--primary),
-    var(--gold)
-    );
+    rgba(239,68,68,.15);
 
-    color:#000;
-
-    font-size:13px;
-
-    font-weight:700;
+    color:var(--red);
 
 }
 
@@ -718,13 +740,13 @@ RESPONSIVE
 
         width:100%;
 
-        height:auto;
-
         position:relative;
+
+        height:auto;
 
     }
 
-    .main-content{
+    .main{
 
         margin-left:0;
 
@@ -740,45 +762,21 @@ RESPONSIVE
 
 @media(max-width:768px){
 
-    .main-content{
+    .main{
 
         padding:18px;
 
     }
 
-    .topbar{
-
-        flex-direction:column;
-
-        align-items:flex-start;
-
-    }
-
-    .topbar h1{
-
-        font-size:34px;
-
-    }
-
-    .dashboard-cards{
-
-        grid-template-columns:1fr 1fr;
-
-    }
-
-}
-
-@media(max-width:480px){
-
-    .dashboard-cards{
+    .cards{
 
         grid-template-columns:1fr;
 
     }
 
-    .table-box{
+    .topbar h1{
 
-        padding:18px;
+        font-size:30px;
 
     }
 
@@ -790,112 +788,60 @@ RESPONSIVE
 
 <body>
 
-<!-- =========================================================
-LAYOUT
-========================================================= -->
+    <!-- SIDEBAR -->
 
-<div class="admin-layout">
+    <div class="sidebar">
 
-    <!-- =====================================================
-    SIDEBAR
-    ====================================================== -->
-
-    <aside class="sidebar">
-
-        <!-- LOGO -->
-
-        <div class="sidebar-logo">
-
-            <img
-            src="../assets/images/logo.png"
-            alt="Logo">
-
-            <h2>
-
-                <span>
-
-                    Hungroo
-
-                </span>
-
-                Admin
-
-            </h2>
-
+        <div class="logo">
+            Hungroo <span>Admin</span>
         </div>
 
-        <!-- MENU -->
+        <a href="dashboard.php"
+            class="menu-item active">
 
-        <div class="sidebar-menu">
+            <i class="fa-solid fa-chart-pie"></i>
+            Dashboard
 
-            <a
-            href="dashboard.php"
+        </a>
 
-            class="active">
+        <a href="products.php"
+            class="menu-item">
 
-                <i class="fa-solid fa-chart-line"></i>
+            <i class="fa-solid fa-burger"></i>
+            Products
 
-                Dashboard
+        </a>
 
-            </a>
+        <a href="orders.php"
+            class="menu-item">
 
-            <a href="products.php">
+            <i class="fa-solid fa-cart-shopping"></i>
+            Orders
 
-                <i class="fa-solid fa-burger"></i>
+        </a>
 
-                Products
+        <a href="users.php"
+            class="menu-item">
 
-            </a>
+            <i class="fa-solid fa-users"></i>
+            Users
 
-            <a href="orders.php">
+        </a>
 
-                <i class="fa-solid fa-cart-shopping"></i>
+        <a href="logout.php"
+            class="menu-item"
+            style="color:#ef4444;">
 
-                Orders
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
 
-            </a>
+        </a>
 
-            <a href="users.php">
+    </div>
 
-                <i class="fa-solid fa-users"></i>
+    <!-- MAIN -->
 
-                Users
-
-            </a>
-
-            <a href="reservations.php">
-
-                <i class="fa-solid fa-calendar-check"></i>
-
-                Reservations
-
-            </a>
-
-            <a href="messages.php">
-
-                <i class="fa-solid fa-envelope"></i>
-
-                Messages
-
-            </a>
-
-            <a href="logout.php">
-
-                <i class="fa-solid fa-right-from-bracket"></i>
-
-                Logout
-
-            </a>
-
-        </div>
-
-    </aside>
-
-    <!-- =====================================================
-    CONTENT
-    ====================================================== -->
-
-    <main class="main-content">
+    <div class="main">
 
         <!-- TOPBAR -->
 
@@ -903,148 +849,106 @@ LAYOUT
 
             <div>
 
-                <h1>
-
-                    Dashboard
-
-                </h1>
+                <h1>Dashboard Overview</h1>
 
                 <p>
-
                     Welcome back,
-                    <?php echo $_SESSION['admin_name']; ?>
-
+                    <?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Admin'); ?>
                 </p>
 
             </div>
 
-            <div class="admin-profile">
-
-                <img
-                src="https://i.pravatar.cc/100"
-                alt="Admin">
+            <div class="profile">
 
                 <div>
 
-                    <strong>
+                    <strong>Admin</strong>
 
-                        Admin
-
-                    </strong>
-
-                    <p>
-
+                    <div style="font-size:12px;color:#9ca3af;">
                         Super Admin
-
-                    </p>
+                    </div>
 
                 </div>
 
-            </div>
-
-        </div>
-
-        <!-- CARDS -->
-
-        <div class="dashboard-cards">
-
-            <!-- PRODUCTS -->
-
-            <div class="dashboard-card">
-
-                <i class="fa-solid fa-burger"></i>
-
-                <h2>
-
-                    <?php echo $totalProducts; ?>
-
-                </h2>
-
-                <p>
-
-                    Total Products
-
-                </p>
-
-            </div>
-
-            <!-- ORDERS -->
-
-            <div class="dashboard-card">
-
-                <i class="fa-solid fa-cart-shopping"></i>
-
-                <h2>
-
-                    <?php echo $totalOrders; ?>
-
-                </h2>
-
-                <p>
-
-                    Total Orders
-
-                </p>
-
-            </div>
-
-            <!-- USERS -->
-
-            <div class="dashboard-card">
-
-                <i class="fa-solid fa-users"></i>
-
-                <h2>
-
-                    <?php echo $totalUsers; ?>
-
-                </h2>
-
-                <p>
-
-                    Registered Users
-
-                </p>
-
-            </div>
-
-            <!-- REVENUE -->
-
-            <div class="dashboard-card">
-
-                <i class="fa-solid fa-indian-rupee-sign"></i>
-
-                <h2>
-
-                    ₹<?php echo number_format($totalRevenue); ?>
-
-                </h2>
-
-                <p>
-
-                    Total Revenue
-
-                </p>
+                <img src="https://i.pravatar.cc/150?img=11">
 
             </div>
 
         </div>
 
-        <!-- =================================================
-        TABLE
-        ================================================== -->
+        <!-- STATS -->
+
+        <div class="cards">
+
+            <div class="card">
+
+                <div class="icon orange">
+                    <i class="fa-solid fa-burger"></i>
+                </div>
+
+                <h2><?php echo $totalProducts; ?></h2>
+
+                <p>Total Products</p>
+
+            </div>
+
+            <div class="card">
+
+                <div class="icon blue">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+
+                <h2><?php echo $totalOrders; ?></h2>
+
+                <p>Total Orders</p>
+
+            </div>
+
+            <div class="card">
+
+                <div class="icon purple">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+                <h2><?php echo $totalUsers; ?></h2>
+
+                <p>Total Users</p>
+
+            </div>
+
+            <div class="card">
+
+                <div class="icon green">
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+                </div>
+
+                <h2><?php echo formatCurrency($totalRevenue); ?></h2>
+
+                <p>Total Revenue</p>
+
+            </div>
+
+        </div>
+
+        <!-- CHART -->
+
+        <div class="chart-box">
+
+            <h2 class="section-title">
+                Revenue Analytics
+            </h2>
+
+            <canvas id="revenueChart"></canvas>
+
+        </div>
+
+        <!-- RECENT ORDERS -->
 
         <div class="table-box">
 
-            <div class="table-top">
-
-                <h2>
-
-                    Recent Orders
-
-                </h2>
-
-            </div>
+            <h2 class="section-title">
+                Recent Orders
+            </h2>
 
             <table>
 
@@ -1052,41 +956,11 @@ LAYOUT
 
                     <tr>
 
-                        <th>
-
-                            Order ID
-
-                        </th>
-
-                        <th>
-
-                            Customer
-
-                        </th>
-
-                        <th>
-
-                            Amount
-
-                        </th>
-
-                        <th>
-
-                            Payment
-
-                        </th>
-
-                        <th>
-
-                            Status
-
-                        </th>
-
-                        <th>
-
-                            Action
-
-                        </th>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Payment</th>
+                        <th>Status</th>
 
                     </tr>
 
@@ -1094,59 +968,76 @@ LAYOUT
 
                 <tbody>
 
-                    <?php while($order = mysqli_fetch_assoc($recentOrders)): ?>
+                <?php if ($recentOrders && $recentOrders->num_rows > 0): ?>
+
+                    <?php while ($order = $recentOrders->fetch_assoc()): ?>
+
+                        <?php
+
+                        $status =
+                            strtolower($order['status']);
+
+                        $badgeClass = "pending";
+
+                        if (
+                            $status == "completed" ||
+                            $status == "delivered"
+                        ) {
+                            $badgeClass = "completed";
+                        }
+
+                        if ($status == "cancelled") {
+                            $badgeClass = "cancelled";
+                        }
+
+                        ?>
+
+                        <tr>
+
+                            <td>
+                                #<?php echo $order['id']; ?>
+                            </td>
+
+                            <td>
+                                <?php echo htmlspecialchars($order['customer_name']); ?>
+                            </td>
+
+                            <td>
+                                <?php echo formatCurrency($order['display_amount']); ?>
+                            </td>
+
+                            <td>
+                                <?php echo ucfirst($order['payment_method']); ?>
+                            </td>
+
+                            <td>
+
+                                <span class="badge <?php echo $badgeClass; ?>">
+
+                                    <?php echo ucfirst($status); ?>
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    <?php endwhile; ?>
+
+                <?php else: ?>
 
                     <tr>
 
-                        <td>
+                        <td colspan="5"
+                            style="text-align:center;color:#9ca3af;">
 
-                            #<?php echo $order['id']; ?>
-
-                        </td>
-
-                        <td>
-
-                            <?php echo $order['customer_name']; ?>
-
-                        </td>
-
-                        <td>
-
-                            ₹<?php echo number_format($order['total_amount']); ?>
-
-                        </td>
-
-                        <td>
-
-                            <?php echo $order['payment_method']; ?>
-
-                        </td>
-
-                        <td>
-
-                            <div
-                            class="status <?php echo $order['order_status']; ?>">
-
-                                <?php echo ucfirst($order['order_status']); ?>
-
-                            </div>
-
-                        </td>
-
-                        <td>
-
-                            <button
-                            class="action-btn">
-
-                                View
-
-                            </button>
+                            No orders found
 
                         </td>
 
                     </tr>
 
-                    <?php endwhile; ?>
+                <?php endif; ?>
 
                 </tbody>
 
@@ -1154,9 +1045,103 @@ LAYOUT
 
         </div>
 
-    </main>
+    </div>
 
-</div>
+    <!-- CHART JS -->
+
+    <script>
+
+        const ctx =
+            document.getElementById('revenueChart');
+
+        new Chart(ctx, {
+
+            type: 'line',
+
+            data: {
+
+                labels: [
+                    'Mon',
+                    'Tue',
+                    'Wed',
+                    'Thu',
+                    'Fri',
+                    'Sat',
+                    'Sun'
+                ],
+
+                datasets: [{
+
+                    label: 'Revenue',
+
+                    data: [
+                        12000,
+                        19000,
+                        15000,
+                        25000,
+                        22000,
+                        30000,
+                        45000
+                    ],
+
+                    borderColor: '#ff9a3d',
+
+                    backgroundColor: 'rgba(255,154,61,0.15)',
+
+                    fill: true,
+
+                    tension: 0.4
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+                        display: false
+                    }
+
+                },
+
+                scales: {
+
+                    x: {
+
+                        ticks: {
+                            color: '#9ca3af'
+                        },
+
+                        grid: {
+                            display: false
+                        }
+
+                    },
+
+                    y: {
+
+                        ticks: {
+                            color: '#9ca3af'
+                        },
+
+                        grid: {
+                            color: 'rgba(255,255,255,0.05)'
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    </script>
 
 </body>
+
 </html>

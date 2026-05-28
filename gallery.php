@@ -1,23 +1,76 @@
 <?php
 
-$pageTitle =
-"Hungroo Café | Gallery";
+include "config/config.php";
+
+$pageTitle = "Hungroo Café | Gallery";
+
+/* =========================================================
+GALLERY DATA
+========================================================= */
 
 $gallery = [
 
-"assets/images/burger.jpg",
-"assets/images/coffee.jpg",
-"assets/images/pizza.jpg",
-"assets/images/dessert.jpg",
-"assets/images/boba.jpg",
-"assets/images/cafe.jpg"
+    [
+        'img' => 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop',
+        'title' => 'Signature Smash Burger',
+        'cat' => 'Burgers',
+        'size' => 'tall'
+    ],
+
+    [
+        'img' => 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop',
+        'title' => 'Artisan Cappuccino',
+        'cat' => 'Coffee',
+        'size' => 'normal'
+    ],
+
+    [
+        'img' => 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800&auto=format&fit=crop',
+        'title' => 'Truffle Fries Platter',
+        'cat' => 'Snacks',
+        'size' => 'normal'
+    ],
+
+    [
+        'img' => 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=800&auto=format&fit=crop',
+        'title' => 'Berry Cheese Cake',
+        'cat' => 'Desserts',
+        'size' => 'tall'
+    ],
+
+    [
+        'img' => 'https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=800&auto=format&fit=crop',
+        'title' => 'Hungroo Interior',
+        'cat' => 'Interior',
+        'size' => 'wide'
+    ],
+
+    [
+        'img' => 'https://images.unsplash.com/photo-1554118811-5e9d723df671?q=80&w=800&auto=format&fit=crop',
+        'title' => 'Mango Smoothie',
+        'cat' => 'Drinks',
+        'size' => 'normal'
+    ],
+
+    [
+        'img' => 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop',
+        'title' => 'Pepperoni Feast',
+        'cat' => 'Pizza',
+        'size' => 'wide'
+    ],
+
+    [
+        'img' => 'https://images.unsplash.com/photo-1559321666-e65a17d08f12?q=80&w=800&auto=format&fit=crop',
+        'title' => 'Sunday Brunch',
+        'cat' => 'Events',
+        'size' => 'tall'
+    ]
 
 ];
 
 ?>
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -34,8 +87,6 @@ content="width=device-width, initial-scale=1.0">
 
 </title>
 
-<!-- GOOGLE FONT -->
-
 <link
 rel="preconnect"
 href="https://fonts.googleapis.com">
@@ -49,13 +100,9 @@ crossorigin>
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- FONT AWESOME -->
-
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<!-- CSS -->
 
 <link
 rel="stylesheet"
@@ -65,33 +112,51 @@ href="assets/css/navbar.css">
 rel="stylesheet"
 href="assets/css/footer.css">
 
-<link
-rel="stylesheet"
-href="assets/css/animations.css">
-
 <style>
 
-:root{
+:root,
+[data-theme="dark"]{
 
-    --bg:#070707;
-    --card:#121212;
-    --white:#fff;
-    --text:#bdbdbd;
-    --primary:#ff9a3d;
-    --gold:#ffd27a;
+    --bg-body:#09090b;
+
+    --bg-card:#1e1e22;
+
+    --bg-card-hover:#26262b;
+
     --border:
-    rgba(255,255,255,.08);
+    rgba(255,255,255,0.08);
+
+    --text-main:#ffffff;
+
+    --text-sec:#a1a1aa;
+
+    --accent:#6C5CE7;
+
+    --accent-glow:#a29bfe;
+
+    --accent-dark:#4834d4;
+
+    --overlay:
+    rgba(0,0,0,0.7);
+
+    --radius:24px;
 
 }
 
-body.light-mode{
+[data-theme="light"]{
 
-    --bg:#f5f5f7;
-    --card:#fff;
-    --white:#111;
-    --text:#666;
+    --bg-body:#f5f5f7;
+
+    --bg-card:#ffffff;
+
+    --bg-card-hover:#fafafa;
+
     --border:
-    rgba(0,0,0,.08);
+    rgba(0,0,0,0.08);
+
+    --text-main:#111111;
+
+    --text-sec:#666666;
 
 }
 
@@ -106,142 +171,346 @@ body.light-mode{
 
 body{
 
-    overflow-x:hidden;
-
-    background:
-    radial-gradient(
-    circle at top right,
-    rgba(255,154,61,.08),
-    transparent 30%
-    ),
-    var(--bg);
-
-    color:var(--white);
-
     font-family:'Poppins',sans-serif;
+
+    background:var(--bg-body);
+
+    color:var(--text-main);
+
+    overflow-x:hidden;
 
 }
 
-.gallery-page{
+/* =========================================================
+BACKGROUND
+========================================================= */
+
+.co-blobs{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:0;
+
+    pointer-events:none;
+
+    overflow:hidden;
+
+}
+
+.co-blob{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    filter:blur(150px);
+
+}
+
+.co-blob-1{
+
+    width:500px;
+    height:500px;
+
+    background:
+    rgba(108,92,231,.08);
+
+    top:-200px;
+    right:-150px;
+
+}
+
+.co-blob-2{
+
+    width:400px;
+    height:400px;
+
+    background:
+    rgba(0,184,148,.08);
+
+    bottom:-150px;
+    left:-100px;
+
+}
+
+/* =========================================================
+HERO
+========================================================= */
+
+.gallery-hero{
+
+    position:relative;
 
     width:100%;
 
-    max-width:1500px;
+    height:400px;
 
-    margin:auto;
+    display:flex;
 
-    padding:
-    130px 16px 80px;
+    align-items:center;
 
-}
-
-/* TOP */
-
-.gallery-top{
+    justify-content:center;
 
     text-align:center;
+
+    border-radius:
+    0 0 40px 40px;
+
+    overflow:hidden;
 
     margin-bottom:60px;
 
 }
 
-.gallery-top span{
+.gallery-hero-bg{
 
-    color:var(--primary);
+    position:absolute;
+
+    inset:0;
+
+}
+
+.gallery-hero-bg img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    filter:brightness(.6);
+
+}
+
+.gallery-hero-overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+    linear-gradient(
+    to bottom,
+    rgba(9,9,11,.3),
+    rgba(9,9,11,1)
+    );
+
+}
+
+.gallery-hero-content{
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+.gallery-badge{
+
+    display:inline-block;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--accent),
+    var(--accent-dark)
+    );
+
+    color:#fff;
+
+    padding:8px 20px;
+
+    border-radius:50px;
 
     font-size:13px;
 
     font-weight:600;
 
+    margin-bottom:15px;
+
 }
 
-.gallery-top h1{
+.gallery-hero h1{
 
     font-size:
-    clamp(40px,6vw,82px);
+    clamp(36px,6vw,64px);
 
-    margin:
-    10px 0 16px;
+    font-weight:800;
 
-}
-
-.gallery-top p{
-
-    max-width:760px;
-
-    margin:auto;
-
-    line-height:1.9;
-
-    color:var(--text);
+    margin-bottom:10px;
 
 }
 
-/* GRID */
+.gallery-hero p{
+
+    font-size:16px;
+
+    color:var(--text-sec);
+
+    max-width:600px;
+
+    margin:0 auto;
+
+}
+
+/* =========================================================
+FILTERS
+========================================================= */
+
+.gallery-filters{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:10px;
+
+    margin-bottom:40px;
+
+    flex-wrap:wrap;
+
+}
+
+.filter-btn{
+
+    padding:10px 24px;
+
+    border-radius:30px;
+
+    border:
+    1px solid var(--border);
+
+    background:var(--bg-card);
+
+    color:var(--text-sec);
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    font-size:14px;
+
+    font-weight:500;
+
+}
+
+.filter-btn:hover,
+.filter-btn.active{
+
+    background:var(--accent);
+
+    color:#fff;
+
+    border-color:var(--accent);
+
+}
+
+/* =========================================================
+GRID
+========================================================= */
+
+.gallery-container{
+
+    position:relative;
+
+    z-index:1;
+
+    max-width:1300px;
+
+    margin:0 auto;
+
+    padding:
+    0 20px 100px;
+
+}
 
 .gallery-grid{
 
     display:grid;
 
     grid-template-columns:
-    repeat(auto-fit,minmax(320px,1fr));
+    repeat(auto-fill,minmax(300px,1fr));
 
-    gap:26px;
+    gap:24px;
 
 }
 
-/* CARD */
-
-.gallery-card{
+.gallery-item{
 
     position:relative;
 
+    border-radius:var(--radius);
+
     overflow:hidden;
 
-    border-radius:34px;
-
-    background:
-    rgba(255,255,255,.04);
+    background:var(--bg-card);
 
     border:
     1px solid var(--border);
 
-    transition:.35s;
-
-}
-
-.gallery-card:hover{
-
-    transform:
-    translateY(-8px);
-
-}
-
-/* IMAGE */
-
-.gallery-card img{
-
-    width:100%;
-    height:320px;
-
-    object-fit:cover;
-
-    display:block;
+    cursor:pointer;
 
     transition:.4s;
 
 }
 
-.gallery-card:hover img{
+.gallery-item:hover{
 
     transform:
-    scale(1.08);
+    translateY(-10px);
+
+    border-color:var(--accent);
+
+    box-shadow:
+    0 15px 40px rgba(108,92,231,.25);
 
 }
 
-/* OVERLAY */
+.gallery-img-wrap{
 
-.gallery-overlay{
+    width:100%;
+
+    height:350px;
+
+    overflow:hidden;
+
+}
+
+.gallery-img-wrap img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.6s;
+
+}
+
+.gallery-item:hover .gallery-img-wrap img{
+
+    transform:scale(1.1);
+
+}
+
+.gallery-item[data-size="wide"]{
+
+    grid-column:span 2;
+
+}
+
+.gallery-item[data-size="tall"] .gallery-img-wrap{
+
+    height:420px;
+
+}
+
+/* =========================================================
+OVERLAY
+========================================================= */
+
+.gallery-info{
 
     position:absolute;
 
@@ -250,56 +519,170 @@ body{
     background:
     linear-gradient(
     to top,
-    rgba(0,0,0,.7),
-    transparent
+    rgba(0,0,0,.9),
+    transparent 50%
     );
 
     display:flex;
 
-    align-items:flex-end;
+    flex-direction:column;
+
+    justify-content:flex-end;
 
     padding:24px;
 
-}
+    opacity:0;
 
-.gallery-overlay h2{
-
-    font-size:28px;
+    transition:.4s;
 
 }
 
-/* RESPONSIVE */
+.gallery-item:hover .gallery-info{
+
+    opacity:1;
+
+}
+
+.gallery-info h3{
+
+    font-size:22px;
+
+    font-weight:700;
+
+    margin-bottom:5px;
+
+    color:#fff;
+
+}
+
+.gallery-cat{
+
+    font-size:13px;
+
+    color:var(--accent-glow);
+
+    font-weight:600;
+
+    text-transform:uppercase;
+
+}
+
+.view-btn{
+
+    margin-top:14px;
+
+    align-self:flex-start;
+
+    background:
+    rgba(255,255,255,.15);
+
+    backdrop-filter:blur(6px);
+
+    color:#fff;
+
+    border:
+    1px solid rgba(255,255,255,.2);
+
+    padding:8px 16px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+/* =========================================================
+LIGHTBOX
+========================================================= */
+
+.lightbox{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+    rgba(0,0,0,.9);
+
+    z-index:9999;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:.3s;
+
+}
+
+.lightbox.active{
+
+    opacity:1;
+
+    visibility:visible;
+
+}
+
+.lightbox img{
+
+    max-width:90%;
+
+    max-height:90vh;
+
+    border-radius:16px;
+
+}
+
+.close-lightbox{
+
+    position:absolute;
+
+    top:30px;
+    right:30px;
+
+    width:45px;
+    height:45px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:
+    rgba(255,255,255,.1);
+
+    color:#fff;
+
+    cursor:pointer;
+
+    font-size:20px;
+
+}
+
+/* =========================================================
+RESPONSIVE
+========================================================= */
 
 @media(max-width:768px){
 
-    .gallery-page{
+    .gallery-item[data-size="wide"]{
 
-        padding:
-        120px 14px 70px;
-
-    }
-
-    .gallery-grid{
-
-        grid-template-columns:1fr;
+        grid-column:span 1;
 
     }
 
-    .gallery-card{
+    .gallery-hero{
 
-        border-radius:24px;
+        height:300px;
 
-    }
-
-    .gallery-card img{
-
-        height:240px;
-
-    }
-
-    .gallery-overlay h2{
-
-        font-size:22px;
+        border-radius:
+        0 0 24px 24px;
 
     }
 
@@ -311,17 +694,37 @@ body{
 
 <body>
 
+<div class="co-blobs">
+
+    <div class="co-blob co-blob-1"></div>
+
+    <div class="co-blob co-blob-2"></div>
+
+</div>
+
 <?php include "Navbar.php"; ?>
 
-<main class="gallery-page">
+<!-- HERO -->
 
-    <!-- TOP -->
+<section class="gallery-hero">
 
-    <div class="gallery-top">
+    <div class="gallery-hero-bg">
 
-        <span>
+        <img
+        src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2000&auto=format&fit=crop"
+        alt="Gallery">
 
-            Premium Moments
+        <div class="gallery-hero-overlay"></div>
+
+    </div>
+
+    <div class="gallery-hero-content">
+
+        <span class="gallery-badge">
+
+            <i class="fa-solid fa-camera"></i>
+
+            Visual Treat
 
         </span>
 
@@ -333,38 +736,105 @@ body{
 
         <p>
 
-            Explore premium meals,
-            handcrafted café drinks,
-            desserts and luxury vibes
-            from Hungroo Café.
+            Explore premium food and café interiors.
 
         </p>
 
     </div>
 
-    <!-- GRID -->
+</section>
 
-    <div class="gallery-grid">
+<!-- MAIN -->
 
-        <?php foreach($gallery as $index => $image): ?>
+<main class="gallery-container">
 
-        <div class="gallery-card">
+    <div class="gallery-filters">
 
-            <img
-            src="<?php echo $image; ?>"
-            alt="gallery">
+        <button
+        class="filter-btn active"
+        onclick="filterGallery('all',this)">
 
-            <div class="gallery-overlay">
+            All
 
-                <h2>
+        </button>
 
-                    Hungroo Café
+        <button
+        class="filter-btn"
+        onclick="filterGallery('Burgers',this)">
 
-                </h2>
+            Burgers
+
+        </button>
+
+        <button
+        class="filter-btn"
+        onclick="filterGallery('Pizza',this)">
+
+            Pizza
+
+        </button>
+
+        <button
+        class="filter-btn"
+        onclick="filterGallery('Coffee',this)">
+
+            Coffee
+
+        </button>
+
+        <button
+        class="filter-btn"
+        onclick="filterGallery('Interior',this)">
+
+            Interior
+
+        </button>
+
+    </div>
+
+    <div
+    class="gallery-grid"
+    id="galleryGrid">
+
+        <?php foreach($gallery as $item): ?>
+
+            <div
+            class="gallery-item"
+            data-cat="<?php echo $item['cat']; ?>"
+            data-size="<?php echo $item['size']; ?>"
+            onclick="openLightbox('<?php echo $item['img']; ?>')">
+
+                <div class="gallery-img-wrap">
+
+                    <img
+                    src="<?php echo $item['img']; ?>"
+                    alt="<?php echo $item['title']; ?>">
+
+                </div>
+
+                <div class="gallery-info">
+
+                    <h3>
+
+                        <?php echo $item['title']; ?>
+
+                    </h3>
+
+                    <span class="gallery-cat">
+
+                        <?php echo $item['cat']; ?>
+
+                    </span>
+
+                    <div class="view-btn">
+
+                        View Fullscreen
+
+                    </div>
+
+                </div>
 
             </div>
-
-        </div>
 
         <?php endforeach; ?>
 
@@ -372,9 +842,120 @@ body{
 
 </main>
 
+<!-- LIGHTBOX -->
+
+<div
+class="lightbox"
+id="lightbox">
+
+    <img
+    src=""
+    alt="Full View"
+    id="lightboxImg">
+
+    <button
+    class="close-lightbox"
+    onclick="closeLightbox()">
+
+        <i class="fa-solid fa-xmark"></i>
+
+    </button>
+
+</div>
+
 <?php include "footer.php"; ?>
 
-<script src="assets/js/theme.js"></script>
+<script>
+
+function openLightbox(src){
+
+    document
+    .getElementById(
+    'lightbox'
+    )
+    .classList.add(
+    'active'
+    );
+
+    document
+    .getElementById(
+    'lightboxImg'
+    )
+    .src = src;
+
+    document.body.style.overflow =
+    'hidden';
+
+}
+
+function closeLightbox(){
+
+    document
+    .getElementById(
+    'lightbox'
+    )
+    .classList.remove(
+    'active'
+    );
+
+    document.body.style.overflow =
+    '';
+
+}
+
+document
+.getElementById(
+'lightbox'
+)
+.addEventListener(
+'click',
+e=>{
+
+    if(e.target.id === 'lightbox'){
+
+        closeLightbox();
+
+    }
+
+});
+
+function filterGallery(category,btn){
+
+    document
+    .querySelectorAll('.filter-btn')
+    .forEach(b=>{
+
+        b.classList.remove('active');
+
+    });
+
+    btn.classList.add('active');
+
+    document
+    .querySelectorAll('.gallery-item')
+    .forEach(item=>{
+
+        if(
+        category === 'all'
+        ||
+        item.dataset.cat === category
+        ){
+
+            item.style.display = 'block';
+
+        }
+
+        else{
+
+            item.style.display = 'none';
+
+        }
+
+    });
+
+}
+
+</script>
 
 </body>
 </html>

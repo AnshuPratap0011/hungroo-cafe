@@ -1,9 +1,9 @@
 <?php
 
-session_start();
-
 /* =========================================================
-CONFIG
+FILE: verify-otp.php
+VERIFY OTP SYSTEM
+INLINE CSS INCLUDED
 ========================================================= */
 
 include "config/config.php";
@@ -12,19 +12,19 @@ include "config/config.php";
 CHECK EMAIL SESSION
 ========================================================= */
 
-if(!isset($_SESSION['otp_email'])){
+if(!isset($_SESSION['reset_email'])){
 
-    header(
-    "Location: send-otp.php"
-    );
-
-    exit();
+    header("Location: forgot-password.php");
+    exit;
 
 }
 
 $email =
+$_SESSION['reset_email'];
 
-$_SESSION['otp_email'];
+/* =========================================================
+MESSAGE
+========================================================= */
 
 $message = "";
 
@@ -34,69 +34,111 @@ VERIFY OTP
 
 if(isset($_POST['verify_otp'])){
 
-    $user_otp =
+    $otp = cleanInput($_POST['otp']);
 
-    mysqli_real_escape_string(
-    $conn,
-    $_POST['otp']
-    );
+    /* =========================================================
+    EMPTY
+    ========================================================= */
 
-    /* =====================================================
-    CHECK OTP
-    ====================================================== */
+    if(empty($otp)){
 
-    $query =
+        $message = "
 
-    "SELECT * FROM otp_verifications
+        <div class='auth-alert error'>
 
-    WHERE email='$email'
+            Please enter OTP
 
-    AND otp='$user_otp'
+        </div>
 
-    AND expires_at >= NOW()
-
-    LIMIT 1";
-
-    $result =
-
-    mysqli_query(
-    $conn,
-    $query
-    );
-
-    /* =====================================================
-    SUCCESS
-    ====================================================== */
-
-    if(mysqli_num_rows($result) > 0){
-
-        mysqli_query(
-
-            $conn,
-
-            "UPDATE otp_verifications
-
-            SET is_verified='1'
-
-            WHERE email='$email'"
-
-        );
-
-        $_SESSION['verified_email'] =
-        $email;
-
-        header(
-        "Location: register.php"
-        );
-
-        exit();
+        ";
 
     }
 
     else{
 
-        $message =
-        "Invalid or expired OTP.";
+        /* =========================================================
+        CHECK OTP
+        ========================================================= */
+
+        $query = mysqli_query(
+
+            $conn,
+
+            "SELECT *
+            FROM users
+
+            WHERE
+
+            email='$email'
+
+            AND
+
+            otp_code='$otp'
+
+            LIMIT 1"
+
+        );
+
+        if(mysqli_num_rows($query) > 0){
+
+            $user =
+            mysqli_fetch_assoc($query);
+
+            /* =========================================================
+            CHECK EXPIRE
+            ========================================================= */
+
+            if(
+
+                strtotime($user['otp_expire'])
+
+                <
+
+                time()
+
+            ){
+
+                $message = "
+
+                <div class='auth-alert error'>
+
+                    OTP expired
+
+                </div>
+
+                ";
+
+            }
+
+            else{
+
+                /* =========================================================
+                VERIFIED
+                ========================================================= */
+
+                $_SESSION['otp_verified'] =
+                true;
+
+                header("Location: reset-password.php");
+                exit;
+
+            }
+
+        }
+
+        else{
+
+            $message = "
+
+            <div class='auth-alert error'>
+
+                Invalid OTP
+
+            </div>
+
+            ";
+
+        }
 
     }
 
@@ -105,7 +147,6 @@ if(isset($_POST['verify_otp'])){
 ?>
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -118,123 +159,117 @@ content="width=device-width, initial-scale=1.0">
 
 <title>
 
-Verify OTP
+Verify OTP | Hungroo Café
 
 </title>
 
+<!-- GOOGLE FONT -->
+
 <link
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
 rel="stylesheet">
+
+<!-- FONT AWESOME -->
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- NAVBAR -->
+
+<link
+rel="stylesheet"
+href="assets/css/navbar.css">
+
+<!-- =========================================================
+INLINE CSS
+========================================================= -->
 
 <style>
 
-body{
+/* =========================================================
+ROOT
+========================================================= */
+
+:root{
+
+    --primary:#ff6b00;
+    --secondary:#ffb347;
+
+}
+
+/* =========================================================
+GLOBAL
+========================================================= */
+
+*{
 
     margin:0;
-    background:#070707;
-    color:#fff;
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+body{
+
+    background:
+    linear-gradient(
+    180deg,
+    #050505,
+    #0d0d0d
+    );
 
     font-family:'Poppins',sans-serif;
+
+    overflow-x:hidden;
+
+    color:#fff;
+
+}
+
+/* =========================================================
+SECTION
+========================================================= */
+
+.auth-section{
+
+    width:100%;
+
+    min-height:100vh;
+
+    padding:
+    140px 6% 80px;
 
     display:flex;
 
     align-items:center;
     justify-content:center;
 
-    min-height:100vh;
-
-    padding:20px;
-
 }
 
-.box{
+/* =========================================================
+BOX
+========================================================= */
+
+.auth-box{
 
     width:100%;
-    max-width:500px;
+
+    max-width:520px;
 
     padding:40px;
 
-    border-radius:30px;
-
-    background:
-    rgba(255,255,255,.04);
-
-    border:
-    1px solid rgba(255,255,255,.08);
-
-    backdrop-filter:blur(12px);
-
-}
-
-.logo{
-
-    text-align:center;
-
-    margin-bottom:20px;
-
-}
-
-.logo h1{
-
-    margin:0;
-
-    font-size:38px;
-
-    background:
-    linear-gradient(
-    135deg,
-    #ff9a3d,
-    #ffd27a
-    );
-
-    -webkit-background-clip:text;
-
-    -webkit-text-fill-color:
-    transparent;
-
-}
-
-h2{
-
-    font-size:32px;
-
-    margin-bottom:10px;
-
-    text-align:center;
-
-}
-
-p{
-
-    color:#aaa;
-
-    margin-bottom:30px;
-
-    text-align:center;
-
-    line-height:1.8;
-
-}
-
-.email{
-
-    color:#ffd27a;
-
-    font-weight:600;
-
-}
-
-input{
-
-    width:100%;
-    height:65px;
-
-    border:none;
-    outline:none;
-
-    border-radius:20px;
-
-    padding:0 20px;
+    border-radius:40px;
 
     background:
     rgba(255,255,255,.05);
@@ -242,78 +277,201 @@ input{
     border:
     1px solid rgba(255,255,255,.08);
 
-    color:#fff;
-
-    font-size:24px;
-
-    letter-spacing:10px;
-
-    text-align:center;
-
-    margin-bottom:24px;
+    backdrop-filter:
+    blur(24px);
 
 }
 
-button{
+/* =========================================================
+FORM
+========================================================= */
+
+.auth-form{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:22px;
+
+}
+
+.auth-form h1{
+
+    font-size:42px;
+
+    font-weight:900;
+
+}
+
+.auth-form p{
+
+    color:#bdbdbd;
+
+    line-height:1.7;
+
+}
+
+/* =========================================================
+INPUT
+========================================================= */
+
+.input-box label{
+
+    display:block;
+
+    margin-bottom:12px;
+
+    color:#ffb347;
+
+    font-size:14px;
+
+    font-weight:700;
+
+}
+
+.input-wrap{
 
     width:100%;
-    height:62px;
+    height:68px;
+
+    padding:0 22px;
+
+    border-radius:24px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    background:
+    rgba(255,255,255,.05);
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+}
+
+.input-wrap i{
+
+    color:#ffb347;
+
+}
+
+.input-wrap input{
+
+    width:100%;
+    height:100%;
 
     border:none;
 
+    outline:none;
+
+    background:transparent;
+
+    color:#fff;
+
+    font-size:15px;
+
+    letter-spacing:4px;
+
+}
+
+/* =========================================================
+BUTTON
+========================================================= */
+
+.auth-btn{
+
+    width:100%;
+    height:64px;
+
+    border:none;
+
+    outline:none;
+
     cursor:pointer;
 
-    border-radius:20px;
+    border-radius:22px;
 
     background:
     linear-gradient(
     135deg,
-    #ff9a3d,
-    #ffd27a
+    #ff6b00,
+    #ffb347
     );
 
-    color:#111;
+    color:#fff;
 
     font-size:16px;
 
-    font-weight:800;
-
-    transition:.3s;
+    font-weight:700;
 
 }
 
-button:hover{
+/* =========================================================
+ALERT
+========================================================= */
 
-    transform:
-    translateY(-2px);
+.auth-alert{
 
-}
+    width:100%;
 
-.message{
+    padding:16px 20px;
 
-    margin-bottom:20px;
-
-    color:#ff4d4d;
-
-    text-align:center;
-
-}
-
-.resend{
-
-    margin-top:24px;
-
-    text-align:center;
-
-}
-
-.resend a{
-
-    color:#ffd27a;
-
-    text-decoration:none;
+    border-radius:18px;
 
     font-size:14px;
+
+}
+
+.auth-alert.error{
+
+    background:
+    rgba(255,60,60,.08);
+
+    border:
+    1px solid rgba(255,60,60,.16);
+
+    color:#ff7b7b;
+
+}
+
+/* =========================================================
+PHONE
+========================================================= */
+
+@media(max-width:768px){
+
+    .auth-section{
+
+        padding:
+        120px 5% 60px;
+
+    }
+
+    .auth-box{
+
+        padding:24px;
+
+        border-radius:30px;
+
+    }
+
+    .auth-form h1{
+
+        font-size:34px;
+
+    }
+
+    .input-wrap{
+
+        height:62px;
+
+        border-radius:20px;
+
+    }
 
 }
 
@@ -323,81 +481,75 @@ button:hover{
 
 <body>
 
-<div class="box">
+<?php include "Navbar.php"; ?>
 
-    <div class="logo">
+<!-- =========================================================
+SECTION
+========================================================= -->
 
-        <h1>
+<section class="auth-section">
 
-            Hungroo
+    <div class="auth-box">
 
-        </h1>
+        <form
+        method="POST"
+        class="auth-form">
 
-    </div>
+            <h1>
 
-    <h2>
+                Verify OTP
 
-        Verify OTP
+            </h1>
 
-    </h2>
+            <p>
 
-    <p>
+                Enter the OTP sent to your email.
 
-        OTP sent to:
+            </p>
 
-        <span class="email">
+            <?php echo $message; ?>
 
-            <?php echo $email; ?>
+            <!-- OTP -->
 
-        </span>
+            <div class="input-box">
 
-    </p>
+                <label>
 
-    <?php if(!empty($message)): ?>
+                    OTP Code
 
-    <div class="message">
+                </label>
 
-        <?php echo $message; ?>
+                <div class="input-wrap">
 
-    </div>
+                    <i class="fa-solid fa-shield"></i>
 
-    <?php endif; ?>
+                    <input
+                    type="text"
+                    name="otp"
+                    placeholder="Enter OTP"
+                    maxlength="6"
+                    required>
 
-    <form method="POST">
+                </div>
 
-        <input
-        type="text"
+            </div>
 
-        name="otp"
+            <!-- BTN -->
 
-        maxlength="6"
+            <button
+            type="submit"
+            name="verify_otp"
+            class="auth-btn">
 
-        placeholder="000000"
+                Verify OTP
 
-        required>
+            </button>
 
-        <button
-        type="submit"
-
-        name="verify_otp">
-
-            Verify OTP
-
-        </button>
-
-    </form>
-
-    <div class="resend">
-
-        <a href="send-otp.php">
-
-            Resend OTP
-
-        </a>
+        </form>
 
     </div>
 
-</div>
+</section>
 
 </body>
 </html>

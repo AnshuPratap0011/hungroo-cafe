@@ -1,90 +1,9 @@
 <?php
-
 include "config/config.php";
 
-$pageTitle =
-"Hungroo Café | Contact";
-
-/* =========================================================
-FORM SUBMIT
-========================================================= */
-
-if(isset($_POST['send_message'])){
-
-    $full_name =
-
-    mysqli_real_escape_string(
-    $conn,
-    $_POST['full_name']
-    );
-
-    $email =
-
-    mysqli_real_escape_string(
-    $conn,
-    $_POST['email']
-    );
-
-    $phone =
-
-    mysqli_real_escape_string(
-    $conn,
-    $_POST['phone']
-    );
-
-    $subject =
-
-    mysqli_real_escape_string(
-    $conn,
-    $_POST['subject']
-    );
-
-    $message =
-
-    mysqli_real_escape_string(
-    $conn,
-    $_POST['message']
-    );
-
-    /* =====================================================
-    INSERT
-    ====================================================== */
-
-    $query =
-
-    "INSERT INTO contact_messages (
-
-        full_name,
-        email,
-        phone,
-        subject,
-        message
-
-    )
-
-    VALUES (
-
-        '$full_name',
-        '$email',
-        '$phone',
-        '$subject',
-        '$message'
-
-    )";
-
-    mysqli_query(
-    $conn,
-    $query
-    );
-
-    $success = true;
-
-}
-
+$pageTitle = "Hungroo Café | About Us";
 ?>
-
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -101,23 +20,22 @@ content="width=device-width, initial-scale=1.0">
 
 </title>
 
-<!-- FONT -->
-
 <link
 rel="preconnect"
 href="https://fonts.googleapis.com">
 
 <link
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-rel="stylesheet">
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
 
-<!-- ICON -->
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+rel="stylesheet">
 
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<!-- CSS -->
 
 <link
 rel="stylesheet"
@@ -130,45 +48,79 @@ href="assets/css/footer.css">
 <style>
 
 /* =========================================================
-ROOT
+PREMIUM THEME VARIABLES
 ========================================================= */
 
-:root{
+:root,
+[data-theme="dark"]{
 
-    --bg:#070707;
+    --bg-body:#09090b;
 
-    --card:#111111;
+    --bg-card:#1e1e22;
 
-    --white:#ffffff;
+    --bg-card-hover:#26262b;
 
-    --text:#bdbdbd;
+    --text-main:#ffffff;
 
-    --primary:#ff9a3d;
+    --text-sec:#a1a1aa;
+
+    --accent:#6C5CE7;
+
+    --accent-l:#a29bfe;
+
+    --accent-dark:#4834d4;
 
     --gold:#ffd27a;
 
     --border:
-    rgba(255,255,255,.08);
+    rgba(255,255,255,0.08);
+
+    --border-h:
+    rgba(255,255,255,0.12);
+
+    --shadow-card:
+    0 10px 30px rgba(0,0,0,0.3);
+
+    --shadow-hover:
+    0 20px 40px -10px rgba(108,92,231,0.2);
+
+    --gradient-text:
+    linear-gradient(
+    135deg,
+    #6C5CE7,
+    #a29bfe
+    );
 
 }
 
-body.light-mode{
+[data-theme="light"]{
 
-    --bg:#f5f5f7;
+    --bg-body:#f5f5f7;
 
-    --card:#ffffff;
+    --bg-card:#ffffff;
 
-    --white:#111111;
+    --bg-card-hover:#fafafa;
 
-    --text:#666666;
+    --text-main:#111111;
+
+    --text-sec:#666666;
 
     --border:
-    rgba(0,0,0,.08);
+    rgba(0,0,0,0.08);
+
+    --border-h:
+    rgba(0,0,0,0.12);
+
+    --shadow-card:
+    0 10px 30px rgba(0,0,0,0.05);
+
+    --shadow-hover:
+    0 20px 40px -10px rgba(108,92,231,0.15);
 
 }
 
 /* =========================================================
-RESET
+GLOBAL
 ========================================================= */
 
 *{
@@ -182,367 +134,577 @@ RESET
 
 body{
 
-    background:var(--bg);
-
-    color:var(--white);
-
     font-family:'Poppins',sans-serif;
+
+    background:var(--bg-body);
+
+    color:var(--text-main);
 
     overflow-x:hidden;
 
+    -webkit-font-smoothing:antialiased;
+
+    transition:
+    background .35s ease,
+    color .35s ease;
+
+}
+
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
+
+img{
+
+    display:block;
+
+    max-width:100%;
+
 }
 
 /* =========================================================
-WRAPPER
+BACKGROUND BLOBS
 ========================================================= */
 
-.contact-wrapper{
+.co-blobs{
 
-    width:100%;
+    position:fixed;
 
-    max-width:1450px;
+    inset:0;
+
+    z-index:0;
+
+    pointer-events:none;
+
+    overflow:hidden;
+
+}
+
+.co-blob{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    filter:blur(130px);
+
+}
+
+.co-blob-1{
+
+    width:600px;
+    height:600px;
+
+    background:
+    rgba(108,92,231,.08);
+
+    top:-200px;
+    left:-100px;
+
+}
+
+.co-blob-2{
+
+    width:500px;
+    height:500px;
+
+    background:
+    rgba(0,184,148,.08);
+
+    bottom:-100px;
+    right:-150px;
+
+}
+
+/* =========================================================
+HERO
+========================================================= */
+
+.hero-about{
+
+    position:relative;
+
+    max-width:1400px;
 
     margin:auto;
 
     padding:
-    140px 16px 90px;
-
-}
-
-/* =========================================================
-TOP
-========================================================= */
-
-.contact-top{
+    140px 24px 80px;
 
     text-align:center;
 
-    margin-bottom:70px;
+    z-index:1;
 
 }
 
-.contact-top span{
+.hero-badge{
 
     display:inline-flex;
 
-    padding:
-    10px 20px;
+    align-items:center;
 
-    border-radius:999px;
+    gap:8px;
+
+    padding:8px 20px;
 
     background:
-    rgba(255,154,61,.10);
+    rgba(108,92,231,0.15);
 
     border:
-    1px solid rgba(255,154,61,.14);
+    1px solid rgba(108,92,231,0.3);
 
-    color:#ffb15e;
+    border-radius:50px;
+
+    color:var(--accent-l);
 
     font-size:13px;
 
-    font-weight:700;
+    font-weight:600;
 
     margin-bottom:24px;
 
+    box-shadow:
+    0 0 15px rgba(108,92,231,0.2);
+
+    backdrop-filter:blur(5px);
+
 }
 
-.contact-top h1{
+.hero-title{
 
     font-size:
-    clamp(50px,7vw,100px);
+    clamp(42px,6vw,72px);
 
-    line-height:1.05;
+    font-weight:800;
+
+    line-height:1.1;
 
     margin-bottom:20px;
 
+    background:
+    linear-gradient(
+    to right,
+    #fff,
+    #a1a1aa
+    );
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:transparent;
+
 }
 
-.contact-top p{
+[data-theme="light"] .hero-title{
 
-    max-width:760px;
+    background:
+    linear-gradient(
+    to right,
+    #111,
+    #666
+    );
 
-    margin:auto;
+    -webkit-background-clip:text;
 
-    color:var(--text);
+    -webkit-text-fill-color:transparent;
 
-    line-height:2;
+}
+
+.hero-desc{
+
+    font-size:18px;
+
+    color:var(--text-sec);
+
+    max-width:700px;
+
+    margin:
+    0 auto 40px;
+
+    line-height:1.6;
+
+}
+
+.hero-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:16px 32px;
+
+    background:var(--gradient-text);
+
+    color:#fff;
+
+    border-radius:50px;
+
+    font-weight:600;
+
+    font-size:16px;
+
+    box-shadow:
+    0 10px 30px rgba(108,92,231,0.4);
+
+    transition:.3s;
+
+}
+
+.hero-btn:hover{
+
+    transform:
+    translateY(-3px);
 
 }
 
 /* =========================================================
-GRID
+CONTAINER
 ========================================================= */
 
-.contact-grid{
+.container{
+
+    max-width:1200px;
+
+    margin:0 auto;
+
+    padding:
+    0 24px 80px;
+
+    position:relative;
+
+    z-index:1;
+
+}
+
+/* =========================================================
+STORY GRID
+========================================================= */
+
+.story-grid{
 
     display:grid;
 
     grid-template-columns:
-    .9fr 1.1fr;
+    1fr 1fr;
 
-    gap:34px;
+    gap:40px;
 
-}
+    align-items:center;
 
-/* =========================================================
-INFO
-========================================================= */
-
-.contact-info{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:22px;
+    margin-bottom:80px;
 
 }
 
-.contact-card{
+.story-img-wrap{
 
-    padding:28px;
+    position:relative;
 
     border-radius:30px;
 
-    background:
-    rgba(255,255,255,.04);
+    overflow:hidden;
+
+    box-shadow:var(--shadow-card);
 
     border:
     1px solid var(--border);
 
 }
 
-body.light-mode
-.contact-card{
+.story-img-wrap img{
 
-    background:#fff;
+    width:100%;
+    height:500px;
+
+    object-fit:cover;
+
+    transition:.5s;
 
 }
 
-.contact-card i{
+.story-img-wrap:hover img{
 
-    width:62px;
-    height:62px;
+    transform:scale(1.03);
 
-    margin-bottom:18px;
+}
 
-    border-radius:18px;
+.story-content h2{
+
+    font-size:36px;
+
+    font-weight:700;
+
+    margin-bottom:20px;
+
+}
+
+.story-content p{
+
+    font-size:16px;
+
+    color:var(--text-sec);
+
+    line-height:1.8;
+
+    margin-bottom:30px;
+
+}
+
+.story-features-list{
+
+    list-style:none;
+
+}
+
+.story-features-list li{
+
+    margin-bottom:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-size:16px;
+
+}
+
+.story-features-list li i{
+
+    color:var(--accent-l);
+
+}
+
+/* =========================================================
+FEATURES
+========================================================= */
+
+.features-section h2{
+
+    text-align:center;
+
+    font-size:32px;
+
+    font-weight:700;
+
+    margin-bottom:40px;
+
+}
+
+.features-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(260px,1fr));
+
+    gap:24px;
+
+}
+
+.feature-card{
+
+    background:var(--bg-card);
+
+    border:
+    1px solid var(--border);
+
+    border-radius:20px;
+
+    padding:30px;
+
+    text-align:center;
+
+    transition:.3s;
+
+}
+
+.feature-card:hover{
+
+    transform:
+    translateY(-5px);
+
+    border-color:var(--accent);
+
+    box-shadow:var(--shadow-hover);
+
+}
+
+.feature-icon{
+
+    width:70px;
+    height:70px;
+
+    border-radius:50%;
+
+    background:
+    rgba(108,92,231,0.1);
 
     display:flex;
 
     align-items:center;
     justify-content:center;
 
-    background:
-    linear-gradient(
-    135deg,
-    var(--primary),
-    var(--gold)
-    );
+    margin:
+    0 auto 20px;
 
-    color:#000;
+    color:var(--accent-l);
 
-    font-size:24px;
+    font-size:28px;
 
 }
 
-.contact-card h3{
+.feature-card h3{
 
-    font-size:24px;
+    font-size:20px;
 
-    margin-bottom:12px;
-
-}
-
-.contact-card p{
-
-    color:var(--text);
-
-    line-height:1.9;
+    margin-bottom:10px;
 
 }
 
-/* =========================================================
-FORM
-========================================================= */
-
-.contact-form{
-
-    padding:34px;
-
-    border-radius:34px;
-
-    background:
-    rgba(255,255,255,.04);
-
-    border:
-    1px solid var(--border);
-
-}
-
-body.light-mode
-.contact-form{
-
-    background:#fff;
-
-}
-
-.contact-form h2{
-
-    font-size:42px;
-
-    margin-bottom:30px;
-
-}
-
-/* =========================================================
-SUCCESS
-========================================================= */
-
-.success-box{
-
-    margin-bottom:24px;
-
-    padding:18px;
-
-    border-radius:18px;
-
-    background:
-    rgba(76,175,80,.12);
-
-    border:
-    1px solid rgba(76,175,80,.18);
-
-    color:#4caf50;
+.feature-card p{
 
     font-size:14px;
 
-    font-weight:600;
+    color:var(--text-sec);
+
+    line-height:1.6;
 
 }
 
 /* =========================================================
-FORM GRID
+STATS
 ========================================================= */
 
-.form-grid{
+.stats-section{
+
+    margin:
+    80px 0;
+
+}
+
+.stats-grid{
 
     display:grid;
 
     grid-template-columns:
-    repeat(2,1fr);
+    repeat(4,1fr);
 
     gap:20px;
 
 }
 
-.form-group{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:10px;
-
-}
-
-.form-group.full{
-
-    grid-column:1/-1;
-
-}
-
-.form-group label{
-
-    font-size:14px;
-
-    font-weight:600;
-
-}
-
-.form-group input,
-.form-group textarea{
-
-    width:100%;
-
-    border:none;
-
-    outline:none;
-
-    padding:18px;
-
-    border-radius:18px;
+.stat-card{
 
     background:
-    rgba(255,255,255,.04);
+    linear-gradient(
+    145deg,
+    var(--bg-card),
+    rgba(255,255,255,0.03)
+    );
 
     border:
     1px solid var(--border);
 
-    color:var(--white);
+    border-radius:24px;
 
-    font-size:14px;
+    padding:30px;
 
-    font-family:'Poppins',sans-serif;
-
-}
-
-body.light-mode
-.form-group input,
-body.light-mode
-.form-group textarea{
-
-    color:#111;
+    text-align:center;
 
 }
 
-.form-group textarea{
+.stat-number{
 
-    height:160px;
+    font-size:42px;
 
-    resize:none;
+    font-weight:800;
+
+    margin-bottom:5px;
+
+    background:var(--gradient-text);
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:transparent;
+
+}
+
+.stat-label{
+
+    color:var(--text-sec);
+
+    font-size:15px;
 
 }
 
 /* =========================================================
-BUTTON
+CTA
 ========================================================= */
 
-.submit-btn{
+.cta-section{
 
-    width:100%;
+    background:var(--bg-card);
 
-    height:62px;
+    border-radius:40px;
 
-    margin-top:24px;
+    padding:60px;
 
-    border:none;
+    text-align:center;
 
-    cursor:pointer;
+    border:
+    1px solid var(--border);
 
-    border-radius:18px;
+    position:relative;
 
-    background:
-    linear-gradient(
-    135deg,
-    var(--primary),
-    var(--gold)
-    );
-
-    color:#000;
-
-    font-size:15px;
-
-    font-weight:800;
-
-    transition:.35s;
+    overflow:hidden;
 
 }
 
-.submit-btn:hover{
+.cta-title{
 
-    transform:
-    translateY(-4px);
+    font-size:36px;
+
+    font-weight:800;
+
+    margin-bottom:15px;
+
+}
+
+.cta-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    background:var(--accent);
+
+    color:#fff;
+
+    padding:16px 32px;
+
+    border-radius:50px;
+
+    font-weight:700;
+
+    margin-top:30px;
+
+    transition:.3s;
+
+}
+
+.cta-btn:hover{
+
+    transform:scale(1.05);
+
+    background:var(--accent-dark);
 
 }
 
@@ -550,42 +712,38 @@ BUTTON
 RESPONSIVE
 ========================================================= */
 
-@media(max-width:992px){
-
-    .contact-grid{
-
-        grid-template-columns:1fr;
-
-    }
-
-}
-
 @media(max-width:768px){
 
-    .contact-wrapper{
-
-        padding:
-        120px 12px 70px;
-
-    }
-
-    .form-grid{
+    .story-grid{
 
         grid-template-columns:1fr;
 
     }
 
-    .contact-form{
+    .story-img-wrap img{
 
-        padding:24px;
-
-        border-radius:26px;
+        height:320px;
 
     }
 
-    .contact-form h2{
+    .stats-grid{
 
-        font-size:32px;
+        grid-template-columns:
+        repeat(2,1fr);
+
+    }
+
+    .hero-title{
+
+        font-size:36px;
+
+    }
+
+    .cta-section{
+
+        border-radius:24px;
+
+        padding:40px 20px;
 
     }
 
@@ -597,233 +755,327 @@ RESPONSIVE
 
 <body>
 
+<div class="co-blobs">
+
+    <div class="co-blob co-blob-1"></div>
+
+    <div class="co-blob co-blob-2"></div>
+
+</div>
+
 <?php include "Navbar.php"; ?>
 
-<!-- =========================================================
-WRAPPER
-========================================================= -->
+<!-- HERO -->
 
-<div class="contact-wrapper">
+<section class="hero-about">
 
-    <!-- TOP -->
+    <div class="hero-badge">
 
-    <div class="contact-top">
+        <i class="fa-solid fa-heart"></i>
 
-        <span>
-
-            Contact Hungroo Café
-
-        </span>
-
-        <h1>
-
-            Let's Talk
-
-        </h1>
-
-        <p>
-
-            Have questions, suggestions or want
-            to connect with us? We'd love to hear
-            from you.
-
-        </p>
+        Who We Are
 
     </div>
 
-    <!-- GRID -->
+    <h1 class="hero-title">
 
-    <div class="contact-grid">
+        Hungroo Café
 
-        <!-- INFO -->
+    </h1>
 
-        <div class="contact-info">
+    <p class="hero-desc">
 
-            <div class="contact-card">
+        Premium food, luxury ambience, and a taste that stays with you forever.
 
-                <i class="fa-solid fa-location-dot"></i>
+    </p>
 
-                <h3>
+    <a
+    href="menu.php"
+    class="hero-btn">
 
-                    Address
+        <i class="fa-solid fa-utensils"></i>
 
-                </h3>
+        Order Now
 
-                <p>
+    </a>
 
-                    India
+</section>
 
-                </p>
+<div class="container">
 
-            </div>
+    <!-- STORY -->
 
-            <div class="contact-card">
+    <section class="story-grid">
 
-                <i class="fa-solid fa-phone"></i>
+        <div class="story-img-wrap">
 
-                <h3>
-
-                    Phone
-
-                </h3>
-
-                <p>
-
-                    +91 9876543210
-
-                </p>
-
-            </div>
-
-            <div class="contact-card">
-
-                <i class="fa-solid fa-envelope"></i>
-
-                <h3>
-
-                    Email
-
-                </h3>
-
-                <p>
-
-                    support@hungroo.com
-
-                </p>
-
-            </div>
+            <img
+            src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1200&auto=format&fit=crop"
+            alt="Hungroo Interior">
 
         </div>
 
-        <!-- FORM -->
-
-        <div class="contact-form">
+        <div class="story-content">
 
             <h2>
 
-                Send Message
+                Crafted With Passion
 
             </h2>
 
-            <?php if(isset($success)): ?>
+            <p>
 
-            <div class="success-box">
+                We believe that food is not just about eating, it's an experience.
 
-                Message sent successfully.
+            </p>
 
-            </div>
+            <p>
 
-            <?php endif; ?>
+                Every dish at Hungroo Café is designed to deliver premium taste.
 
-            <form method="POST">
+            </p>
 
-                <div class="form-grid">
+            <ul class="story-features-list">
 
-                    <div class="form-group">
+                <li>
 
-                        <label>
+                    <i class="fa-solid fa-check-circle"></i>
 
-                            Full Name
+                    Handcrafted Recipes
 
-                        </label>
+                </li>
 
-                        <input
-                        type="text"
+                <li>
 
-                        name="full_name"
+                    <i class="fa-solid fa-leaf"></i>
 
-                        required>
+                    100% Fresh Ingredients
 
-                    </div>
+                </li>
 
-                    <div class="form-group">
+                <li>
 
-                        <label>
+                    <i class="fa-solid fa-wine-glass"></i>
 
-                            Email
+                    Premium Ambience
 
-                        </label>
+                </li>
 
-                        <input
-                        type="email"
-
-                        name="email"
-
-                        required>
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>
-
-                            Phone
-
-                        </label>
-
-                        <input
-                        type="text"
-
-                        name="phone">
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>
-
-                            Subject
-
-                        </label>
-
-                        <input
-                        type="text"
-
-                        name="subject">
-
-                    </div>
-
-                    <div class="form-group full">
-
-                        <label>
-
-                            Message
-
-                        </label>
-
-                        <textarea
-                        name="message"
-
-                        required></textarea>
-
-                    </div>
-
-                </div>
-
-                <button
-                type="submit"
-
-                name="send_message"
-
-                class="submit-btn">
-
-                    Send Message
-
-                </button>
-
-            </form>
+            </ul>
 
         </div>
 
-    </div>
+    </section>
+
+    <!-- FEATURES -->
+
+    <section class="features-section">
+
+        <h2>
+
+            Why Choose Us?
+
+        </h2>
+
+        <div class="features-grid">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-burger"></i>
+
+                </div>
+
+                <h3>
+
+                    Premium Quality
+
+                </h3>
+
+                <p>
+
+                    Finest ingredients with unforgettable taste.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-clock"></i>
+
+                </div>
+
+                <h3>
+
+                    Fast Delivery
+
+                </h3>
+
+                <p>
+
+                    Hot & fresh delivery at lightning speed.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                </div>
+
+                <h3>
+
+                    24/7 Support
+
+                </h3>
+
+                <p>
+
+                    Always ready to assist you anytime.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-truck"></i>
+
+                </div>
+
+                <h3>
+
+                    Secure Packaging
+
+                </h3>
+
+                <p>
+
+                    Hygienic packaging for perfect delivery.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- STATS -->
+
+    <section class="stats-section">
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+
+                    15K+
+
+                </div>
+
+                <div class="stat-label">
+
+                    Happy Customers
+
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+
+                    50+
+
+                </div>
+
+                <div class="stat-label">
+
+                    Menu Items
+
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+
+                    4.9
+
+                </div>
+
+                <div class="stat-label">
+
+                    Star Rating
+
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+
+                    10+
+
+                </div>
+
+                <div class="stat-label">
+
+                    Cities Active
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CTA -->
+
+    <section class="cta-section">
+
+        <h2 class="cta-title">
+
+            Ready to Taste the Difference?
+
+        </h2>
+
+        <p style="color:var(--text-sec)">
+
+            Join thousands of satisfied customers today.
+
+        </p>
+
+        <a
+        href="menu.php"
+        class="cta-btn">
+
+            View Full Menu
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+    </section>
 
 </div>
 
 <?php include "footer.php"; ?>
-
-<script src="assets/js/theme.js"></script>
-<script src="assets/js/cart.js"></script>
-<script src="assets/js/preloader.js"></script>
 
 </body>
 </html>

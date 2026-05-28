@@ -1,142 +1,145 @@
 <?php
 
-session_start();
-
 /* =========================================================
-LOGIN CHECK
-========================================================= */
-
-if(!isset($_SESSION['admin_id'])){
-
-    header(
-    "Location: login.php"
-    );
-
-    exit();
-
-}
-
-/* =========================================================
-CONFIG
+   CONFIG & SESSION
 ========================================================= */
 
 include "../config/config.php";
 
-/* =========================================================
-DELETE PRODUCT
-========================================================= */
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-if(isset($_GET['delete'])){
+if (!isset($_SESSION['admin_id'])) {
 
-    $deleteId =
-
-    intval($_GET['delete']);
-
-    $deleteQuery =
-
-    "DELETE FROM products
-    WHERE id='$deleteId'";
-
-    mysqli_query(
-    $conn,
-    $deleteQuery
-    );
-
-    header(
-    "Location: products.php"
-    );
-
+    header("Location: login.php");
     exit();
-
 }
 
 /* =========================================================
-ADD PRODUCT
+   IMAGE UPLOAD
 ========================================================= */
 
-if(isset($_POST['add_product'])){
+$uploadDir = "../uploads/";
 
-    $name =
+if (!file_exists($uploadDir)) {
+    mkdir($uploadDir, 0777, true);
+}
 
-    mysqli_real_escape_string(
-    $conn,
-    $_POST['name']
+/* =========================================================
+   DELETE PRODUCT
+========================================================= */
+
+if (isset($_GET['delete'])) {
+
+    $deleteId = intval($_GET['delete']);
+
+    mysqli_query(
+        $conn,
+        "DELETE FROM products WHERE id='$deleteId'"
     );
 
-    $slug =
+    header("Location: products.php");
+    exit();
+}
 
-    strtolower(
-    trim(
-    preg_replace(
-    '/[^A-Za-z0-9-]+/',
-    '-',
-    $name
-    ))
+/* =========================================================
+   ADD PRODUCT
+========================================================= */
+
+if (isset($_POST['add_product'])) {
+
+    $name = mysqli_real_escape_string(
+        $conn,
+        $_POST['name']
     );
 
-    $description =
-
-    mysqli_real_escape_string(
-    $conn,
-    $_POST['description']
+    $slug = strtolower(
+        trim(
+            preg_replace(
+                '/[^A-Za-z0-9-]+/',
+                '-',
+                $name
+            )
+        )
     );
 
-    $short_description =
-
-    mysqli_real_escape_string(
-    $conn,
-    $_POST['short_description']
+    $category = mysqli_real_escape_string(
+        $conn,
+        $_POST['category']
     );
 
-    $category =
-
-    mysqli_real_escape_string(
-    $conn,
-    $_POST['category']
+    $description = mysqli_real_escape_string(
+        $conn,
+        $_POST['description']
     );
 
-    $price =
+    $price = $_POST['price'];
 
-    $_POST['price'];
+    $original_price = !empty($_POST['original_price'])
+        ? $_POST['original_price']
+        : 0;
 
-    $old_price =
+    $preparation_time = !empty($_POST['preparation_time'])
+        ? $_POST['preparation_time']
+        : 10;
 
-    $_POST['old_price'];
+    /* =====================================================
+       IMAGE URL OR FILE
+    ===================================================== */
 
-    $tag =
+    $image = "";
 
-    mysqli_real_escape_string(
-    $conn,
-    $_POST['tag']
-    );
+    // IMAGE URL
+    if (!empty($_POST['image_url'])) {
 
-    $image =
+        $image = mysqli_real_escape_string(
+            $conn,
+            $_POST['image_url']
+        );
+    }
 
-    mysqli_real_escape_string(
-    $conn,
-    $_POST['image']
-    );
+    // IMAGE FILE
+    if (
+        isset($_FILES['image_file']) &&
+        $_FILES['image_file']['error'] == 0
+    ) {
 
-    /* =====================
-    INSERT
-    ===================== */
+        $fileName = time() . "_" .
+        basename($_FILES["image_file"]["name"]);
 
-    $insertQuery =
+        $targetFile =
+        $uploadDir . $fileName;
 
-    "INSERT INTO products (
+        move_uploaded_file(
+            $_FILES["image_file"]["tmp_name"],
+            $targetFile
+        );
+
+        $image =
+        "../uploads/" . $fileName;
+    }
+
+    /* =====================================================
+       INSERT
+    ===================================================== */
+
+    $insertQuery = "
+
+    INSERT INTO products (
 
         name,
         slug,
-        description,
-        short_description,
         category,
+        description,
         price,
-        old_price,
+        original_price,
         image,
-        tag,
+        status,
         is_featured,
-        is_popular,
-        status
+        is_trending,
+        rating,
+        preparation_time
 
     )
 
@@ -144,63 +147,63 @@ if(isset($_POST['add_product'])){
 
         '$name',
         '$slug',
-        '$description',
-        '$short_description',
         '$category',
+        '$description',
         '$price',
-        '$old_price',
+        '$original_price',
         '$image',
-        '$tag',
+        'active',
         1,
         1,
-        'active'
+        4.5,
+        '$preparation_time'
 
-    )";
+    )
+
+    ";
 
     mysqli_query(
-    $conn,
-    $insertQuery
+        $conn,
+        $insertQuery
     );
 
-    header(
-    "Location: products.php"
-    );
-
+    header("Location: products.php");
     exit();
-
 }
 
 /* =========================================================
-GET PRODUCTS
+   GET PRODUCTS
 ========================================================= */
 
-$productQuery =
+$productQuery = "
 
-"SELECT * FROM products
-ORDER BY id DESC";
+SELECT *
+FROM products
+ORDER BY id DESC
 
-$productResult =
+";
 
-mysqli_query(
-$conn,
-$productQuery
+$productResult = mysqli_query(
+    $conn,
+    $productQuery
 );
 
 /* =========================================================
-GET CATEGORIES
+   CATEGORIES
 ========================================================= */
 
-$categoryQuery =
+$categories = [
 
-"SELECT * FROM categories
-ORDER BY name ASC";
+    "Burgers",
+    "Pizza",
+    "Coffee",
+    "Desserts",
+    "Cold Drinks",
+    "Snacks",
+    "Wraps",
+    "Breakfast"
 
-$categoryResult =
-
-mysqli_query(
-$conn,
-$categoryQuery
-);
+];
 
 ?>
 
@@ -218,11 +221,9 @@ content="width=device-width, initial-scale=1.0">
 
 <title>
 
-Manage Products
+Hungroo Products
 
 </title>
-
-<!-- FONT -->
 
 <link
 rel="preconnect"
@@ -232,49 +233,46 @@ href="https://fonts.googleapis.com">
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- ICON -->
-
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 
-/* =========================================================
-ROOT
-========================================================= */
-
 :root{
 
-    --bg:#070707;
+    --bg:#0b0b12;
 
-    --card:#111111;
+    --card:#171726;
 
-    --sidebar:#0f0f0f;
+    --sidebar:#131320;
 
     --white:#ffffff;
 
-    --text:#bdbdbd;
+    --text:#9ca3af;
 
-    --primary:#ff9a3d;
+    --primary:#9b5cff;
 
-    --gold:#ffd27a;
+    --primary2:#b983ff;
+
+    --green:#10b981;
+
+    --red:#ef4444;
+
+    --blue:#3b82f6;
 
     --border:
-    rgba(255,255,255,.08);
+    rgba(255,255,255,.06);
 
 }
-
-/* =========================================================
-RESET
-========================================================= */
 
 *{
 
     margin:0;
     padding:0;
-
     box-sizing:border-box;
+
+    font-family:'Poppins',sans-serif;
 
 }
 
@@ -284,31 +282,31 @@ body{
 
     color:var(--white);
 
-    font-family:'Poppins',sans-serif;
-
     overflow-x:hidden;
 
 }
 
-/* =========================================================
-LAYOUT
-========================================================= */
+a{
+
+    text-decoration:none;
+    color:inherit;
+
+}
 
 .admin-layout{
 
     display:flex;
-
     min-height:100vh;
 
 }
 
 /* =========================================================
-SIDEBAR
+   SIDEBAR
 ========================================================= */
 
 .sidebar{
 
-    width:280px;
+    width:260px;
 
     background:var(--sidebar);
 
@@ -326,62 +324,25 @@ SIDEBAR
 
 }
 
-.sidebar-logo{
+.logo{
 
-    display:flex;
+    font-size:24px;
 
-    align-items:center;
-
-    gap:14px;
+    font-weight:700;
 
     margin-bottom:40px;
 
-}
-
-.sidebar-logo img{
-
-    width:58px;
-    height:58px;
-
-    border-radius:18px;
-
-    object-fit:cover;
+    padding-left:10px;
 
 }
 
-.sidebar-logo h2{
+.logo span{
 
-    font-size:28px;
-
-}
-
-.sidebar-logo span{
-
-    background:
-    linear-gradient(
-    135deg,
-    var(--primary),
-    var(--gold)
-    );
-
-    -webkit-background-clip:text;
-
-    -webkit-text-fill-color:
-    transparent;
+    color:var(--primary);
 
 }
 
-.sidebar-menu{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:12px;
-
-}
-
-.sidebar-menu a{
+.menu-item{
 
     height:58px;
 
@@ -391,12 +352,9 @@ SIDEBAR
 
     gap:14px;
 
-    padding:
-    0 18px;
+    padding:0 18px;
 
     border-radius:18px;
-
-    text-decoration:none;
 
     color:#fff;
 
@@ -406,48 +364,51 @@ SIDEBAR
 
     font-weight:600;
 
+    margin-bottom:10px;
+
 }
 
-.sidebar-menu a.active,
-.sidebar-menu a:hover{
+.menu-item.active,
+.menu-item:hover{
 
     background:
-    rgba(255,154,61,.12);
+    linear-gradient(
+    90deg,
+    rgba(155,92,255,.18),
+    transparent
+    );
+
+    color:var(--primary2);
 
 }
 
-.sidebar-menu a i{
+.menu-item i{
 
-    color:var(--primary);
+    color:var(--primary2);
 
 }
 
 /* =========================================================
-CONTENT
+   MAIN
 ========================================================= */
 
 .main-content{
 
     flex:1;
 
-    margin-left:280px;
+    margin-left:260px;
 
     padding:30px;
 
 }
 
-/* =========================================================
-TOP
-========================================================= */
-
 .page-top{
 
     display:flex;
 
-    align-items:center;
     justify-content:space-between;
 
-    gap:20px;
+    align-items:center;
 
     margin-bottom:30px;
 
@@ -468,7 +429,7 @@ TOP
 }
 
 /* =========================================================
-FORM
+   FORM
 ========================================================= */
 
 .product-form{
@@ -477,13 +438,23 @@ FORM
 
     border-radius:28px;
 
-    background:
-    rgba(255,255,255,.04);
+    background:var(--card);
 
     border:
     1px solid var(--border);
 
     margin-bottom:30px;
+
+    transition:.3s;
+
+    backdrop-filter:blur(14px);
+
+}
+
+.product-form:hover{
+
+    border-color:
+    rgba(155,92,255,.3);
 
 }
 
@@ -536,11 +507,10 @@ FORM
 
     border-radius:18px;
 
-    background:
-    rgba(255,255,255,.04);
+    background:#0d0d16;
 
     border:
-    1px solid var(--border);
+    1px solid rgba(255,255,255,.08);
 
     color:#fff;
 
@@ -557,7 +527,7 @@ FORM
 }
 
 /* =========================================================
-BUTTON
+   BUTTON
 ========================================================= */
 
 .submit-btn{
@@ -578,19 +548,31 @@ BUTTON
     linear-gradient(
     135deg,
     var(--primary),
-    var(--gold)
+    var(--primary2)
     );
 
-    color:#000;
+    color:#fff;
 
     font-size:15px;
 
     font-weight:800;
 
+    transition:.3s;
+
+    box-shadow:
+    0 10px 30px
+    rgba(155,92,255,.3);
+
+}
+
+.submit-btn:hover{
+
+    transform:translateY(-2px);
+
 }
 
 /* =========================================================
-TABLE
+   TABLE
 ========================================================= */
 
 .table-box{
@@ -599,8 +581,7 @@ TABLE
 
     border-radius:28px;
 
-    background:
-    rgba(255,255,255,.04);
+    background:var(--card);
 
     border:
     1px solid var(--border);
@@ -648,10 +629,12 @@ table td{
 
     object-fit:cover;
 
+    background:#111;
+
 }
 
 /* =========================================================
-ACTION
+   ACTION
 ========================================================= */
 
 .action-buttons{
@@ -672,8 +655,7 @@ ACTION
 
     cursor:pointer;
 
-    padding:
-    0 16px;
+    padding:0 16px;
 
     border-radius:14px;
 
@@ -687,18 +669,26 @@ ACTION
 
 .edit-btn{
 
-    background:#1e88e5;
+    background:var(--blue);
 
 }
 
 .delete-btn{
 
-    background:#ff4d4d;
+    background:var(--red);
+
+}
+
+.status-active{
+
+    color:var(--green);
+
+    font-weight:700;
 
 }
 
 /* =========================================================
-RESPONSIVE
+   RESPONSIVE
 ========================================================= */
 
 @media(max-width:992px){
@@ -751,80 +741,60 @@ RESPONSIVE
 
 <div class="admin-layout">
 
-    <!-- =====================================================
-    SIDEBAR
-    ====================================================== -->
+    <!-- SIDEBAR -->
 
-    <aside class="sidebar">
+    <div class="sidebar">
 
-        <div class="sidebar-logo">
-
-            <img
-            src="../assets/images/logo.png"
-            alt="Logo">
-
-            <h2>
-
-                <span>
-
-                    Hungroo
-
-                </span>
-
-                Admin
-
-            </h2>
-
+        <div class="logo">
+            Hungroo <span>Admin</span>
         </div>
 
-        <div class="sidebar-menu">
+        <a href="dashboard.php"
+            class="menu-item">
 
-            <a href="dashboard.php">
+            <i class="fa-solid fa-chart-pie"></i>
+            Dashboard
 
-                <i class="fa-solid fa-chart-line"></i>
+        </a>
 
-                Dashboard
+        <a href="products.php"
+            class="menu-item active">
 
-            </a>
+            <i class="fa-solid fa-burger"></i>
+            Products
 
-            <a
-            href="products.php"
+        </a>
 
-            class="active">
+        <a href="orders.php"
+            class="menu-item">
 
-                <i class="fa-solid fa-burger"></i>
+            <i class="fa-solid fa-cart-shopping"></i>
+            Orders
 
-                Products
+        </a>
 
-            </a>
+        <a href="users.php"
+            class="menu-item">
 
-            <a href="orders.php">
+            <i class="fa-solid fa-users"></i>
+            Users
 
-                <i class="fa-solid fa-cart-shopping"></i>
+        </a>
 
-                Orders
+        <a href="logout.php"
+            class="menu-item"
+            style="color:#ef4444;">
 
-            </a>
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
 
-            <a href="logout.php">
+        </a>
 
-                <i class="fa-solid fa-right-from-bracket"></i>
+    </div>
 
-                Logout
-
-            </a>
-
-        </div>
-
-    </aside>
-
-    <!-- =====================================================
-    CONTENT
-    ====================================================== -->
+    <!-- MAIN -->
 
     <main class="main-content">
-
-        <!-- TOP -->
 
         <div class="page-top">
 
@@ -838,7 +808,7 @@ RESPONSIVE
 
                 <p>
 
-                    Add and manage café items
+                    Add and manage café products
 
                 </p>
 
@@ -846,13 +816,13 @@ RESPONSIVE
 
         </div>
 
-        <!-- =================================================
-        FORM
-        ================================================== -->
+        <!-- FORM -->
 
         <div class="product-form">
 
-            <form method="POST">
+            <form
+            method="POST"
+            enctype="multipart/form-data">
 
                 <div class="form-grid">
 
@@ -868,9 +838,7 @@ RESPONSIVE
 
                         <input
                         type="text"
-
                         name="name"
-
                         required>
 
                     </div>
@@ -887,19 +855,18 @@ RESPONSIVE
 
                         <select
                         name="category"
-
                         required>
 
-                            <?php while($category = mysqli_fetch_assoc($categoryResult)): ?>
+                            <?php foreach($categories as $category): ?>
 
                             <option
-                            value="<?php echo $category['name']; ?>">
+                            value="<?php echo $category; ?>">
 
-                                <?php echo $category['name']; ?>
+                                <?php echo $category; ?>
 
                             </option>
 
-                            <?php endwhile; ?>
+                            <?php endforeach; ?>
 
                         </select>
 
@@ -917,50 +884,30 @@ RESPONSIVE
 
                         <input
                         type="number"
-
+                        step="0.01"
                         name="price"
-
                         required>
 
                     </div>
 
-                    <!-- OLD PRICE -->
+                    <!-- ORIGINAL -->
 
                     <div class="form-group">
 
                         <label>
 
-                            Old Price
+                            Original Price
 
                         </label>
 
                         <input
                         type="number"
-
-                        name="old_price">
-
-                    </div>
-
-                    <!-- TAG -->
-
-                    <div class="form-group">
-
-                        <label>
-
-                            Tag
-
-                        </label>
-
-                        <input
-                        type="text"
-
-                        name="tag"
-
-                        placeholder="Best Seller">
+                        step="0.01"
+                        name="original_price">
 
                     </div>
 
-                    <!-- IMAGE -->
+                    <!-- IMAGE URL -->
 
                     <div class="form-group">
 
@@ -972,43 +919,57 @@ RESPONSIVE
 
                         <input
                         type="text"
-
-                        name="image"
-
-                        required>
+                        name="image_url"
+                        placeholder="https://example.com/image.jpg">
 
                     </div>
 
-                    <!-- SHORT -->
+                    <!-- IMAGE FILE -->
 
-                    <div class="form-group full">
+                    <div class="form-group">
 
                         <label>
 
-                            Short Description
+                            Upload Image
 
                         </label>
 
-                        <textarea
-                        name="short_description"
-
-                        required></textarea>
+                        <input
+                        type="file"
+                        name="image_file"
+                        accept="image/*">
 
                     </div>
 
-                    <!-- DESC -->
+                    <!-- PREPARATION -->
+
+                    <div class="form-group">
+
+                        <label>
+
+                            Preparation Time
+
+                        </label>
+
+                        <input
+                        type="number"
+                        name="preparation_time"
+                        value="10">
+
+                    </div>
+
+                    <!-- DESCRIPTION -->
 
                     <div class="form-group full">
 
                         <label>
 
-                            Full Description
+                            Description
 
                         </label>
 
                         <textarea
                         name="description"
-
                         required></textarea>
 
                     </div>
@@ -1017,9 +978,7 @@ RESPONSIVE
 
                 <button
                 type="submit"
-
                 name="add_product"
-
                 class="submit-btn">
 
                     Add Product
@@ -1030,9 +989,7 @@ RESPONSIVE
 
         </div>
 
-        <!-- =================================================
-        TABLE
-        ================================================== -->
+        <!-- TABLE -->
 
         <div class="table-box">
 
@@ -1042,41 +999,13 @@ RESPONSIVE
 
                     <tr>
 
-                        <th>
-
-                            Image
-
-                        </th>
-
-                        <th>
-
-                            Product
-
-                        </th>
-
-                        <th>
-
-                            Category
-
-                        </th>
-
-                        <th>
-
-                            Price
-
-                        </th>
-
-                        <th>
-
-                            Status
-
-                        </th>
-
-                        <th>
-
-                            Action
-
-                        </th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Rating</th>
+                        <th>Status</th>
+                        <th>Action</th>
 
                     </tr>
 
@@ -1092,9 +1021,7 @@ RESPONSIVE
 
                             <img
                             src="<?php echo $product['image']; ?>"
-
                             class="product-img"
-
                             alt="Product">
 
                         </td>
@@ -1119,7 +1046,17 @@ RESPONSIVE
 
                         <td>
 
-                            <?php echo ucfirst($product['status']); ?>
+                            ⭐ <?php echo $product['rating']; ?>
+
+                        </td>
+
+                        <td>
+
+                            <span class="status-active">
+
+                                <?php echo ucfirst($product['status']); ?>
+
+                            </span>
 
                         </td>
 
@@ -1128,6 +1065,7 @@ RESPONSIVE
                             <div class="action-buttons">
 
                                 <button
+                                type="button"
                                 class="action-btn edit-btn">
 
                                     Edit
@@ -1139,10 +1077,11 @@ RESPONSIVE
 
                                 onclick=
                                 "return confirm(
-                                'Delete product?'
+                                'Delete Product?'
                                 )">
 
                                     <button
+                                    type="button"
                                     class="action-btn delete-btn">
 
                                         Delete
@@ -1170,4 +1109,5 @@ RESPONSIVE
 </div>
 
 </body>
+
 </html>

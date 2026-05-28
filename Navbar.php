@@ -1,168 +1,168 @@
 <?php
 
-if(session_status() === PHP_SESSION_NONE){
+/* =========================================================
+PROFILE IMAGE
+========================================================= */
 
-    session_start();
+ $profileImage = "https://i.imgur.com/2DhmtJ4.png";
+
+if (isset($_SESSION['profile_image']) && !empty($_SESSION['profile_image'])) {
+
+    $profileImage = $_SESSION['profile_image'];
 
 }
+
+/* =========================================================
+CURRENT PAGE
+========================================================= */
+
+ $currentPage = basename($_SERVER['PHP_SELF']);
 
 ?>
 
 <!-- =========================================================
-PREMIUM IOS NAVBAR
-HUNGROO CAFÉ
+PREMIUM NAVBAR — HUNGROO CAFÉ
 ========================================================= -->
-
-<div class="navbar-wrapper">
+<link
+rel="stylesheet"
+href="assets/css/navbar.css">
+<div class="navbar-wrapper" id="navbarWrapper">
 
     <nav class="navbar">
 
         <!-- =========================================================
-        LOGO
+        LEFT — LOGO
         ========================================================= -->
 
         <a href="home.php" class="navbar-logo">
 
-            <img
-            src="https://i.imgur.com/8Km9tLL.png"
-            alt="Hungroo Café">
+            <div class="logo-icon">
+
+                <img src="https://i.imgur.com/8Km9tLL.png" alt="Hungroo Café">
+
+            </div>
 
             <div class="logo-text">
 
-                <h2>
+                <span class="logo-name">HUNGROO</span>
 
-                    HUNGROO
-
-                </h2>
-
-                <span>
-
-                    CAFÉ
-
-                </span>
+                <span class="logo-sub">CAFÉ</span>
 
             </div>
 
         </a>
 
         <!-- =========================================================
-        NAV LINKS
+        CENTER — NAV LINKS
         ========================================================= -->
 
         <div class="navbar-links" id="mobileMenu">
 
-            <a
-            href="home.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'home.php' ? 'active' : ''; ?>">
+            <a href="home.php" class="nav-link <?php echo $currentPage == 'home.php' ? 'active' : ''; ?>">
 
                 <i class="fa-solid fa-house"></i>
 
-                Home
+                <span>Home</span>
 
             </a>
 
-            <a
-            href="menu.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'menu.php' ? 'active' : ''; ?>">
+            <a href="menu.php" class="nav-link <?php echo $currentPage == 'menu.php' ? 'active' : ''; ?>">
 
                 <i class="fa-solid fa-utensils"></i>
 
-                Menu
+                <span>Menu</span>
 
             </a>
 
-            <a
-            href="offers.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'offers.php' ? 'active' : ''; ?>">
+            <a href="offers.php" class="nav-link <?php echo $currentPage == 'offers.php' ? 'active' : ''; ?>">
 
                 <i class="fa-solid fa-tags"></i>
 
-                Offers
+                <span>Offers</span>
 
             </a>
 
-            <a
-            href="gallery.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'gallery.php' ? 'active' : ''; ?>">
+            <a href="gallery.php" class="nav-link <?php echo $currentPage == 'gallery.php' ? 'active' : ''; ?>">
 
                 <i class="fa-solid fa-images"></i>
 
-                Gallery
+                <span>Gallery</span>
 
             </a>
 
-            <a
-            href="about.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'about.php' ? 'active' : ''; ?>">
+            <a href="about.php" class="nav-link <?php echo $currentPage == 'about.php' ? 'active' : ''; ?>">
 
                 <i class="fa-solid fa-circle-info"></i>
 
-                About
+                <span>About</span>
 
             </a>
 
-            <a
-            href="contact.php"
-            class="<?php echo basename($_SERVER['PHP_SELF']) == 'contact.php' ? 'active' : ''; ?>">
+            <a href="contact.php" class="nav-link <?php echo $currentPage == 'contact.php' ? 'active' : ''; ?>">
 
                 <i class="fa-solid fa-envelope"></i>
 
-                Contact
+                <span>Contact</span>
 
             </a>
 
             <!-- =========================================================
-            MOBILE EXTRA ACTIONS
+            MOBILE ONLY — EXTRA ACTIONS
             ========================================================= -->
 
             <div class="mobile-extra-actions">
 
-                <!-- MOBILE CART -->
+                <!-- MOBILE CART BUTTON -->
 
-                <a
-                href="Cart.php"
-                class="mobile-cart-btn">
+                <button class="mobile-cart-btn" id="mobileOpenCart">
 
                     <div class="mobile-cart-left">
 
                         <i class="fa-solid fa-cart-shopping"></i>
 
-                        My Cart
+                        <span>My Cart</span>
 
                     </div>
 
-                    <span
-                    class="mobile-cart-count cart-count">
+                    <span class="mobile-cart-badge cart-count">0</span>
 
-                        0
+                </button>
 
-                    </span>
+                <!-- MOBILE PROFILE / LOGIN -->
 
-                </a>
+                <?php if (isset($_SESSION['user_id'])): ?>
 
-                <!-- MOBILE PROFILE -->
+                    <a href="profile.php" class="mobile-profile-btn">
 
-                <?php if(isset($_SESSION['user_id'])): ?>
+                        <img src="<?php echo $profileImage; ?>" alt="Profile">
 
-                    <a
-                    href="profile.php"
-                    class="mobile-profile-btn">
+                        <span>My Profile</span>
 
-                        <i class="fa-solid fa-user"></i>
+                    </a>
 
-                        My Profile
+                    <a href="orders.php" class="mobile-profile-btn">
+
+                        <i class="fa-solid fa-bag-shopping"></i>
+
+                        <span>My Orders</span>
+
+                    </a>
+
+                    <a href="logout.php" class="mobile-profile-btn mobile-logout">
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        <span>Logout</span>
 
                     </a>
 
                 <?php else: ?>
 
-                    <a
-                    href="login.php"
-                    class="mobile-profile-btn">
+                    <a href="login.php" class="mobile-profile-btn">
 
                         <i class="fa-solid fa-right-to-bracket"></i>
 
-                        Login Account
+                        <span>Login / Sign Up</span>
 
                     </a>
 
@@ -173,57 +173,58 @@ HUNGROO CAFÉ
         </div>
 
         <!-- =========================================================
-        RIGHT ACTIONS
+        RIGHT — ACTIONS
         ========================================================= -->
 
         <div class="navbar-actions">
 
-            <!-- THEME BUTTON -->
+            <!-- THEME TOGGLE -->
 
-            <button
-            class="theme-btn"
-            id="themeToggle">
+            <button class="action-btn theme-toggle-btn" id="themeToggle" title="Toggle theme">
 
-                <i class="fa-solid fa-moon"></i>
+                <i class="fa-solid fa-moon" id="themeIcon"></i>
 
             </button>
 
-            <!-- DESKTOP CART -->
+            <!-- CART BUTTON -->
 
-            <a
-            href="Cart.php"
-            class="cart-btn">
+            <button class="action-btn cart-btn" id="desktopOpenCart" title="Cart">
 
                 <i class="fa-solid fa-cart-shopping"></i>
 
-                <span
-                class="cart-count">
+                <span class="cart-count">0</span>
 
-                    0
+            </button>
 
-                </span>
+            <!-- USER / LOGIN -->
 
-            </a>
-
-            <!-- DESKTOP USER -->
-
-            <?php if(isset($_SESSION['user_id'])): ?>
+            <?php if (isset($_SESSION['user_id'])): ?>
 
                 <div class="user-dropdown">
 
-                    <button class="user-btn">
+                    <button class="action-btn user-btn" id="userDropdownBtn">
 
-                        <i class="fa-solid fa-user"></i>
-
-                        <span>
-
-                            Account
-
-                        </span>
+                        <img src="<?php echo $profileImage; ?>" alt="Profile">
 
                     </button>
 
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" id="userDropdown">
+
+                        <div class="dropdown-header">
+
+                            <img src="<?php echo $profileImage; ?>" alt="Profile">
+
+                            <div>
+
+                                <strong><?php echo htmlspecialchars($_SESSION['name'] ?? 'User'); ?></strong>
+
+                                <span><?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?></span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="dropdown-divider"></div>
 
                         <a href="profile.php">
 
@@ -233,7 +234,7 @@ HUNGROO CAFÉ
 
                         </a>
 
-                        <a href="track-order.php">
+                        <a href="orders.php">
 
                             <i class="fa-solid fa-bag-shopping"></i>
 
@@ -241,7 +242,9 @@ HUNGROO CAFÉ
 
                         </a>
 
-                        <a href="logout.php">
+                        <div class="dropdown-divider"></div>
+
+                        <a href="logout.php" class="dropdown-logout">
 
                             <i class="fa-solid fa-right-from-bracket"></i>
 
@@ -255,25 +258,25 @@ HUNGROO CAFÉ
 
             <?php else: ?>
 
-                <a
-                href="login.php"
-                class="login-btn">
+                <a href="login.php" class="login-btn">
 
                     <i class="fa-solid fa-user"></i>
 
-                    Login
+                    <span>Login</span>
 
                 </a>
 
             <?php endif; ?>
 
-            <!-- MOBILE MENU BUTTON -->
+            <!-- MOBILE HAMBURGER -->
 
-            <button
-            class="mobile-menu-btn"
-            id="mobileMenuBtn">
+            <button class="action-btn mobile-menu-btn" id="mobileMenuBtn" title="Menu">
 
-                <i class="fa-solid fa-bars"></i>
+                <span class="hamburger-line"></span>
+
+                <span class="hamburger-line"></span>
+
+                <span class="hamburger-line"></span>
 
             </button>
 
@@ -285,155 +288,226 @@ HUNGROO CAFÉ
 
 <!-- =========================================================
 MOBILE OVERLAY
-========================================================= -->
+======================================================== -->
 
-<div
-class="mobile-overlay"
-id="mobileOverlay">
-
-</div>
+<div class="mobile-overlay" id="mobileOverlay"></div>
 
 <!-- =========================================================
-NAVBAR SCRIPT
-========================================================= -->
+NAVBAR SCRIPTS
+======================================================== -->
 
 <script>
 
 /* =========================================================
 MOBILE MENU
-========================================================= */
+======================================================== */
 
-const mobileMenuBtn =
-document.getElementById(
-'mobileMenuBtn'
-);
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 
-const mobileMenu =
-document.getElementById(
-'mobileMenu'
-);
+const mobileMenu = document.getElementById('mobileMenu');
 
-const mobileOverlay =
-document.getElementById(
-'mobileOverlay'
-);
+const mobileOverlay = document.getElementById('mobileOverlay');
 
-mobileMenuBtn.addEventListener(
-'click',
-() => {
+function toggleMobileMenu() {
 
-    mobileMenu.classList.toggle(
-    'active'
-    );
+    const isOpen = mobileMenu.classList.toggle('active');
 
-    mobileOverlay.classList.toggle(
-    'active'
-    );
+    mobileOverlay.classList.toggle('active', isOpen);
 
-});
+    mobileMenuBtn.classList.toggle('is-open', isOpen);
 
-mobileOverlay.addEventListener(
-'click',
-() => {
-
-    mobileMenu.classList.remove(
-    'active'
-    );
-
-    mobileOverlay.classList.remove(
-    'active'
-    );
-
-});
-
-/* =========================================================
-THEME SYSTEM
-========================================================= */
-
-const themeToggle =
-document.getElementById(
-'themeToggle'
-);
-
-const body =
-document.body;
-
-const savedTheme =
-localStorage.getItem(
-'theme'
-);
-
-if(savedTheme === 'light'){
-
-    body.classList.add(
-    'light-mode'
-    );
-
-    themeToggle.innerHTML =
-    '<i class="fa-solid fa-sun"></i>';
+    document.body.style.overflow = isOpen ? 'hidden' : '';
 
 }
 
-themeToggle.addEventListener(
-'click',
-() => {
+mobileMenuBtn.addEventListener('click', toggleMobileMenu);
 
-    body.classList.toggle(
-    'light-mode'
-    );
+mobileOverlay.addEventListener('click', toggleMobileMenu);
 
-    if(
-    body.classList.contains(
-    'light-mode'
-    )
-    ){
+/* Close mobile menu on link click */
 
-        localStorage.setItem(
-        'theme',
-        'light'
-        );
+mobileMenu.querySelectorAll('.nav-link').forEach(link => {
 
-        themeToggle.innerHTML =
-        '<i class="fa-solid fa-sun"></i>';
+    link.addEventListener('click', () => {
 
-    }
+        if (mobileMenu.classList.contains('active')) {
 
-    else{
+            toggleMobileMenu();
 
-        localStorage.setItem(
-        'theme',
-        'dark'
-        );
+        }
 
-        themeToggle.innerHTML =
-        '<i class="fa-solid fa-moon"></i>';
-
-    }
+    });
 
 });
 
 /* =========================================================
-LIVE CART COUNT
-========================================================= */
+USER DROPDOWN
+======================================================== */
 
-function updateCartCount(){
+const userDropdownBtn = document.getElementById('userDropdownBtn');
 
-    let cart =
-    JSON.parse(
-    localStorage.getItem('cart')
-    ) || [];
+const userDropdown = document.getElementById('userDropdown');
 
-    document
-    .querySelectorAll('.cart-count')
-    .forEach(count => {
+if (userDropdownBtn && userDropdown) {
 
-        count.innerHTML =
-        cart.length;
+    userDropdownBtn.addEventListener('click', (e) => {
+
+        e.stopPropagation();
+
+        userDropdown.classList.toggle('active');
+
+    });
+
+    document.addEventListener('click', (e) => {
+
+        if (!userDropdown.contains(e.target)) {
+
+            userDropdown.classList.remove('active');
+
+        }
+
+    });
+
+}
+
+/* =========================================================
+THEME SYSTEM
+======================================================== */
+
+const themeToggle = document.getElementById('themeToggle');
+
+const themeIcon = document.getElementById('themeIcon');
+
+const savedTheme = localStorage.getItem('theme') || 'dark';
+
+function applyTheme(theme) {
+
+    document.documentElement.setAttribute('data-theme', theme);
+
+    if (theme === 'light') {
+
+        themeIcon.className = 'fa-solid fa-sun';
+
+    } else {
+
+        themeIcon.className = 'fa-solid fa-moon';
+
+    }
+
+    localStorage.setItem('theme', theme);
+
+}
+
+applyTheme(savedTheme);
+
+themeToggle.addEventListener('click', () => {
+
+    const current = document.documentElement.getAttribute('data-theme');
+
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+
+});
+
+/* =========================================================
+NAVBAR SCROLL BEHAVIOR
+======================================================== */
+
+const navbarWrapper = document.getElementById('navbarWrapper');
+
+let lastScroll = 0;
+
+window.addEventListener('scroll', () => {
+
+    const currentScroll = window.pageYOffset;
+
+    if (currentScroll > 80) {
+
+        navbarWrapper.classList.add('scrolled');
+
+    } else {
+
+        navbarWrapper.classList.remove('scrolled');
+
+    }
+
+    if (currentScroll > lastScroll && currentScroll > 200) {
+
+        navbarWrapper.classList.add('hidden');
+
+    } else {
+
+        navbarWrapper.classList.remove('hidden');
+
+    }
+
+    lastScroll = currentScroll;
+
+}, { passive: true });
+
+/* =========================================================
+CART COUNT
+======================================================== */
+
+function updateCartCount() {
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    let total = 0;
+
+    cart.forEach(item => { total += item.quantity; });
+
+    document.querySelectorAll('.cart-count').forEach(el => {
+
+        el.textContent = total;
+
+        el.style.display = total > 0 ? 'flex' : 'none';
 
     });
 
 }
 
 updateCartCount();
+
+/* =========================================================
+SLIDE CART OPEN (delegated to home.js if exists)
+======================================================== */
+
+function openSlideCart() {
+
+    const slideCart = document.getElementById('slideCart');
+
+    const cartOverlay = document.getElementById('cartOverlay');
+
+    if (slideCart) slideCart.classList.add('active');
+
+    if (cartOverlay) cartOverlay.classList.add('active');
+
+    document.body.style.overflow = 'hidden';
+
+}
+
+function closeSlideCart() {
+
+    const slideCart = document.getElementById('slideCart');
+
+    const cartOverlay = document.getElementById('cartOverlay');
+
+    if (slideCart) slideCart.classList.remove('active');
+
+    if (cartOverlay) cartOverlay.classList.remove('active');
+
+    document.body.style.overflow = '';
+
+}
+
+document.getElementById('desktopOpenCart')?.addEventListener('click', openSlideCart);
+
+document.getElementById('mobileOpenCart')?.addEventListener('click', () => {
+
+    openSlideCart();
+
+    if (mobileMenu.classList.contains('active')) toggleMobileMenu();
+
+});
 
 </script>

@@ -1,94 +1,76 @@
 <?php
 
-session_start();
-
 /* =========================================================
-LOGIN CHECK
-========================================================= */
-
-if(!isset($_SESSION['admin_id'])){
-
-    header(
-    "Location: login.php"
-    );
-
-    exit();
-
-}
-
-/* =========================================================
-CONFIG
+   CONFIG & SESSION
 ========================================================= */
 
 include "../config/config.php";
 
-/* =========================================================
-GET ID
-========================================================= */
-
-if(!isset($_GET['id'])){
-
-    header(
-    "Location: orders.php"
-    );
-
-    exit();
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-$order_id =
+if (!isset($_SESSION['admin_id'])) {
 
-intval(
-$_GET['id']
-);
+    header("Location: login.php");
+    exit();
+}
 
 /* =========================================================
-GET ORDER
+   GET ORDER ID
 ========================================================= */
 
-$orderQuery =
+if (!isset($_GET['id'])) {
 
-"SELECT * FROM orders
+    header("Location: orders.php");
+    exit();
+}
+
+$order_id = intval($_GET['id']);
+
+/* =========================================================
+   GET ORDER
+========================================================= */
+
+$orderQuery = "
+
+SELECT *
+FROM orders
 WHERE id='$order_id'
-LIMIT 1";
+LIMIT 1
 
-$orderResult =
+";
 
-mysqli_query(
-$conn,
-$orderQuery
+$orderResult = mysqli_query(
+    $conn,
+    $orderQuery
 );
 
-if(mysqli_num_rows($orderResult) < 1){
+if (!$orderResult || mysqli_num_rows($orderResult) < 1) {
 
-    header(
-    "Location: orders.php"
-    );
-
+    header("Location: orders.php");
     exit();
-
 }
 
-$order =
-
-mysqli_fetch_assoc(
-$orderResult
+$order = mysqli_fetch_assoc(
+    $orderResult
 );
 
 /* =========================================================
-GET ITEMS
+   GET ITEMS
 ========================================================= */
 
-$itemQuery =
+$itemQuery = "
 
-"SELECT * FROM order_items
-WHERE order_id='$order_id'";
+SELECT *
+FROM order_items
+WHERE order_id='$order_id'
 
-$itemResult =
+";
 
-mysqli_query(
-$conn,
-$itemQuery
+$itemResult = mysqli_query(
+    $conn,
+    $itemQuery
 );
 
 ?>
@@ -111,7 +93,7 @@ View Order
 
 </title>
 
-<!-- FONT -->
+<!-- GOOGLE FONT -->
 
 <link
 rel="preconnect"
@@ -121,7 +103,7 @@ href="https://fonts.googleapis.com">
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- ICON -->
+<!-- FONT AWESOME -->
 
 <link
 rel="stylesheet"
@@ -129,16 +111,36 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <style>
 
+/* =========================================================
+   ROOT
+========================================================= */
+
 :root{
 
-    --bg:#070707;
-    --sidebar:#0f0f0f;
-    --card:#121212;
+    --bg:#0b0b12;
+
+    --card:#171726;
+
+    --sidebar:#131320;
+
     --white:#ffffff;
-    --text:#bdbdbd;
-    --primary:#ff9a3d;
-    --gold:#ffd27a;
-    --border:rgba(255,255,255,.08);
+
+    --text:#9ca3af;
+
+    --primary:#9b5cff;
+
+    --primary2:#b983ff;
+
+    --green:#10b981;
+
+    --red:#ef4444;
+
+    --blue:#3b82f6;
+
+    --yellow:#facc15;
+
+    --border:
+    rgba(255,255,255,.06);
 
 }
 
@@ -146,36 +148,46 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
     margin:0;
     padding:0;
+
     box-sizing:border-box;
+
+    font-family:'Poppins',sans-serif;
 
 }
 
 body{
 
     background:var(--bg);
+
     color:var(--white);
-    font-family:'Poppins',sans-serif;
+
+    overflow-x:hidden;
 
 }
 
-/* =========================================================
-LAYOUT
-========================================================= */
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
 
 .admin-layout{
 
     display:flex;
+
     min-height:100vh;
 
 }
 
 /* =========================================================
-SIDEBAR
+   SIDEBAR
 ========================================================= */
 
 .sidebar{
 
-    width:280px;
+    width:260px;
 
     background:var(--sidebar);
 
@@ -193,62 +205,30 @@ SIDEBAR
 
 }
 
-.sidebar-logo{
+.logo{
 
-    display:flex;
-    align-items:center;
-    gap:14px;
+    font-size:24px;
+
+    font-weight:700;
 
     margin-bottom:40px;
 
-}
-
-.sidebar-logo img{
-
-    width:58px;
-    height:58px;
-
-    border-radius:18px;
-
-    object-fit:cover;
+    padding-left:10px;
 
 }
 
-.sidebar-logo h2{
+.logo span{
 
-    font-size:28px;
-
-}
-
-.sidebar-logo span{
-
-    background:
-    linear-gradient(
-    135deg,
-    var(--primary),
-    var(--gold)
-    );
-
-    -webkit-background-clip:text;
-
-    -webkit-text-fill-color:
-    transparent;
+    color:var(--primary);
 
 }
 
-.sidebar-menu{
-
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-
-}
-
-.sidebar-menu a{
+.menu-item{
 
     height:58px;
 
     display:flex;
+
     align-items:center;
 
     gap:14px;
@@ -257,40 +237,47 @@ SIDEBAR
 
     border-radius:18px;
 
-    text-decoration:none;
-
     color:#fff;
 
     transition:.35s;
 
     font-size:15px;
+
     font-weight:600;
 
+    margin-bottom:10px;
+
 }
 
-.sidebar-menu a.active,
-.sidebar-menu a:hover{
+.menu-item.active,
+.menu-item:hover{
 
     background:
-    rgba(255,154,61,.12);
+    linear-gradient(
+    90deg,
+    rgba(155,92,255,.18),
+    transparent
+    );
+
+    color:var(--primary2);
 
 }
 
-.sidebar-menu a i{
+.menu-item i{
 
-    color:var(--primary);
+    color:var(--primary2);
 
 }
 
 /* =========================================================
-CONTENT
+   MAIN
 ========================================================= */
 
 .main-content{
 
     flex:1;
 
-    margin-left:280px;
+    margin-left:260px;
 
     padding:30px;
 
@@ -301,13 +288,14 @@ CONTENT
     display:flex;
 
     align-items:center;
+
     justify-content:space-between;
+
+    flex-wrap:wrap;
 
     gap:20px;
 
     margin-bottom:30px;
-
-    flex-wrap:wrap;
 
 }
 
@@ -326,7 +314,7 @@ CONTENT
 }
 
 /* =========================================================
-BUTTON
+   BUTTON
 ========================================================= */
 
 .back-btn{
@@ -352,19 +340,23 @@ BUTTON
     linear-gradient(
     135deg,
     var(--primary),
-    var(--gold)
+    var(--primary2)
     );
 
-    color:#000;
+    color:#fff;
 
     font-size:14px;
 
     font-weight:700;
 
+    box-shadow:
+    0 10px 30px
+    rgba(155,92,255,.3);
+
 }
 
 /* =========================================================
-ORDER CARD
+   ORDER CARD
 ========================================================= */
 
 .order-card{
@@ -373,8 +365,7 @@ ORDER CARD
 
     border-radius:34px;
 
-    background:
-    rgba(255,255,255,.04);
+    background:var(--card);
 
     border:
     1px solid var(--border);
@@ -422,14 +413,14 @@ ORDER CARD
 
 .info-box h3{
 
-    font-size:20px;
+    font-size:18px;
 
     word-break:break-word;
 
 }
 
 /* =========================================================
-ITEMS
+   ITEMS
 ========================================================= */
 
 .items-box{
@@ -438,8 +429,7 @@ ITEMS
 
     border-radius:34px;
 
-    background:
-    rgba(255,255,255,.04);
+    background:var(--card);
 
     border:
     1px solid var(--border);
@@ -448,9 +438,9 @@ ITEMS
 
 .items-box h2{
 
-    font-size:34px;
+    font-size:32px;
 
-    margin-bottom:30px;
+    margin-bottom:28px;
 
 }
 
@@ -459,6 +449,7 @@ ITEMS
     display:flex;
 
     align-items:center;
+
     justify-content:space-between;
 
     gap:20px;
@@ -480,6 +471,30 @@ ITEMS
 .item-card:last-child{
 
     margin-bottom:0;
+
+}
+
+.item-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.item-image{
+
+    width:90px;
+
+    height:90px;
+
+    border-radius:20px;
+
+    object-fit:cover;
+
+    background:#111;
 
 }
 
@@ -509,17 +524,7 @@ ITEMS
 
     margin-bottom:8px;
 
-    background:
-    linear-gradient(
-    135deg,
-    var(--primary),
-    var(--gold)
-    );
-
-    -webkit-background-clip:text;
-
-    -webkit-text-fill-color:
-    transparent;
+    color:var(--primary2);
 
 }
 
@@ -530,7 +535,7 @@ ITEMS
 }
 
 /* =========================================================
-RESPONSIVE
+   RESPONSIVE
 ========================================================= */
 
 @media(max-width:992px){
@@ -595,6 +600,14 @@ RESPONSIVE
 
     }
 
+    .item-left{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
 }
 
 </style>
@@ -607,88 +620,60 @@ RESPONSIVE
 
     <!-- SIDEBAR -->
 
-    <aside class="sidebar">
+    <div class="sidebar">
 
-        <div class="sidebar-logo">
-
-            <img
-            src="../assets/images/logo.png"
-            alt="Logo">
-
-            <h2>
-
-                <span>
-
-                    Hungroo
-
-                </span>
-
-                Admin
-
-            </h2>
-
+        <div class="logo">
+            Hungroo <span>Admin</span>
         </div>
 
-        <div class="sidebar-menu">
+        <a href="dashboard.php"
+            class="menu-item">
 
-            <a href="dashboard.php">
+            <i class="fa-solid fa-chart-pie"></i>
+            Dashboard
 
-                <i class="fa-solid fa-chart-line"></i>
+        </a>
 
-                Dashboard
+        <a href="products.php"
+            class="menu-item">
 
-            </a>
+            <i class="fa-solid fa-burger"></i>
+            Products
 
-            <a href="products.php">
+        </a>
 
-                <i class="fa-solid fa-burger"></i>
+        <a href="orders.php"
+            class="menu-item active">
 
-                Products
+            <i class="fa-solid fa-cart-shopping"></i>
+            Orders
 
-            </a>
+        </a>
 
-            <a
-            href="orders.php"
+        <a href="users.php"
+            class="menu-item">
 
-            class="active">
+            <i class="fa-solid fa-users"></i>
+            Users
 
-                <i class="fa-solid fa-cart-shopping"></i>
+        </a>
 
-                Orders
+        <a href="logout.php"
+            class="menu-item"
+            style="color:#ef4444;">
 
-            </a>
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
 
-            <a href="reservations.php">
+        </a>
 
-                <i class="fa-solid fa-calendar-check"></i>
+    </div>
 
-                Reservations
-
-            </a>
-
-            <a href="messages.php">
-
-                <i class="fa-solid fa-envelope"></i>
-
-                Messages
-
-            </a>
-
-            <a href="logout.php">
-
-                <i class="fa-solid fa-right-from-bracket"></i>
-
-                Logout
-
-            </a>
-
-        </div>
-
-    </aside>
-
-    <!-- CONTENT -->
+    <!-- MAIN -->
 
     <main class="main-content">
+
+        <!-- TOP -->
 
         <div class="page-top">
 
@@ -731,13 +716,13 @@ RESPONSIVE
 
                     <span>
 
-                        Customer Name
+                        Order Number
 
                     </span>
 
                     <h3>
 
-                        <?php echo $order['customer_name']; ?>
+                        #<?php echo $order['order_number']; ?>
 
                     </h3>
 
@@ -747,13 +732,21 @@ RESPONSIVE
 
                     <span>
 
-                        Phone Number
+                        Customer Name
 
                     </span>
 
                     <h3>
 
-                        <?php echo $order['customer_phone']; ?>
+                        <?php
+
+                        echo !empty($order['customer_name'])
+
+                        ? $order['customer_name']
+
+                        : "Guest";
+
+                        ?>
 
                     </h3>
 
@@ -769,7 +762,30 @@ RESPONSIVE
 
                     <h3>
 
-                        <?php echo $order['payment_method']; ?>
+                        <?php echo strtoupper($order['payment_method']); ?>
+
+                    </h3>
+
+                </div>
+
+                <div class="info-box">
+
+                    <span>
+
+                        Payment Status
+
+                    </span>
+
+                    <h3
+                    style="color:var(--green);">
+
+                        <?php
+
+                        echo ucfirst(
+                            $order['payment_status']
+                        );
+
+                        ?>
 
                     </h3>
 
@@ -783,9 +799,16 @@ RESPONSIVE
 
                     </span>
 
-                    <h3>
+                    <h3
+                    style="color:var(--primary2);">
 
-                        <?php echo ucfirst($order['order_status']); ?>
+                        <?php
+
+                        echo ucfirst(
+                            $order['status']
+                        );
+
+                        ?>
 
                     </h3>
 
@@ -801,7 +824,13 @@ RESPONSIVE
 
                     <h3>
 
-                        ₹<?php echo number_format($order['total_amount']); ?>
+                        ₹<?php
+
+                        echo number_format(
+                            $order['total']
+                        );
+
+                        ?>
 
                     </h3>
 
@@ -817,7 +846,31 @@ RESPONSIVE
 
                     <h3>
 
-                        <?php echo $order['customer_address']; ?>
+                        <?php
+
+                        echo $order['delivery_address'];
+
+                        ?>
+
+                    </h3>
+
+                </div>
+
+                <div class="info-box">
+
+                    <span>
+
+                        Order Date
+
+                    </span>
+
+                    <h3>
+
+                        <?php
+
+                        echo $order['created_at'];
+
+                        ?>
 
                     </h3>
 
@@ -827,7 +880,7 @@ RESPONSIVE
 
         </div>
 
-        <!-- ORDER ITEMS -->
+        <!-- ITEMS -->
 
         <div class="items-box">
 
@@ -843,18 +896,27 @@ RESPONSIVE
 
                 <div class="item-left">
 
-                    <h3>
+                    <img
+                    src="<?php echo $item['product_image']; ?>"
+                    class="item-image"
+                    alt="Product">
 
-                        <?php echo $item['product_name']; ?>
+                    <div>
 
-                    </h3>
+                        <h3>
 
-                    <p>
+                            <?php echo $item['product_name']; ?>
 
-                        Quantity:
-                        <?php echo $item['quantity']; ?>
+                        </h3>
 
-                    </p>
+                        <p>
+
+                            Quantity:
+                            <?php echo $item['quantity']; ?>
+
+                        </p>
+
+                    </div>
 
                 </div>
 
@@ -862,13 +924,26 @@ RESPONSIVE
 
                     <h2>
 
-                        ₹<?php echo number_format($item['subtotal']); ?>
+                        ₹<?php
+
+                        echo number_format(
+                            $item['total']
+                        );
+
+                        ?>
 
                     </h2>
 
                     <span>
 
-                        ₹<?php echo $item['product_price']; ?>
+                        ₹<?php
+
+                        echo number_format(
+                            $item['price']
+                        );
+
+                        ?>
+
                         each
 
                     </span>
@@ -886,4 +961,5 @@ RESPONSIVE
 </div>
 
 </body>
+
 </html>
