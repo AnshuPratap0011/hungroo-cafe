@@ -449,3 +449,9 @@ if (newsletterForm) {
 }
 
 </script>
+
+<!-- =========================================================
+VERCEL SPEED INSIGHTS
+========================================================= -->
+
+<script src="assets/js/speed-insights-init.js" defer></script>

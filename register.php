@@ -1207,6 +1207,11 @@ GO BACK
 function goBack() { window.location.href = 'register.php'; }
 </script>
 
+<!-- =========================================================
+VERCEL SPEED INSIGHTS
+========================================================= -->
+<script src="assets/js/speed-insights-init.js" defer></script>
+
 </body>
 
 </html>
