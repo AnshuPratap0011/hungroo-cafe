@@ -406,7 +406,7 @@ img{display:block;max-width:100%}
                     <i class="qi-address"><i class="fa-solid fa-location-dot"></i></i>
                     Edit Address
                 </a>
-                <a href="forgot-password.php" class="pf-quick-btn">
+                <a href="reset-password.php" class="pf-quick-btn">
                     <i class="qi-pass"><i class="fa-solid fa-key"></i></i>
                     Change Password
                 </a>

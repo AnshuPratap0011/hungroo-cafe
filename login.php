@@ -168,6 +168,50 @@ a{text-decoration:none;color:inherit}
 .abt a:hover{color:var(--a-ac)}
 @media(max-width:900px){.ac{grid-template-columns:1fr}.af{padding:40px 32px}.aff{display:none}}
 @media(max-width:600px){.as{padding:100px 16px 60px}.ar{padding:32px 24px}.af{padding:32px 24px}.af h1{font-size:28px}.arh h2{font-size:24px}.iw{height:50px}}
+
+.admin-login-btn{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    width:100%;
+    height:55px;
+
+    border-radius:16px;
+
+    background:linear-gradient(
+    135deg,
+    #6C5CE7,
+    #8B7BFF
+    );
+
+    color:#fff;
+    text-decoration:none;
+
+    font-size:15px;
+    font-weight:700;
+
+    margin-top:15px;
+
+    transition:.3s ease;
+
+    box-shadow:
+    0 10px 25px
+    rgba(108,92,231,.25);
+
+}
+
+.admin-login-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 15px 35px
+    rgba(108,92,231,.35);
+
+}
 </style>
 </head>
 <body>
@@ -249,7 +293,17 @@ a{text-decoration:none;color:inherit}
                 <div class="abt">
                     Don't have an account? <a href="register.php">Register</a>
                 </div>
+               <div style="margin-top:20px;text-align:center;">
 
+    <a href="admin/login.php" class="admin-login-btn">
+
+        <i class="fa-solid fa-user-shield"></i>
+
+        Admin Login
+
+    </a>
+
+</div>
             </form>
 
         </div>

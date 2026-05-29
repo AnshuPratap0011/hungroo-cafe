@@ -1,1081 +1,405 @@
 <?php
+/* =========================================================
+CONFIG & SECURITY
+========================================================= */
+// Include Config (This handles session_start() automatically)
 include "config/config.php";
 
-$pageTitle = "Hungroo Café | About Us";
+ $pageTitle = "Hungroo Café | Contact Us";
+
+ $success = false;
+ $error = "";
+
+/* =========================================================
+FORM HANDLING (SECURE)
+========================================================= */
+if(isset($_POST['send_message'])){
+    // Sanitize inputs (Basic XSS prevention)
+    $full_name = htmlspecialchars(trim($_POST['full_name']));
+    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+    $phone = htmlspecialchars(trim($_POST['phone']));
+    $subject = htmlspecialchars(trim($_POST['subject']));
+    $message = htmlspecialchars(trim($_POST['message']));
+
+    // Validation
+    if(empty($full_name) || empty($email) || empty($message)){
+        $error = "Please fill in all required fields (Name, Email, Message).";
+    } elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        $error = "Please enter a valid email address.";
+    } else {
+        // Secure Insertion using Prepared Statements
+        $stmt = $conn->prepare("INSERT INTO contact_messages (full_name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)");
+        
+        if($stmt){
+            $stmt->bind_param("sssss", $full_name, $email, $phone, $subject, $message);
+            
+            if($stmt->execute()){
+                $success = true;
+                // Clear form values after success
+                $full_name = $email = $phone = $subject = $message = "";
+            } else {
+                $error = "Database error: Could not save message.";
+            }
+            $stmt->close();
+        } else {
+            $error = "System error: Please try again later.";
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-
-<?php echo $pageTitle; ?>
-
-</title>
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<link
-rel="stylesheet"
-href="assets/css/navbar.css">
-
-<link
-rel="stylesheet"
-href="assets/css/footer.css">
-
-<style>
-
-/* =========================================================
-PREMIUM THEME VARIABLES
-========================================================= */
-
-:root,
-[data-theme="dark"]{
-
-    --bg-body:#09090b;
-
-    --bg-card:#1e1e22;
-
-    --bg-card-hover:#26262b;
-
-    --text-main:#ffffff;
-
-    --text-sec:#a1a1aa;
-
-    --accent:#6C5CE7;
-
-    --accent-l:#a29bfe;
-
-    --accent-dark:#4834d4;
-
-    --gold:#ffd27a;
-
-    --border:
-    rgba(255,255,255,0.08);
-
-    --border-h:
-    rgba(255,255,255,0.12);
-
-    --shadow-card:
-    0 10px 30px rgba(0,0,0,0.3);
-
-    --shadow-hover:
-    0 20px 40px -10px rgba(108,92,231,0.2);
-
-    --gradient-text:
-    linear-gradient(
-    135deg,
-    #6C5CE7,
-    #a29bfe
-    );
-
-}
-
-[data-theme="light"]{
-
-    --bg-body:#f5f5f7;
-
-    --bg-card:#ffffff;
-
-    --bg-card-hover:#fafafa;
-
-    --text-main:#111111;
-
-    --text-sec:#666666;
-
-    --border:
-    rgba(0,0,0,0.08);
-
-    --border-h:
-    rgba(0,0,0,0.12);
-
-    --shadow-card:
-    0 10px 30px rgba(0,0,0,0.05);
-
-    --shadow-hover:
-    0 20px 40px -10px rgba(108,92,231,0.15);
-
-}
-
-/* =========================================================
-GLOBAL
-========================================================= */
-
-*{
-
-    margin:0;
-    padding:0;
-
-    box-sizing:border-box;
-
-}
-
-body{
-
-    font-family:'Poppins',sans-serif;
-
-    background:var(--bg-body);
-
-    color:var(--text-main);
-
-    overflow-x:hidden;
-
-    -webkit-font-smoothing:antialiased;
-
-    transition:
-    background .35s ease,
-    color .35s ease;
-
-}
-
-a{
-
-    text-decoration:none;
-
-    color:inherit;
-
-}
-
-img{
-
-    display:block;
-
-    max-width:100%;
-
-}
-
-/* =========================================================
-BACKGROUND BLOBS
-========================================================= */
-
-.co-blobs{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:0;
-
-    pointer-events:none;
-
-    overflow:hidden;
-
-}
-
-.co-blob{
-
-    position:absolute;
-
-    border-radius:50%;
-
-    filter:blur(130px);
-
-}
-
-.co-blob-1{
-
-    width:600px;
-    height:600px;
-
-    background:
-    rgba(108,92,231,.08);
-
-    top:-200px;
-    left:-100px;
-
-}
-
-.co-blob-2{
-
-    width:500px;
-    height:500px;
-
-    background:
-    rgba(0,184,148,.08);
-
-    bottom:-100px;
-    right:-150px;
-
-}
-
-/* =========================================================
-HERO
-========================================================= */
-
-.hero-about{
-
-    position:relative;
-
-    max-width:1400px;
-
-    margin:auto;
-
-    padding:
-    140px 24px 80px;
-
-    text-align:center;
-
-    z-index:1;
-
-}
-
-.hero-badge{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    padding:8px 20px;
-
-    background:
-    rgba(108,92,231,0.15);
-
-    border:
-    1px solid rgba(108,92,231,0.3);
-
-    border-radius:50px;
-
-    color:var(--accent-l);
-
-    font-size:13px;
-
-    font-weight:600;
-
-    margin-bottom:24px;
-
-    box-shadow:
-    0 0 15px rgba(108,92,231,0.2);
-
-    backdrop-filter:blur(5px);
-
-}
-
-.hero-title{
-
-    font-size:
-    clamp(42px,6vw,72px);
-
-    font-weight:800;
-
-    line-height:1.1;
-
-    margin-bottom:20px;
-
-    background:
-    linear-gradient(
-    to right,
-    #fff,
-    #a1a1aa
-    );
-
-    -webkit-background-clip:text;
-
-    -webkit-text-fill-color:transparent;
-
-}
-
-[data-theme="light"] .hero-title{
-
-    background:
-    linear-gradient(
-    to right,
-    #111,
-    #666
-    );
-
-    -webkit-background-clip:text;
-
-    -webkit-text-fill-color:transparent;
-
-}
-
-.hero-desc{
-
-    font-size:18px;
-
-    color:var(--text-sec);
-
-    max-width:700px;
-
-    margin:
-    0 auto 40px;
-
-    line-height:1.6;
-
-}
-
-.hero-btn{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    padding:16px 32px;
-
-    background:var(--gradient-text);
-
-    color:#fff;
-
-    border-radius:50px;
-
-    font-weight:600;
-
-    font-size:16px;
-
-    box-shadow:
-    0 10px 30px rgba(108,92,231,0.4);
-
-    transition:.3s;
-
-}
-
-.hero-btn:hover{
-
-    transform:
-    translateY(-3px);
-
-}
-
-/* =========================================================
-CONTAINER
-========================================================= */
-
-.container{
-
-    max-width:1200px;
-
-    margin:0 auto;
-
-    padding:
-    0 24px 80px;
-
-    position:relative;
-
-    z-index:1;
-
-}
-
-/* =========================================================
-STORY GRID
-========================================================= */
-
-.story-grid{
-
-    display:grid;
-
-    grid-template-columns:
-    1fr 1fr;
-
-    gap:40px;
-
-    align-items:center;
-
-    margin-bottom:80px;
-
-}
-
-.story-img-wrap{
-
-    position:relative;
-
-    border-radius:30px;
-
-    overflow:hidden;
-
-    box-shadow:var(--shadow-card);
-
-    border:
-    1px solid var(--border);
-
-}
-
-.story-img-wrap img{
-
-    width:100%;
-    height:500px;
-
-    object-fit:cover;
-
-    transition:.5s;
-
-}
-
-.story-img-wrap:hover img{
-
-    transform:scale(1.03);
-
-}
-
-.story-content h2{
-
-    font-size:36px;
-
-    font-weight:700;
-
-    margin-bottom:20px;
-
-}
-
-.story-content p{
-
-    font-size:16px;
-
-    color:var(--text-sec);
-
-    line-height:1.8;
-
-    margin-bottom:30px;
-
-}
-
-.story-features-list{
-
-    list-style:none;
-
-}
-
-.story-features-list li{
-
-    margin-bottom:12px;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    font-size:16px;
-
-}
-
-.story-features-list li i{
-
-    color:var(--accent-l);
-
-}
-
-/* =========================================================
-FEATURES
-========================================================= */
-
-.features-section h2{
-
-    text-align:center;
-
-    font-size:32px;
-
-    font-weight:700;
-
-    margin-bottom:40px;
-
-}
-
-.features-grid{
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(260px,1fr));
-
-    gap:24px;
-
-}
-
-.feature-card{
-
-    background:var(--bg-card);
-
-    border:
-    1px solid var(--border);
-
-    border-radius:20px;
-
-    padding:30px;
-
-    text-align:center;
-
-    transition:.3s;
-
-}
-
-.feature-card:hover{
-
-    transform:
-    translateY(-5px);
-
-    border-color:var(--accent);
-
-    box-shadow:var(--shadow-hover);
-
-}
-
-.feature-icon{
-
-    width:70px;
-    height:70px;
-
-    border-radius:50%;
-
-    background:
-    rgba(108,92,231,0.1);
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    margin:
-    0 auto 20px;
-
-    color:var(--accent-l);
-
-    font-size:28px;
-
-}
-
-.feature-card h3{
-
-    font-size:20px;
-
-    margin-bottom:10px;
-
-}
-
-.feature-card p{
-
-    font-size:14px;
-
-    color:var(--text-sec);
-
-    line-height:1.6;
-
-}
-
-/* =========================================================
-STATS
-========================================================= */
-
-.stats-section{
-
-    margin:
-    80px 0;
-
-}
-
-.stats-grid{
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(4,1fr);
-
-    gap:20px;
-
-}
-
-.stat-card{
-
-    background:
-    linear-gradient(
-    145deg,
-    var(--bg-card),
-    rgba(255,255,255,0.03)
-    );
-
-    border:
-    1px solid var(--border);
-
-    border-radius:24px;
-
-    padding:30px;
-
-    text-align:center;
-
-}
-
-.stat-number{
-
-    font-size:42px;
-
-    font-weight:800;
-
-    margin-bottom:5px;
-
-    background:var(--gradient-text);
-
-    -webkit-background-clip:text;
-
-    -webkit-text-fill-color:transparent;
-
-}
-
-.stat-label{
-
-    color:var(--text-sec);
-
-    font-size:15px;
-
-}
-
-/* =========================================================
-CTA
-========================================================= */
-
-.cta-section{
-
-    background:var(--bg-card);
-
-    border-radius:40px;
-
-    padding:60px;
-
-    text-align:center;
-
-    border:
-    1px solid var(--border);
-
-    position:relative;
-
-    overflow:hidden;
-
-}
-
-.cta-title{
-
-    font-size:36px;
-
-    font-weight:800;
-
-    margin-bottom:15px;
-
-}
-
-.cta-btn{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    background:var(--accent);
-
-    color:#fff;
-
-    padding:16px 32px;
-
-    border-radius:50px;
-
-    font-weight:700;
-
-    margin-top:30px;
-
-    transition:.3s;
-
-}
-
-.cta-btn:hover{
-
-    transform:scale(1.05);
-
-    background:var(--accent-dark);
-
-}
-
-/* =========================================================
-RESPONSIVE
-========================================================= */
-
-@media(max-width:768px){
-
-    .story-grid{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .story-img-wrap img{
-
-        height:320px;
-
-    }
-
-    .stats-grid{
-
-        grid-template-columns:
-        repeat(2,1fr);
-
-    }
-
-    .hero-title{
-
-        font-size:36px;
-
-    }
-
-    .cta-section{
-
-        border-radius:24px;
-
-        padding:40px 20px;
-
-    }
-
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $pageTitle; ?></title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #09090b;
+            --card-bg: rgba(23, 23, 28, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: #6C5CE7;
+            --primary-hover: #5b4cc4;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --input-bg: #111111;
+            --success: #00b894;
+            --error: #ff4d4d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background Ambience */
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.4;
+        }
+        .blob-1 { width: 400px; height: 400px; background: var(--primary); top: -100px; left: -100px; }
+        .blob-2 { width: 300px; height: 300px; background: #00cec9; bottom: -50px; right: -50px; }
+
+        /* Layout */
+        .contact-wrapper {
+            max-width: 1100px;
+            margin: 140px auto 80px;
+            padding: 0 20px;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .hero-section h1 {
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .hero-section p {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        /* Grid Layout */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        /* Contact Info Column */
+        .info-col h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: rgba(108, 92, 231, 0.15);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .info-content h4 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .info-content p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Form Column */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #d1d1d6;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .input-field {
+            width: 100%;
+            height: 52px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 0 18px;
+            color: #fff;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
+        }
+
+        textarea.input-field {
+            height: 140px;
+            padding: 15px 18px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            height: 54px;
+            background: linear-gradient(135deg, var(--primary), #8c7bff);
+            border: none;
+            border-radius: 14px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.25);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(108, 92, 231, 0.35);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert.success {
+            background: rgba(0, 184, 148, 0.1);
+            border: 1px solid rgba(0, 184, 148, 0.3);
+            color: var(--success);
+        }
+
+        .alert.error {
+            background: rgba(255, 77, 77, 0.1);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            color: var(--error);
+        }
+
+        /* Responsive */
+        @media(max-width: 900px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            .contact-wrapper {
+                margin-top: 100px;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="co-blobs">
+    <!-- Background Effects -->
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
 
-    <div class="co-blob co-blob-1"></div>
+    <!-- Navbar -->
+    <?php include "Navbar.php"; ?>
 
-    <div class="co-blob co-blob-2"></div>
+    <div class="contact-wrapper">
+        
+        <!-- Header -->
+        <div class="hero-section">
+            <h1>Contact Hungroo Café</h1>
+            <p>Have questions? We’d love to hear from you. Send us a message and we’ll respond as soon as possible.</p>
+        </div>
 
-</div>
+        <div class="grid-container">
+            
+            <!-- Left: Contact Information -->
+            <div class="card info-col">
+                <h2>Get In Touch</h2>
+                
+                <div class="info-item">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4>Our Location</h4>
+                        <p>123 Flavor Street, Foodie District,<br>Mumbai, India 400001</p>
+                    </div>
+                </div>
 
-<?php include "Navbar.php"; ?>
+                <div class="info-item">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4>Email Us</h4>
+                        <p>support@hungroocafe.com<br>booking@hungroocafe.com</p>
+                    </div>
+                </div>
 
-<!-- HERO -->
+                <div class="info-item">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                    <div class="info-content">
+                        <h4>Call Us</h4>
+                        <p>+91 98765 43210<br>Mon-Fri, 9am - 6pm</p>
+                    </div>
+                </div>
 
-<section class="hero-about">
+                <div style="margin-top: 40px;">
+                    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">Follow us on social media</p>
+                    <div style="display: flex; gap: 15px;">
+                        <a href="#" style="color: #fff; font-size: 20px;"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" style="color: #fff; font-size: 20px;"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" style="color: #fff; font-size: 20px;"><i class="fa-brands fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
 
-    <div class="hero-badge">
+            <!-- Right: Contact Form -->
+            <div class="card form-col">
+                
+                <!-- PHP Alerts -->
+                <?php if($success): ?>
+                    <div class="alert success">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Your message has been sent successfully! We will contact you shortly.</span>
+                    </div>
+                <?php endif; ?>
 
-        <i class="fa-solid fa-heart"></i>
+                <?php if($error): ?>
+                    <div class="alert error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span><?php echo $error; ?></span>
+                    </div>
+                <?php endif; ?>
 
-        Who We Are
+                <form method="POST">
+                    <div class="form-group">
+                        <label class="form-label">Full Name <span style="color:var(--primary)">*</span></label>
+                        <input class="input-field" type="text" name="full_name" placeholder="e.g. John Doe" value="<?php echo isset($full_name) ? $full_name : ''; ?>" required>
+                    </div>
 
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label class="form-label">Email Address <span style="color:var(--primary)">*</span></label>
+                            <input class="input-field" type="email" name="email" placeholder="john@example.com" value="<?php echo isset($email) ? $email : ''; ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input class="input-field" type="text" name="phone" placeholder="+91 98765 43210" value="<?php echo isset($phone) ? $phone : ''; ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <input class="input-field" type="text" name="subject" placeholder="How can we help?" value="<?php echo isset($subject) ? $subject : ''; ?>">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Message <span style="color:var(--primary)">*</span></label>
+                        <textarea class="input-field" name="message" placeholder="Type your message here..." required><?php echo isset($message) ? $message : ''; ?></textarea>
+                    </div>
+
+                    <button type="submit" name="send_message" class="submit-btn">
+                        Send Message <i class="fa-solid fa-paper-plane" style="margin-left: 8px;"></i>
+                    </button>
+                </form>
+            </div>
+
+        </div>
     </div>
 
-    <h1 class="hero-title">
-
-        Hungroo Café
-
-    </h1>
-
-    <p class="hero-desc">
-
-        Premium food, luxury ambience, and a taste that stays with you forever.
-
-    </p>
-
-    <a
-    href="menu.php"
-    class="hero-btn">
-
-        <i class="fa-solid fa-utensils"></i>
-
-        Order Now
-
-    </a>
-
-</section>
-
-<div class="container">
-
-    <!-- STORY -->
-
-    <section class="story-grid">
-
-        <div class="story-img-wrap">
-
-            <img
-            src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1200&auto=format&fit=crop"
-            alt="Hungroo Interior">
-
-        </div>
-
-        <div class="story-content">
-
-            <h2>
-
-                Crafted With Passion
-
-            </h2>
-
-            <p>
-
-                We believe that food is not just about eating, it's an experience.
-
-            </p>
-
-            <p>
-
-                Every dish at Hungroo Café is designed to deliver premium taste.
-
-            </p>
-
-            <ul class="story-features-list">
-
-                <li>
-
-                    <i class="fa-solid fa-check-circle"></i>
-
-                    Handcrafted Recipes
-
-                </li>
-
-                <li>
-
-                    <i class="fa-solid fa-leaf"></i>
-
-                    100% Fresh Ingredients
-
-                </li>
-
-                <li>
-
-                    <i class="fa-solid fa-wine-glass"></i>
-
-                    Premium Ambience
-
-                </li>
-
-            </ul>
-
-        </div>
-
-    </section>
-
-    <!-- FEATURES -->
-
-    <section class="features-section">
-
-        <h2>
-
-            Why Choose Us?
-
-        </h2>
-
-        <div class="features-grid">
-
-            <div class="feature-card">
-
-                <div class="feature-icon">
-
-                    <i class="fa-solid fa-burger"></i>
-
-                </div>
-
-                <h3>
-
-                    Premium Quality
-
-                </h3>
-
-                <p>
-
-                    Finest ingredients with unforgettable taste.
-
-                </p>
-
-            </div>
-
-            <div class="feature-card">
-
-                <div class="feature-icon">
-
-                    <i class="fa-solid fa-clock"></i>
-
-                </div>
-
-                <h3>
-
-                    Fast Delivery
-
-                </h3>
-
-                <p>
-
-                    Hot & fresh delivery at lightning speed.
-
-                </p>
-
-            </div>
-
-            <div class="feature-card">
-
-                <div class="feature-icon">
-
-                    <i class="fa-solid fa-headset"></i>
-
-                </div>
-
-                <h3>
-
-                    24/7 Support
-
-                </h3>
-
-                <p>
-
-                    Always ready to assist you anytime.
-
-                </p>
-
-            </div>
-
-            <div class="feature-card">
-
-                <div class="feature-icon">
-
-                    <i class="fa-solid fa-truck"></i>
-
-                </div>
-
-                <h3>
-
-                    Secure Packaging
-
-                </h3>
-
-                <p>
-
-                    Hygienic packaging for perfect delivery.
-
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- STATS -->
-
-    <section class="stats-section">
-
-        <div class="stats-grid">
-
-            <div class="stat-card">
-
-                <div class="stat-number">
-
-                    15K+
-
-                </div>
-
-                <div class="stat-label">
-
-                    Happy Customers
-
-                </div>
-
-            </div>
-
-            <div class="stat-card">
-
-                <div class="stat-number">
-
-                    50+
-
-                </div>
-
-                <div class="stat-label">
-
-                    Menu Items
-
-                </div>
-
-            </div>
-
-            <div class="stat-card">
-
-                <div class="stat-number">
-
-                    4.9
-
-                </div>
-
-                <div class="stat-label">
-
-                    Star Rating
-
-                </div>
-
-            </div>
-
-            <div class="stat-card">
-
-                <div class="stat-number">
-
-                    10+
-
-                </div>
-
-                <div class="stat-label">
-
-                    Cities Active
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- CTA -->
-
-    <section class="cta-section">
-
-        <h2 class="cta-title">
-
-            Ready to Taste the Difference?
-
-        </h2>
-
-        <p style="color:var(--text-sec)">
-
-            Join thousands of satisfied customers today.
-
-        </p>
-
-        <a
-        href="menu.php"
-        class="cta-btn">
-
-            View Full Menu
-
-            <i class="fa-solid fa-arrow-right"></i>
-
-        </a>
-
-    </section>
-
-</div>
-
-<?php include "footer.php"; ?>
+    <!-- Footer -->
+    <?php include "footer.php"; ?>
 
 </body>
 </html>
