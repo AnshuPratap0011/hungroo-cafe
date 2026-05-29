@@ -1,0 +1,12 @@
+{
+  "name": "hungroo-cafe",
+  "version": "1.0.0",
+  "description": "Modern premium café website with Vercel Speed Insights",
+  "private": true,
+  "scripts": {
+    "postinstall": "echo 'Dependencies installed successfully'"
+  },
+  "dependencies": {
+    "@vercel/speed-insights": "^1.0.12"
+  }
+}
